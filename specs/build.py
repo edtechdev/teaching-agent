@@ -11,6 +11,7 @@ ORDER = [
     ("agent", True),
     ("task", True),
     ("template", True),
+    ("checklist", True),
     ("data", True),
 ]
 
