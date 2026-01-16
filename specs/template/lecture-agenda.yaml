@@ -1,0 +1,25 @@
+template:
+  id: lecture-agenda
+  name: 'Lecture Agenda'
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/lecture-agenda.md
+  title: 'Lecture Agenda'
+  inputs:
+    - docs/lecture-outline.learning-goals
+    - docs/lecture-outline.time-commitment
+    - docs/lecture-didactics.didactic-concept
+    - docs/lecture-didactics.course-type
+  sections:
+    - id: overview
+      title: Overview
+      template: 'Short overview of the agenda, learning objectives, didactics & course type.'
+    - id: modules
+      title: Modules / Sessions
+      template: >
+        Each session includes:
+
+        - Title, duration, type (lecture/exercise)
+        - Learning objective(s), summary
+        - Automatic materials file (materials/{n}-{type}.md)

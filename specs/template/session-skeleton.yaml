@@ -1,0 +1,24 @@
+template:
+  id: session-skeleton
+  name: 'Session Skeleton'
+  version: 1.0
+  output:
+    format: markdown
+    filename: skeletons/{{number}}-{{type}}.md
+  title: 'Session {{number}} ({{type | title}})'
+  sections:
+    - id: title
+      title: Title
+      template: 'Session {{number}} – {{title}} ({{type | title}})'
+    - id: summary
+      title: Summary
+      template: 'Short overview, reference to agenda, relevance, didactics.'
+    - id: content
+      title: Content
+      template: 'Placeholder for main topics or assignments.'
+    - id: activities
+      title: Activities
+      template: 'Placeholder for exercises, discussions, reflection.'
+    - id: references
+      title: References & Sources
+      template: 'List of relevant sources and materials.'

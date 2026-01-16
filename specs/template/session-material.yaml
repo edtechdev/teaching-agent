@@ -1,0 +1,35 @@
+template:
+  id: session-material
+  name: 'Session Material'
+  version: 1.0
+  output:
+    format: markdown
+    filename: materials/{{number}}-{{type}}.md
+  title: 'Session {{number}} ({{type | title}})'
+  inputs:
+    - docs/lecture-agenda.modules
+    - docs/lecture-didactics.style
+    - docs/lecture-didactics.course-type
+    - docs/lecture-didactics.professor-persona
+  sections:
+    - id: outline
+      title: Planned Outline
+      template: > # {{title}}
+
+        Summary
+
+        ## Introduction
+        Content
+        References
+
+        ## Main Part 1
+        Content
+        References
+
+        ## Main Part 2
+        Content
+        References
+
+        ## Summary / Wrap-up
+        Content
+        References

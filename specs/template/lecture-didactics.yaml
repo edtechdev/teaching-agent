@@ -1,0 +1,29 @@
+template:
+  id: lecture-didactics
+  name: 'Lecture Didactics & Style'
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/lecture-didactics.md
+  title: 'Lecture Didactics & Style'
+  inputs:
+    - docs/lecture-outline.abstract
+    - docs/lecture-outline.audience
+    - docs/lecture-outline.time-commitment
+    - docs/lecture-outline.learning-goals
+  sections:
+    - id: didactic-concept
+      title: Didactic Concept
+      template: 'Teaching methods, learning phases, didactic considerations.'
+    - id: professor-persona
+      title: Professor Persona
+      template: 'Description of the professor (background, expertise, role).'
+    - id: style
+      title: Style & Difficulty Level
+      template: 'Description (e.g., humorous, scientific, practical).'
+    - id: course-type
+      title: Course Type
+      template: 'Type of course (introductory, advanced, practice-oriented, group work, self-learning).'
+    - id: difficulty-level
+      title: Difficulty Level
+      template: 'Intended difficulty level (beginner, intermediate, advanced).'
