@@ -6,11 +6,6 @@ template:
     format: markdown
     filename: materials/{{number}}-{{type}}.md
   title: 'Session {{number}} ({{type | title}})'
-  inputs:
-    - docs/lecture-agenda.modules
-    - docs/lecture-didactics.style
-    - docs/lecture-didactics.course-type
-    - docs/lecture-didactics.professor-persona
   sections:
     - id: outline
       title: Planned Outline

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Checks the consistency and completeness of all lecture documents based on the didactics from `docs/lecture-didactics.md` and the agenda from `checklist/lecture-quality-checklist.md`.
+Checks the consistency and completeness of all lecture documents based on the didactics from `docs/lecture-didactics.md` and the agenda from `checklists/lecture-quality-checklist.md`.
 **The agent also adopts the professor persona and style from `docs/lecture-didactics.md#Professor-Persona` into its own persona, so all content is written in this voice.**
 
 ## Output
@@ -11,7 +11,7 @@ Checks the consistency and completeness of all lecture documents based on the di
 
 ## Steps
 
-1. Load and use the structure from `checklist/lecture-quality-checklist.md`.
+1. Load and use the structure from `checklists/lecture-quality-checklist.md`.
 2. Check the outline.
 3. Check the didactics.
 4. Check the agenda.

@@ -19,7 +19,7 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 ## Output
 
 - `docs/lecture-agenda.md` (Markdown file)
-- Structure based on `template/lecture-agenda.yaml`
+- Structure based on `templates/lecture-agenda.yaml`
 
 ## Steps
 
@@ -32,5 +32,5 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 
 4. Define sessions/modules.
 5. Build the agenda in a structured form.
-6. Fill the `template/lecture-agenda.yaml` template with the results.
+6. Fill the `templates/lecture-agenda.yaml` template with the results.
 7. Save the file as `docs/lecture-agenda.md`.

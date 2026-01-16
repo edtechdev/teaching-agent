@@ -8,10 +8,10 @@ MAIN_MD = "main.md"
 # Order of folders/files to bundle
 ORDER = [
     (MAIN_MD, False),
-    ("agent", True),
-    ("task", True),
-    ("template", True),
-    ("checklist", True),
+    ("agents", True),
+    ("tasks", True),
+    ("templates", True),
+    ("checklists", True),
     ("data", True),
 ]
 
@@ -30,12 +30,19 @@ def read_file(file, name):
             "\n```"
         ])
 
-    if name.startswith("agent/"):
+    if name.startswith("agents/"):
         content = "".join([
             "## Agent Definition\n\n",
             "CRITICAL: Read the full YAML, start activation to alter your state of being, follow startup section instructions, stay in this being until told to exit this mode:",
             "\n\n",
-            content
+            "```yaml\n",
+            "activation-instructions:\n",
+            "  - ONLY load dependency files when explicitly invoked\n",
+            "  - The agent.customization field ALWAYS takes precedence\n",
+            "  - Always show numbered lists for options\n",
+            "  - Always clarify missing inputs with follow-up questions\n",
+            "  - STAY IN CHARACTER!\n",
+            content.replace("```yaml", ""),
         ])
 
     if content != "" and name != MAIN_MD:

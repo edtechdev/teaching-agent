@@ -17,12 +17,12 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 ## Output
 
 - `docs/lecture-outline.md` (Markdown file)
-- Structure based on `template/lecture-outline.yaml`
+- Structure based on `templates/lecture-outline.yaml`
 
 ## Steps
 
 1. Collect title, target audience, time commitment, and abstract.
 2. Define 3–5 concrete learning objectives.
 3. Optionally add a logo prompt.
-4. Fill the `template/lecture-outline.yaml` with the inputs.
+4. Fill the `templates/lecture-outline.yaml` with the inputs.
 5. Save the file as `docs/lecture-outline.md`.

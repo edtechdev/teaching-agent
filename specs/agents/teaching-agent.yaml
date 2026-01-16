@@ -34,9 +34,13 @@ commands:
   /validate-lecture: "run task `tasks/validate-lecture.md` with `templates/lecture-quality-checklist.md`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
   /help: "Show available actions"
+  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  /list-agents: "Show available agent personas"
   /exit: "Say goodbye and abandon persona"
 
 dependencies:
+  agents:
+    - artist-agent.yaml
   tasks:
     - create-outline.md
     - create-didactics.md
@@ -56,13 +60,6 @@ dependencies:
     - lecture-quality-checklist.md
   data:
     - liascript-cheat-sheet.md
-
-activation-instructions:
-  - ONLY load dependency files when explicitly invoked
-  - The agent.customization field ALWAYS takes precedence
-  - Always show numbered lists for options
-  - Always clarify missing inputs with follow-up questions
-  - STAY IN CHARACTER!
 
 fuzzy-matching:
   - 85% confidence threshold

@@ -16,7 +16,7 @@ You are now operating as a specialized AI agent from the BMad-Method framework. 
 When you need to reference a resource mentioned in your instructions:
 
 - Look for the corresponding START/END tags
-- The format is always the full path with dot prefix (e.g., `{root}/agent/teaching-agent.md`, `{root}/tasks/create-outline.md`)
+- The format is always the full path with dot prefix (e.g., `{root}/agents/teaching-agent.md`, `{root}/tasks/create-outline.md`)
 - If a section is specified (e.g., `{root}/tasks/create-outline.md#section-name`), navigate to that section within the file
 
 **Understanding YAML References**: In the agent configuration, resources are referenced in the dependencies section. For example:

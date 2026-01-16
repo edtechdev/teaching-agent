@@ -6,11 +6,6 @@ template:
     format: markdown
     filename: docs/lecture-agenda.md
   title: 'Lecture Agenda'
-  inputs:
-    - docs/lecture-outline.learning-goals
-    - docs/lecture-outline.time-commitment
-    - docs/lecture-didactics.didactic-concept
-    - docs/lecture-didactics.course-type
   sections:
     - id: overview
       title: Overview

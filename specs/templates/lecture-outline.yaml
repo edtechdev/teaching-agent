@@ -10,7 +10,7 @@ template:
     - id: title
       title: Title
       template: 'Name of the lecture or course'
-    - id: audience
+    - id: target-audience
       title: Target Audience
       template: 'Who is this course/lecture for?'
     - id: time-commitment
@@ -25,7 +25,3 @@ template:
       title: Learning Objectives
       template: >
         List of 3–5 clear learning objectives with application scenarios.
-    - id: logo
-      title: Logo (optional)
-      template: >
-        Prompt for creating a logo for the lecture.
