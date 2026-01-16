@@ -8,10 +8,10 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 
 ## Inputs
 
-- Learning objectives from `docs/lecture-outline.md`
-- Abstract from `docs/lecture-outline.md`
-- Time commitment from `docs/lecture-outline.md`
-- Didactic concept from `docs/lecture-didactics.md`
+- Learning objectives from `docs/lecture-outline.md#Learning-Objectives`
+- Abstract from `docs/lecture-outline.md#Abstract`
+- Time commitment from `docs/lecture-outline.md#Time-Commitment`
+- Didactic concept from `docs/lecture-didactics.md#Didactic-Concept`
 - **Professor persona from `docs/lecture-didactics.md#Professor-Persona` (mandatory handoff)**
 - **Style & difficulty level from `docs/lecture-didactics.md` (mandatory handoff)**
 - Course type from `docs/lecture-didactics.md`

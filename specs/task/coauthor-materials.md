@@ -10,7 +10,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `docs/lecture-didactics.md` (mandatory handoff)
+- Professor persona & style from `docs/lecture-didactics.md#Professor-Persona` (mandatory handoff)
 - Agenda info (modules/sessions) from `docs/lecture-agenda.md`
 - Currently open document `materials/{number}-{type}.md`
 - Optionally, corresponding skeleton `skeletons/{number}-{type}.md`
