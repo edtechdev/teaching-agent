@@ -8,7 +8,9 @@ MAIN_MD = "main.md"
 # Order of folders/files to bundle
 ORDER = [
     (MAIN_MD, False),
-    ("agents", True),
+    ("agents/teaching-agent.yaml", False),
+    ("agents/artist-agent.yaml", False),
+    ("agents/development-agent.yaml", False),
     ("tasks", True),
     ("templates", True),
     ("checklists", True),
@@ -68,8 +70,8 @@ def bundle_files():
         else:
             if not path.exists() or not path.is_file():
                 continue
-            
-            bundle += read_file(path, path.name)
+            print(name)
+            bundle += read_file(path, name )
 
     out_path = BASE_DIR / BUNDLE_NAME
     with open(out_path, "w", encoding="utf-8") as out:

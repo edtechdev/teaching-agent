@@ -28,6 +28,8 @@ commands:
   /create-style-guide: "run task `tasks/create-style-guide.md` with `templates/style-guide.yaml`"
   /create-logo: "run task `tasks/create-logo.md`"
   /create-image {description}: "run task `tasks/create-image.md`"
+  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  /list-agents: "Show available agent personas"
   /help: "Show available actions"
   /exit: "Say goodbye and abandon persona"
 
