@@ -1,0 +1,470 @@
+workflow:
+  id: lecture-development
+  name: Lecture Development Workflow
+  description: >-
+    Multi-agent workflow for creating complete lecture materials from outline to publication.
+    Coordinates Teaching-Agent, Artist-Agent, and Development-Agent to build structured,
+    visually consistent course content with automated publishing.
+  type: educational
+  project_types:
+    - lecture-creation
+    - course-development
+    - educational-materials
+
+  agents:
+    teaching:
+      id: teaching-agent
+      role: "Pedagogical structure and content creation"
+    artist:
+      id: artist-agent
+      role: "Visual identity and image prompts"
+    development:
+      id: development-agent
+      role: "Version control and publishing"
+
+  sequence:
+    # Phase 1: Foundation
+    - step: create_outline
+      agent: teaching
+      command: /create-outline
+      output: docs/lecture-outline.md
+      notes: |
+        Define the lecture foundation:
+        - Title, target audience, time commitment
+        - Abstract with topics and benefits
+        - 3-5 clear learning objectives
+
+    - step: create_didactics
+      agent: teaching
+      command: /create-didactics
+      output: docs/lecture-didactics.md
+      dependencies: [create_outline]
+      notes: |
+        Define teaching approach:
+        - Didactic concept and methods
+        - Professor persona and style
+        - Course type and difficulty level
+
+    # Phase 2: Visual Identity
+    - step: create_style_guide
+      agent: artist
+      command: /create-style-guide
+      output: docs/style-guide.md
+      dependencies: [create_outline, create_didactics]
+      notes: |
+        Create visual identity aligned with teaching persona:
+        - Logo generation guidelines and colors
+        - Course image style and consistency rules
+        - Website color palette and typography
+
+    - step: create_logo
+      agent: artist
+      command: /create-logo
+      output: assets/prompts/logo-prompt.md
+      dependencies: [create_style_guide]
+      optional: true
+      notes: |
+        Generate detailed logo prompt for the course.
+        Optional: Can be done later or skipped.
+
+    # Phase 3: Structure
+    - step: create_agenda
+      agent: teaching
+      command: /create-agenda
+      output: docs/lecture-agenda.md
+      dependencies: [create_didactics, create_style_guide]
+      notes: |
+        Build session structure:
+        - Define all sessions/modules
+        - Assign learning objectives per session
+        - Set duration and type (lecture/exercise)
+
+    # Phase 4: Session Development (Two Approaches)
+    - step: session_development
+      agent: teaching
+      approaches:
+        iterative:
+          description: "Create one session at a time, fully develop it, then move to next"
+          sequence:
+            - command: /create-session {number} {type} {title}
+              output: skeletons/{number}-{type}.md
+              notes: "Create skeleton for session N"
+            - command: /promote-session {number} {type}
+              output: materials/{number}-{type}.md
+              notes: "Convert skeleton to full material"
+            - command: /coauthor-materials
+              notes: |
+                Interactive co-authoring in professor persona:
+                - Refine content, add examples
+                - Suggest images (call artist-agent if needed)
+                - Iterate until material is complete
+            - agent: artist
+              command: /create-image {description}
+              optional: true
+              notes: "Create image prompts during coauthoring as needed"
+            - repeat: for each session
+
+        batch:
+          description: "Create all skeletons first, then promote all, then coauthor all"
+          sequence:
+            - command: /create-session {number} {type} {title}
+              output: skeletons/{number}-{type}.md
+              notes: "Create all session skeletons"
+              repeat: for all sessions
+            - command: /promote-session {number} {type}
+              output: materials/{number}-{type}.md
+              notes: "Promote all skeletons to materials"
+              repeat: for all sessions
+            - command: /coauthor-materials
+              notes: |
+                Go through all materials sequentially:
+                - Refine content for each session
+                - Add images via artist-agent when needed
+                - Mark each session complete before moving to next
+              repeat: for all materials
+
+      notes: |
+        User chooses approach based on preference:
+        - Iterative: Complete one session fully before next (focused)
+        - Batch: Create all structure first, then fill in content (overview)
+
+    # Phase 5: Validation
+    - step: validate_lecture
+      agent: teaching
+      command: /validate-lecture
+      output: docs/validation-report.md
+      dependencies: [session_development]
+      notes: |
+        Check consistency and completeness:
+        - Verify all learning objectives covered
+        - Check outline ↔ didactics ↔ agenda ↔ sessions consistency
+        - Ensure all materials exist and are complete
+
+    # Phase 6: Publishing
+    - step: git_operations
+      agent: development
+      command: /manage-git
+      optional: throughout workflow
+      notes: |
+        Available anytime for:
+        - Staging and committing changes
+        - Writing meaningful commit messages
+        - Pulling, pushing, viewing diffs
+        - Resolving conflicts
+        - Step-by-step guidance for beginners
+
+    - step: initial_publishing
+      agent: development
+      command: /create-project
+      output: project.yaml + .github/workflows/
+      condition: first_time_setup
+      dependencies: [validate_lecture]
+      notes: |
+        Initial project setup:
+        - Generate project.yaml with all materials
+        - Apply style-guide colors to project.yaml
+        - Create GitHub Actions workflow (force_orphan: true)
+        - Ask about GitHub Pages activation
+        - Commit and push to repository
+
+    - step: update_publishing
+      agent: development
+      command: /update-project
+      condition: updates_to_existing_project
+      dependencies: [validate_lecture]
+      notes: |
+        Update existing project:
+        - Update project.yaml with new/changed materials
+        - Commit and push changes
+        - Trigger GitHub Pages workflow
+
+    # Phase 7: Bundling (Optional)
+    - step: assemble_bundle
+      agent: teaching
+      command: /assemble-bundle
+      output: lecture-bundle/ or .zip
+      optional: true
+      notes: |
+        Create complete package:
+        - Collect all documents
+        - Generate index file
+        - Bundle everything together
+
+  usage_notes: |
+    This workflow is flexible:
+    - Steps can be done in sequence or with iterations
+    - Git operations (manage-git) available anytime
+    - Image creation on-demand during coauthoring
+    - Choose iterative or batch approach for sessions
+    - Publishing can be initial setup or incremental updates
+      condition: after_prd_creation
+      notes: |
+        Review PRD to determine if architectural planning is needed:
+        - New architectural patterns → Create architecture doc
+        - New libraries/frameworks → Create architecture doc
+        - Platform/infrastructure changes → Create architecture doc
+        - Following existing patterns → Skip to story creation
+
+    - agent: architect
+      creates: architecture.md
+      uses: brownfield-architecture-tmpl
+      requires: prd.md
+      condition: architecture_changes_needed
+      notes: "Creates architecture ONLY for significant architectural changes. SAVE OUTPUT: Copy final architecture.md to your project's docs/ folder."
+
+    - agent: po
+      validates: all_artifacts
+      uses: po-master-checklist
+      notes: "Validates all documents for integration safety and completeness. May require updates to any document."
+
+    - agent: various
+      updates: any_flagged_documents
+      condition: po_checklist_issues
+      notes: "If PO finds issues, return to relevant agent to fix and re-export updated documents to docs/ folder."
+
+    - agent: po
+      action: shard_documents
+      creates: sharded_docs
+      requires: all_artifacts_in_project
+      notes: |
+        Shard documents for IDE development:
+        - Option A: Use PO agent to shard: @po then ask to shard docs/prd.md
+        - Option B: Manual: Drag shard-doc task + docs/prd.md into chat
+        - Creates docs/prd/ and docs/architecture/ folders with sharded content
+
+    - agent: sm
+      action: create_story
+      creates: story.md
+      requires: sharded_docs_or_brownfield_docs
+      repeats: for_each_epic_or_enhancement
+      notes: |
+        Story creation cycle:
+        - For sharded PRD: @sm → *create (uses create-next-story)
+        - For brownfield docs: @sm → use create-brownfield-story task
+        - Creates story from available documentation
+        - Story starts in "Draft" status
+        - May require additional context gathering for brownfield
+
+    - agent: analyst/pm
+      action: review_draft_story
+      updates: story.md
+      requires: story.md
+      optional: true
+      condition: user_wants_story_review
+      notes: |
+        OPTIONAL: Review and approve draft story
+        - NOTE: story-review task coming soon
+        - Review story completeness and alignment
+        - Update story status: Draft → Approved
+
+    - agent: dev
+      action: implement_story
+      creates: implementation_files
+      requires: story.md
+      notes: |
+        Dev Agent (New Chat): @dev
+        - Implements approved story
+        - Updates File List with all changes
+        - Marks story as "Review" when complete
+
+    - agent: qa
+      action: review_implementation
+      updates: implementation_files
+      requires: implementation_files
+      optional: true
+      notes: |
+        OPTIONAL: QA Agent (New Chat): @qa → review-story
+        - Senior dev review with refactoring ability
+        - Fixes small issues directly
+        - Leaves checklist for remaining items
+        - Updates story status (Review → Done or stays Review)
+
+    - agent: dev
+      action: address_qa_feedback
+      updates: implementation_files
+      condition: qa_left_unchecked_items
+      notes: |
+        If QA left unchecked items:
+        - Dev Agent (New Chat): Address remaining items
+        - Return to QA for final approval
+
+    - repeat_development_cycle:
+      action: continue_for_all_stories
+      notes: |
+        Repeat story cycle (SM → Dev → QA) for all epic stories
+        Continue until all stories in PRD are complete
+
+    - agent: po
+      action: epic_retrospective
+      creates: epic-retrospective.md
+      condition: epic_complete
+      optional: true
+      notes: |
+        OPTIONAL: After epic completion
+        - NOTE: epic-retrospective task coming soon
+        - Validate epic was completed correctly
+        - Document learnings and improvements
+
+    - workflow_end:
+      action: project_complete
+      notes: |
+        All stories implemented and reviewed!
+        Project development phase complete.
+
+        Reference: .bmad-core/data/bmad-kb.md#IDE Development Workflow
+
+  flow_diagram: |
+    ```mermaid
+    graph TD
+        A[Start: Lecture Development] --> B[teaching: create-outline]
+        B --> C[teaching: create-didactics]
+        C --> D[artist: create-style-guide]
+        D --> E[artist: create-logo - optional]
+        E --> F[teaching: create-agenda]
+        
+        F --> G{Session Approach?}
+        
+        G -->|Iterative| H[teaching: create-session N]
+        H --> I[teaching: promote-session N]
+        I --> J[teaching: coauthor-materials N]
+        J --> K[artist: create-image - as needed]
+        K --> L{More sessions?}
+        L -->|Yes| H
+        L -->|No| M[teaching: validate-lecture]
+        
+        G -->|Batch| N[teaching: create all skeletons]
+        N --> O[teaching: promote all sessions]
+        O --> P[teaching: coauthor all materials]
+        P --> Q[artist: create-image - as needed]
+        Q --> M
+        
+        M --> R{First time?}
+        R -->|Yes| S[development: create-project]
+        R -->|No| T[development: update-project]
+        
+        S --> U[development: manage-git - anytime]
+        T --> U
+        
+        U --> V[Optional: teaching: assemble-bundle]
+        V --> END[Published Course]
+        
+        style A fill:#0B6E75,color:#fff
+        style END fill:#FF8C42,color:#fff
+        style G fill:#f9f,stroke:#333,stroke-width:2px
+        style R fill:#f9f,stroke:#333,stroke-width:2px
+    ```
+        
+        F --> G{Docs Adequate?}
+        G -->|No| H[architect: document-project]
+        G -->|Yes| I[pm: brownfield PRD]
+        H --> I
+        
+        I --> J{Architecture Needed?}
+        J -->|Yes| K[architect: architecture.md]
+        J -->|No| L[po: validate artifacts]
+        K --> L
+        
+        L --> M{PO finds issues?}
+        M -->|Yes| N[Fix issues]
+        M -->|No| O[po: shard documents]
+        N --> L
+        
+        O --> P[sm: create story]
+        P --> Q{Story Type?}
+        Q -->|Sharded PRD| R[create-next-story]
+        Q -->|Brownfield Docs| S[create-brownfield-story]
+        
+        R --> T{Review draft?}
+        S --> T
+        T -->|Yes| U[review & approve]
+        T -->|No| V[dev: implement]
+        U --> V
+        
+        V --> W{QA review?}
+        W -->|Yes| X[qa: review]
+        W -->|No| Y{More stories?}
+        X --> Z{Issues?}
+        Z -->|Yes| AA[dev: fix]
+        Z -->|No| Y
+        AA --> X
+        Y -->|Yes| P
+        Y -->|No| AB{Retrospective?}
+        AB -->|Yes| AC[po: retrospective]
+        AB -->|No| AD[Complete]
+        AC --> AD
+
+        style AD fill:#90EE90
+        style END1 fill:#90EE90
+        style END2 fill:#90EE90
+        style D fill:#87CEEB
+        style E fill:#87CEEB
+        style I fill:#FFE4B5
+        style K fill:#FFE4B5
+        style O fill:#ADD8E6
+        style P fill:#ADD8E6
+        style V fill:#ADD8E6
+        style U fill:#F0E68C
+        style X fill:#F0E68C
+        style AC fill:#F0E68C
+    ```
+
+
+  decision_guidance:
+    when_to_use:
+      - Creating new lecture materials from scratch
+      - Developing complete course content
+      - Building structured educational materials
+      - Coordinating pedagogical, visual, and technical aspects
+
+  handoff_prompts:
+    foundation_complete: |
+      Lecture foundation created:
+      - Outline: {{title}} for {{target_audience}}
+      - Didactics: {{professor_persona}} with {{teaching_style}} style
+      Ready for visual identity creation.
+
+    visual_identity_complete: |
+      Visual identity established:
+      - Style guide created with {{primary_color}} primary color
+      - Logo prompt generated (if applicable)
+      Ready for agenda and session planning.
+
+    structure_complete: |
+      Lecture structure defined:
+      - Agenda with {{session_count}} sessions
+      Choose approach:
+      1. Iterative: Create→Promote→Coauthor one session at a time
+      2. Batch: Create all→Promote all→Coauthor all
+
+    session_development_complete: |
+      All sessions developed:
+      - {{session_count}} sessions created and coauthored
+      - Materials validated and consistent
+      Ready for publishing setup.
+
+    publishing_complete: |
+      Course published:
+      - project.yaml configured
+      - GitHub Pages workflow active
+      - All materials live at: {{github_pages_url}}
+
+  quick_reference:
+    teaching_agent_commands:
+      - /create-outline
+      - /create-didactics
+      - /create-agenda
+      - /create-session {number} {type} {title}
+      - /promote-session {number} {type}
+      - /coauthor-materials
+      - /validate-lecture
+      - /assemble-bundle
+
+    artist_agent_commands:
+      - /create-style-guide
+      - /create-logo
+      - /create-image {description}
+
+    development_agent_commands:
+      - /manage-git
+      - /create-project
+      - /update-project

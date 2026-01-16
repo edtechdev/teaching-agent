@@ -15,6 +15,7 @@ ORDER = [
     ("templates", True),
     ("checklists", True),
     ("data", True),
+    ("workflows", True)
 ]
 
 def read_file(file, name):
