@@ -30,8 +30,14 @@ Suggest images for visualization, either as a search term or as a concrete image
 1. Agent loads agenda info, skeleton, and didactics persona.
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
-4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
-5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
+4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
+   - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
+   - If a learning objective from `agenda.md` is not addressed: flag it before moving on
+   - If the instructor's suggestion contradicts the didactic concept in `didactics.md`: raise it as a conflict
+   - If an explanation is too long, too abstract, or not suited for the target audience: say so
+   - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
+   - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
+   - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
 
