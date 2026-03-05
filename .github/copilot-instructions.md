@@ -180,7 +180,8 @@ commands:
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
-  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md`"
+  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing; with {number} {type}: session-level syntax + content check after coauthor"
+  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
   /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
   /help: "Show available actions"
@@ -579,6 +580,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Steps
 
 1. Agent loads agenda info, skeleton, and didactics persona.
+   - **If `validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "Ich habe den Validation-Report geladen. Für Session {N} gibt es folgende Punkte: [...]. Fangen wir damit an."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
@@ -591,6 +593,8 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
+8. After approval, suggest running a session-level syntax and content check:
+   > "Material gespeichert. Soll ich eine kurze Validierung machen (`/validate-course {number} {type}`) um Syntax und Lernziele zu prüfen?"
 
 ## Special Features
 
@@ -1264,24 +1268,122 @@ This task is invoked when:
 
 ## Purpose
 
-Checks the consistency and completeness of all course documents based on the didactics from `didactics.md`, the course context from `context.md`, and the checklist from `checklists/course-quality-checklist.md`.
-**The agent also adopts the instructor persona and style from `didactics.md#Professor-Persona` into its own persona, so all content is written in this voice.**
+Checks the consistency, completeness, and LiaScript syntax correctness of course documents.
+Can be run in two modes:
+
+- **Session mode** (`/validate-course {number} {type}`) — checks a single material file after co-authoring
+- **Course mode** (`/validate-course`) — checks the entire course before publishing
+
+## Inputs
+
+- `context.md` — course type and conventions
+- `checklists/course-quality-checklist.md` — structured checklist
+- `data/liascript-cheat-sheet.md` — syntax reference for LiaScript checks
+- For session mode: `materials/{number}-{type}.md` and matching row in `sessions.md`
+- For course mode: all docs (`outline.md`, `didactics.md`, `agenda.md`, `sessions.md`, `skeletons/`, `materials/`)
 
 ## Output
 
-- `validation-report.md`
+- **Session mode**: short inline report (printed, not saved) with issues for this session
+- **Course mode**: `validation-report.md` — structured report with pass/fail per section and a list of issues
 
-## Steps
+---
 
-1. Load `context.md` to understand the course type and applicable conventions.
-2. Load and use the structure from `checklists/course-quality-checklist.md`.
-3. Check the outline.
-4. Check the didactics.
-5. Check the agenda (if applicable for the course type).
-6. Load `sessions.md` if it exists — use it as the primary source for skeleton/material/done status per session.
-7. Cross-check: verify that every row marked ✅ in `sessions.md` has a corresponding file in `skeletons/` or `materials/`.
-8. Check the materials.
-9. Create the report.
+## Session Mode Steps (`/validate-course {number} {type}`)
+
+1. Load `context.md` for course type and conventions.
+2. Load `agenda.md` to get the learning objectives for this session.
+3. Load `data/liascript-cheat-sheet.md` as syntax reference.
+4. Open `materials/{number}-{type}.md` and check:
+
+   **Content checks:**
+   - [ ] All learning objectives from `agenda.md` for this session are addressed
+   - [ ] No section is vague, content-free, or placeholder-only
+   - [ ] References present where content claims are made
+
+   **Persona & style checks:**
+   - [ ] Tone matches the instructor persona from `didactics.md`
+   - [ ] Terminology matches `context.md` (sessions-called, etc.)
+
+   **LiaScript syntax checks** (against `data/liascript-cheat-sheet.md`):
+   - [ ] Exactly one `#` heading in the file (course title)
+   - [ ] `###` and deeper headings only inside HTML blocks, lists, or blockquotes
+   - [ ] All code blocks properly closed (triple backticks)
+   - [ ] Animation counters (`--{{n}}--`, `{{n}}`) reset to 0 after each `##`
+   - [ ] Quiz syntax correct: `[(X)]` for single choice, `[[X]]` for multiple choice, `[[answer]]` for text
+   - [ ] All media elements have alt text
+   - [ ] No unclosed `<div>` blocks
+
+5. Report issues clearly with line references where possible.
+6. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax und Inhalt geprüft."
+7. If issues found: list them and ask the instructor whether to open `/coauthor-materials` to fix them.
+
+---
+
+## Course Mode Steps (`/validate-course`)
+
+1. Load `context.md` to understand course type and applicable conventions.
+2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
+3. Load `data/liascript-cheat-sheet.md` as syntax reference.
+
+4. **Check Context & Foundation:**
+   - `context.md` complete (course type, terminology, agenda flag, conventions)
+   - `outline.md`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
+   - `didactics.md`: instructor persona, didactic concept, style, difficulty level
+
+5. **Check Agenda** `[if agenda flag = yes in context.md]`:
+   - All sessions have title, duration, type, learning objective, summary
+   - Learning objectives align with `outline.md`
+
+6. **Check Session Progress:**
+   - Load `sessions.md` as primary source
+   - All expected sessions have a row
+   - Cross-check: every ✅ Skeleton row has a file in `skeletons/`
+   - Cross-check: every ✅ Material row has a file in `materials/`
+   - All sessions marked ✅ Fertig `[required before publishing]`
+
+7. **Check each material file** in `materials/` (same LiaScript + content checks as Session Mode Step 4).
+
+8. **Consistency check across all documents:**
+   - Terminology consistent (sessions-called from `context.md` used throughout)
+   - Persona tone consistent across all materials
+   - Learning objectives from `outline.md` traceable through `agenda.md` into materials
+   - Numbering correct and no gaps
+
+9. **Create `validation-report.md`:**
+
+   ```
+   # Validation Report — [Course Title]
+   Date: YYYY-MM-DD
+   Course type: [type]
+
+   ## Summary
+   PASS / FAIL — [N issues found]
+
+   ## Issues by Section
+   ### Foundation
+   - [issue or ✅ OK]
+
+   ### Agenda
+   - [issue or ✅ OK / SKIPPED (course type)]
+
+   ### Session Progress
+   - [issue or ✅ OK]
+
+   ### Materials
+   #### Session {N} — {title}
+   - [issue or ✅ OK]
+
+   ### Consistency
+   - [issue or ✅ OK]
+
+   ## Recommended Actions
+   1. [Concrete action with file reference]
+   ```
+
+10. After report is created: suggest next step.
+    - If issues exist: "Öffne `/coauthor-materials {number} {type}` um die Issues in Session X zu beheben, dann erneut `/validate-course` ausführen."
+    - If no issues: "Kurs ist bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`"
 
 ==================== END: .bmad-core/tasks/validate-course.md ====================
 
@@ -1616,62 +1718,81 @@ template:
 
 # Checklist: Course Quality
 
+> **Usage note:** Read `context.md` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
+
 ## Context
 
 - [ ] `context.md` exists
 - [ ] Course type defined
-- [ ] Terminology set (sessions-called, units-called)
+- [ ] Terminology set (sessions-called, lectures-called)
 - [ ] Language & tone conventions set
 - [ ] Agenda flag correct (yes / no / optional)
+- [ ] Person (Sie / Du / you) set
 
 ## Outline
 
 - [ ] Title present
 - [ ] Target audience clearly defined
-- [ ] Time commitment specified
-- [ ] Summary complete
-- [ ] Learning objectives formulated
+- [ ] Time commitment specified `[lecture-series, workshop]`
+- [ ] Time commitment present or estimated `[self-paced]`
+- [ ] Abstract complete (topics, benefits, application)
+- [ ] 3–5 learning objectives formulated, measurable (verb + context)
 - [ ] Optional: Logo prompt
 
 ## Didactics
 
 - [ ] Refers to outline
 - [ ] Didactic concept clear
-- [ ] Instructor persona defined
+- [ ] Instructor persona defined (background, role, style)
 - [ ] Style & difficulty level specified
-- [ ] Course type set
+- [ ] Course type consistent with `context.md`
 
-## Agenda
+## Agenda `[if agenda flag = yes in context.md]`
 
-- [ ] Applicable for this course type (check `context.md` agenda flag)
-- [ ] Learning objectives included
-- [ ] Sessions complete (title, duration, type, learning objective, summary, materials)
+- [ ] All sessions have: title, duration, type, learning objective, summary
+- [ ] Session learning objectives align with `outline.md` learning objectives
+- [ ] Materials file reference present per session
 
 ## Session Progress (sessions.md)
 
-- [ ] `sessions.md` exists
+- [ ] `sessions.md` exists `[not single-lesson]`
 - [ ] All expected sessions have a row
+- [ ] No session marked ✅ Skeleton without a file in `skeletons/`
 - [ ] No session marked ✅ Material without a file in `materials/`
 - [ ] All sessions marked ✅ Fertig before publishing
 
 ## Session Skeletons
 
 - [ ] Exist for all sessions
-- [ ] Mandatory sections included
+- [ ] All mandatory sections present (title, summary, content, activities, references)
 
 ## Session Materials
 
-- [ ] All skeletons transferred
-- [ ] Outline with subchapters
-- [ ] References per section
-- [ ] Didactic inputs considered
+- [ ] All skeletons promoted to materials
+- [ ] Outline with subchapters present
+- [ ] References included per section where claims are made
+- [ ] Didactic inputs from `didactics.md` reflected (methods, learning phases)
+- [ ] Learning objectives from `agenda.md` addressed in content
+
+## LiaScript Syntax (per material file)
+
+- [ ] Exactly one `#` heading per file (course title)
+- [ ] `###` and deeper headings only inside HTML blocks (`<div>`), lists, or blockquotes
+- [ ] All code blocks properly closed (triple backticks)
+- [ ] Animation counters (`--{{n}}--`, `{{n}}`) reset to 0 after each `##` heading
+- [ ] Quiz syntax correct: `[(X)]` single choice, `[[X]]` multiple choice, `[[answer]]` text
+- [ ] All media elements (`![]`, `?[]`, `!?[]`) have meaningful alt text
+- [ ] No unclosed HTML blocks (`<div>` without `</div>`)
+- [ ] Course header metadata present (author, version, language, narrator) `[lecture-series, self-paced, workshop]`
 
 ## Overall Consistency
 
+- [ ] Terminology from `context.md` used consistently throughout all docs
+- [ ] Instructor persona tone consistent across all materials
+- [ ] Learning objectives from `outline.md` traceable into `agenda.md` and materials
 - [ ] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
+- [ ] Numbering correct, no gaps
 - [ ] No sessions without materials
-- [ ] Numbering correct
-- [ ] Markdown format consistent
 
 ==================== END: .bmad-core/checklists/course-quality-checklist.md ====================
 
@@ -2298,6 +2419,12 @@ workflow:
               command: /create-image {description}
               optional: true
               notes: "Create image prompts during coauthoring as needed"
+            - command: /validate-course {number} {type}
+              notes: |
+                Session-level check after coauthor approval:
+                - LiaScript syntax, learning objectives, persona tone
+                - If issues found: re-open /coauthor-materials with report as context
+                - If clean: move to next session
             - repeat: for each session
 
         batch:
@@ -2318,6 +2445,9 @@ workflow:
                 - Add images via artist-agent when needed
                 - Mark each session complete before moving to next
               repeat: for all materials
+            - command: /validate-course {number} {type}
+              notes: "Session-level check per material after coauthor approval"
+              repeat: for all materials
 
       notes: |
         User chooses approach based on preference:
@@ -2331,10 +2461,17 @@ workflow:
       output: validation-report.md
       dependencies: [session_development]
       notes: |
-        Check consistency and completeness:
-        - Verify all learning objectives covered
-        - Check outline ↔ didactics ↔ agenda ↔ sessions consistency
-        - Ensure all materials exist and are complete
+        Full course check before publishing:
+        - Cross-document consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
+        - All sessions Fertig ✅ in sessions.md
+        - LiaScript syntax check on all material files
+        - Produces validation-report.md with PASS/FAIL + issues list
+
+        Feedback loop if issues found:
+        - Open /coauthor-materials {number} {type} for affected sessions
+        - Agent loads validation-report.md and works through issues
+        - Re-run /validate-course after fixes until report is clean
+        - Instructor confirms "Report ist akzeptabel" to exit loop
 
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
