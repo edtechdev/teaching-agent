@@ -29,6 +29,7 @@ customization: null
 
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
+  /analyze-existing: "run task `tasks/analyze-existing.md`"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
@@ -47,6 +48,7 @@ dependencies:
     - artist-agent.yaml
   tasks:
     - init.md
+    - analyze-existing.md
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
@@ -67,7 +69,7 @@ dependencies:
   data:
     - liascript-cheat-sheet.md
   workflows:
-    - lecture-development.yaml
+    - course-development.yaml
 
 fuzzy-matching:
   - 85% confidence threshold

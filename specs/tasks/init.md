@@ -60,10 +60,10 @@ The course context acts as the governance layer: it defines the course type, ter
    - **lecture-series / workshop** → `/create-outline`
    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
-   - **improve-existing** → ask the instructor to share the existing materials first
+   - **improve-existing** → `/analyze-existing` (scans existing docs, offers to fill gaps)
 
 ## Notes
 
 - All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `context.md` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
-- For `improve-existing`, the init creates a baseline context; the actual analysis happens interactively during `/coauthor-materials`.
+- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing docs before improvement work begins.

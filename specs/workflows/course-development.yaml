@@ -35,6 +35,20 @@ workflow:
         - Define project-level conventions (language, tone, accessibility)
         - All subsequent steps read this file as their governance layer
 
+    # Phase 0b: Existing Course Analysis (improve-existing only)
+    - step: analyze_existing
+      agent: teaching
+      command: /analyze-existing
+      output: docs-status.md
+      dependencies: [init]
+      condition: course_type == improve-existing
+      notes: |
+        Scan project for existing docs and fill gaps:
+        - Check outline.md, didactics.md, agenda.md, skeletons/, materials/
+        - For missing core docs: offer auto-generate or interactive creation
+        - List improvement opportunities and suggest next steps
+        - Skip all of Phase 1–3 if docs already exist
+
     # Phase 1: Foundation
     - step: create_outline
       agent: teaching
@@ -461,8 +475,24 @@ workflow:
       - All materials live at: {{github_pages_url}}
 
   quick_reference:
+    course_type_paths:
+      lecture-series:
+        sequence: [/init, /create-outline, /create-didactics, /create-visuals, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course, /create-project]
+      self-paced:
+        sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course, /create-project]
+        note: "Agenda optional — decided at /init"
+      workshop:
+        sequence: [/init, /create-outline, /create-didactics, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course, /create-project]
+      single-lesson:
+        sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        note: "No agenda needed; one session only"
+      improve-existing:
+        sequence: [/init, /analyze-existing, /coauthor-materials, /validate-course, /update-project]
+        note: "/analyze-existing scans for missing docs and offers to auto-generate or create them interactively"
+
     teaching_agent_commands:
       - /init
+      - /analyze-existing
       - /create-outline
       - /create-didactics
       - /create-agenda
