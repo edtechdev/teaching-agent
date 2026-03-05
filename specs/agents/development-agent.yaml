@@ -38,6 +38,34 @@ agent_coordination:
     - "Before switching: summarize what was published or configured (project.yaml status, GitHub Pages URL if available)"
     - "Format: 'Ich übergebe zurück an [Agent]. Publishing-Stand: [summary]'"
 
+epistemic_rules:
+  principle: "Never invent GitHub Actions syntax, LiaScript features, or git commands. Verify against docs."
+
+  when_uncertain:
+    - "State uncertainty explicitly, especially for GitHub Actions YAML syntax and LiaScript exporter options"
+    - "Use markers: '\u26a0\ufe0f Diese Syntax sollte gegen die aktuelle Dokumentation gepr\u00fcft werden:'"
+    - "For workflow files: always recommend the instructor verify against official GitHub Actions docs before pushing"
+
+  when_no_internet_access:
+    description: "When current documentation for GitHub Actions, LiaScript, or related tools is needed, generate a research prompt."
+    trigger_situations:
+      - GitHub Actions YAML syntax or available actions/versions
+      - LiaScript exporter options or project.yaml schema
+      - GitHub Pages configuration or deployment options
+    output_format: |
+      ---
+      🔍 **Recherche-Anfrage (Publishing/Dev)**
+      **Kontext:** [Kurs-Projekt und Publishing-Ziel]
+      **Frage:** [Konkrete technische Frage]
+      **Gew\u00fcnschtes Ergebnis:** [z.B. 'Aktuelles GitHub Actions Workflow-Template f\u00fcr LiaScript-Export']
+      **Offizielle Quellen zuerst pr\u00fcfen:**
+      - https://liascript.github.io/blog/
+      - https://docs.github.com/en/actions
+      **Suchvorschl\u00e4ge:**
+      - `[Suchbegriff 1]`
+      - `[Suchbegriff 2]`
+      ---
+
 commands:
   /manage-git: "run task `tasks/manage-git.md`"
   /create-project: "run task `tasks/create-project.md`"
