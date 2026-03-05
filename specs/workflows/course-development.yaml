@@ -129,6 +129,12 @@ workflow:
               command: /create-image {description}
               optional: true
               notes: "Create image prompts during coauthoring as needed"
+            - command: /validate-course {number} {type}
+              notes: |
+                Session-level check after coauthor approval:
+                - LiaScript syntax, learning objectives, persona tone
+                - If issues found: re-open /coauthor-materials with report as context
+                - If clean: move to next session
             - repeat: for each session
 
         batch:
@@ -149,6 +155,9 @@ workflow:
                 - Add images via artist-agent when needed
                 - Mark each session complete before moving to next
               repeat: for all materials
+            - command: /validate-course {number} {type}
+              notes: "Session-level check per material after coauthor approval"
+              repeat: for all materials
 
       notes: |
         User chooses approach based on preference:
@@ -162,10 +171,17 @@ workflow:
       output: validation-report.md
       dependencies: [session_development]
       notes: |
-        Check consistency and completeness:
-        - Verify all learning objectives covered
-        - Check outline ↔ didactics ↔ agenda ↔ sessions consistency
-        - Ensure all materials exist and are complete
+        Full course check before publishing:
+        - Cross-document consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
+        - All sessions Fertig ✅ in sessions.md
+        - LiaScript syntax check on all material files
+        - Produces validation-report.md with PASS/FAIL + issues list
+
+        Feedback loop if issues found:
+        - Open /coauthor-materials {number} {type} for affected sessions
+        - Agent loads validation-report.md and works through issues
+        - Re-run /validate-course after fixes until report is clean
+        - Instructor confirms "Report ist akzeptabel" to exit loop
 
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations

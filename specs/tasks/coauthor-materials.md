@@ -28,6 +28,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Steps
 
 1. Agent loads agenda info, skeleton, and didactics persona.
+   - **If `validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "Ich habe den Validation-Report geladen. Für Session {N} gibt es folgende Punkte: [...]. Fangen wir damit an."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
@@ -40,6 +41,8 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
+8. After approval, suggest running a session-level syntax and content check:
+   > "Material gespeichert. Soll ich eine kurze Validierung machen (`/validate-course {number} {type}`) um Syntax und Lernziele zu prüfen?"
 
 ## Special Features
 
