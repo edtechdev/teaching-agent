@@ -26,7 +26,11 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 1. Read `context.md`:
    - Check `agenda` field in the profile:
      - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
-     - **`optional`** → Ask: "Möchtest du jetzt eine Agenda erstellen, um die Struktur zu planen? (Ja / Nein / Später)". If no: redirect to `/create-session`. If yes: continue.
+     - **`optional`** → 🎛️ Ask with structured question (single choice):
+       - **Ja** — Agenda erstellen, um die Struktur zu planen
+       - **Nein** — direkt zu `/create-session`
+       - **Später** — Agenda überspringen, später nachholen
+       If no: redirect to `/create-session`. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.

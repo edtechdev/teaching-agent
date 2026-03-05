@@ -41,8 +41,9 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
-8. After approval, suggest running a session-level syntax and content check:
-   > "Material gespeichert. Soll ich eine kurze Validierung machen (`/validate-course {number} {type}`) um Syntax und Lernziele zu prüfen?"
+8. After approval, 🎛️ ask with structured question (single choice):
+   - **Ja, jetzt validieren** — führe `/validate-course {number} {type}` aus
+   - **Später** — Validierung überspringen, direkt zur nächsten Session
 
 ## Special Features
 

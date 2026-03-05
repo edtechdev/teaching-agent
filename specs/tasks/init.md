@@ -21,14 +21,14 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Steps
 
 1. Welcome the instructor and briefly explain the workflow.
-2. Ask for the **course type**:
+2. 🎛️ Ask for the **course type** (structured question — single choice):
    1. **lecture-series** – Semester course / lecture series with instructor
    2. **self-paced** – Self-learning course, asynchronous, no live sessions
    3. **workshop** – Intensive, interactive, time-boxed (1–3 days)
    4. **single-lesson** – One standalone lesson or tutorial
    5. **improve-existing** – Analyze and improve an existing course
-3. Ask for a working title (optional).
-4. Ask about the target platform (LiaScript / other).
+3. 💬 Ask for a working title (optional, free text).
+4. 🎛️ Ask about the target platform (structured question — single choice: LiaScript / Other).
 5. Based on the course type, set the profile defaults:
 
    | Type | Terminology | Persona | Agenda default | Pacing | Assessment |
@@ -39,20 +39,19 @@ The course context acts as the governance layer: it defines the course type, ter
    | single-lesson | lesson | tutor | optional | n/a | optional quiz |
    | improve-existing | (from existing) | (from existing) | optional | (from existing) | (from existing) |
 
-   For **self-paced** and **single-lesson**, ask the instructor:
-   > "Möchtest du eine Agenda / Gliederung erstellen?  
-   > – **Ja**: hilft bei der Strukturplanung, besonders bei längeren Inhalten  
-   > – **Nein**: direkt weiter zu Skeleton und Materialien"
+   For **self-paced** and **single-lesson**, 🎛️ ask agenda preference (structured question — single choice):
+   - **Ja** — hilft bei der Strukturplanung, besonders bei längeren Inhalten
+   - **Nein** — direkt weiter zu Skeleton und Materialien
 
    Set `agenda` in the profile to `yes` or `no` based on the answer.
    For **lecture-series** and **workshop**, agenda is always `yes` (required, no question needed).
 
-6. Ask about project-level conventions:
-   - Language (de / en / other)
-   - Tone (formal / informal / conversational)
-   - Person (Sie / Du / you)
-   - Accessibility requirements
-   - Any LiaScript-specific conventions
+6. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
+   - Language: de / en / other (+ free text if other)
+   - Tone: formal / informal / conversational
+   - Person: Sie / Du / you
+   - Accessibility: required / optional / not needed
+   - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
 8. Save the file as `context.md`.

@@ -40,11 +40,10 @@ Offers two paths for each missing core document:
    - ⚠️ exists but likely incomplete (e.g., missing sections)
    - ❌ missing
 
-4. For each **missing** core document (`outline.md`, `didactics.md`), ask the instructor:
-   > "Für `[document]` gibt es drei Optionen:
-   > 1. **Auto-generieren** — ich lese deine bestehenden Materialien und erstelle einen Entwurf
-   > 2. **Interaktiv erstellen** — ich führe dich durch das passende Erstellungs-Kommando
-   > 3. **Überspringen** — weiter ohne dieses Dokument"
+4. For each **missing** core document (`outline.md`, `didactics.md`), 🎛️ ask with structured question (single choice):
+   - **Auto-generieren** — ich lese deine bestehenden Materialien und erstelle einen Entwurf
+   - **Interaktiv erstellen** — ich führe dich durch das passende Erstellungs-Kommando
+   - **Überspringen** — weiter ohne dieses Dokument
 
 5. If **auto-generate** is chosen:
    - Read all available files in `skeletons/` and `materials/`
