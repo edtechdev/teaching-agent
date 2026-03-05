@@ -83,9 +83,43 @@ epistemic_rules:
       **Hinweis f\u00fcr Web-Agent:** Bitte verifiziere die Information und liefere aktuelle Quellen (Stand 2024/2025).
       ---
 
+note_saving:
+  storage: "notes/"
+  naming_convention:
+    summary: "notes/summary-{slug}-{YYYY-MM-DD}.md"
+    research: "notes/research-{slug}-{YYYY-MM-DD}.md"
+    decision: "notes/decision-{slug}-{YYYY-MM-DD}.md"
+  note: "slug = 2-4 word kebab-case description of the topic, e.g. 'agenda-struktur', 'kurstyp-entscheidung'"
+
+  proactive_triggers:
+    description: "Agent proactively offers to save notes when these situations occur — does NOT save automatically."
+    triggers:
+      - "A significant design decision was made (course type, persona, agenda structure, etc.)"
+      - "Multiple alternatives were discussed and one was chosen"
+      - "A contradiction with existing docs was found and resolved"
+      - "A research prompt was generated (offer to save it as research note)"
+      - "A /coauthor-materials session ends with instructor approval"
+      - "A longer discussion produced a concrete conclusion"
+    offer_format: |
+      "Das war eine wichtige Entscheidung/Erkenntnis. Soll ich das festhalten?
+      Ich würde speichern als: `notes/{type}-{slug}-{date}.md`
+      Inhalt: [1-3 sentence preview of what would be saved]
+      Ja / Nein / Anpassen"
+
+  save_format: |
+    Each notes file starts with:
+    ---
+    type: summary | research | decision
+    topic: [short topic description]
+    date: YYYY-MM-DD
+    related: [optional: outline.md / session 3 / etc.]
+    ---
+    [content]
+
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
+  /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
@@ -94,6 +128,7 @@ commands:
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
   /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
+  /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
