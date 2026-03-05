@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Initializes a new course project by creating `docs/course-context.md`.
+Initializes a new course project by creating `context.md`.
 
 This is the **first mandatory step** for every new course project.
 The course context acts as the governance layer: it defines the course type, terminology, persona style, conventions, and LiaScript rules that all subsequent tasks will load and follow.
@@ -15,7 +15,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 ## Output
 
-- `docs/course-context.md` (Markdown file)
+- `context.md` (Markdown file)
 - Structure based on `templates/course-context.yaml`
 
 ## Steps
@@ -47,7 +47,7 @@ The course context acts as the governance layer: it defines the course type, ter
    - Any LiaScript-specific conventions
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
-8. Save the file as `docs/course-context.md`.
+8. Save the file as `context.md`.
 9. Confirm completion and suggest the next step based on course type:
    - **lecture-series / self-paced / workshop** → `/create-outline`
    - **single-lesson** → `/create-outline`, then directly `/create-session 1 lecture`
@@ -55,6 +55,6 @@ The course context acts as the governance layer: it defines the course type, ter
 
 ## Notes
 
-- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `docs/course-context.md` and adapt their behavior accordingly.
+- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `context.md` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
 - For `improve-existing`, the init creates a baseline context; the actual analysis happens interactively during `/coauthor-materials`.

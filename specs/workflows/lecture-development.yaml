@@ -27,7 +27,7 @@ workflow:
     - step: init
       agent: teaching
       command: /init
-      output: docs/course-context.md
+      output: context.md
       notes: |
         First mandatory step for every new course:
         - Choose course type (lecture-series / self-paced / workshop / single-lesson / improve-existing)
@@ -39,7 +39,7 @@ workflow:
     - step: create_outline
       agent: teaching
       command: /create-outline
-      output: docs/course-outline.md
+      output: outline.md
       dependencies: [init]
       notes: |
         Define the course foundation:
@@ -50,7 +50,7 @@ workflow:
     - step: create_didactics
       agent: teaching
       command: /create-didactics
-      output: docs/course-didactics.md
+      output: didactics.md
       dependencies: [create_outline]
       notes: |
         Define teaching approach:
@@ -61,7 +61,7 @@ workflow:
     - step: create_style_guide
       agent: artist
       command: /create-style-guide
-      output: docs/style-guide.md
+      output: style-guide.md
       dependencies: [create_outline, create_didactics]
       notes: |
         Create visual identity aligned with teaching persona:
@@ -83,7 +83,7 @@ workflow:
     - step: create_agenda
       agent: teaching
       command: /create-agenda
-      output: docs/course-agenda.md
+      output: agenda.md
       dependencies: [create_didactics, create_style_guide]
       notes: |
         Build session structure (skipped for single-lesson):
@@ -144,7 +144,7 @@ workflow:
     - step: validate_course
       agent: teaching
       command: /validate-course
-      output: docs/course-validation-report.md
+      output: validation-report.md
       dependencies: [session_development]
       notes: |
         Check consistency and completeness:

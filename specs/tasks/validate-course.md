@@ -2,16 +2,16 @@
 
 ## Purpose
 
-Checks the consistency and completeness of all course documents based on the didactics from `docs/course-didactics.md`, the course context from `docs/course-context.md`, and the checklist from `checklists/course-quality-checklist.md`.
-**The agent also adopts the instructor persona and style from `docs/course-didactics.md#Professor-Persona` into its own persona, so all content is written in this voice.**
+Checks the consistency and completeness of all course documents based on the didactics from `didactics.md`, the course context from `context.md`, and the checklist from `checklists/course-quality-checklist.md`.
+**The agent also adopts the instructor persona and style from `didactics.md#Professor-Persona` into its own persona, so all content is written in this voice.**
 
 ## Output
 
-- `docs/course-validation-report.md`
+- `validation-report.md`
 
 ## Steps
 
-1. Load `docs/course-context.md` to understand the course type and applicable conventions.
+1. Load `context.md` to understand the course type and applicable conventions.
 2. Load and use the structure from `checklists/course-quality-checklist.md`.
 3. Check the outline.
 4. Check the didactics.
