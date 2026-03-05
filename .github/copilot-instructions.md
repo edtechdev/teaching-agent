@@ -111,6 +111,27 @@ agent_coordination:
     - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
     - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
 
+interaction_mode:
+  principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content."
+
+  structured_questions:
+    description: "Clickable options — use when the answer comes from a known, finite set and determines a workflow branch."
+    use_when:
+      - "Selecting from a fixed list: course type, language, tone, person (Sie/Du), difficulty, persona style"
+      - "Binary or trinary gates: yes/no/later, PASS/proceed/fix-first"
+      - "Mode selection: iterative vs. batch, scaffold vs. step-by-step"
+      - "Confirmation steps: 'Soll ich jetzt generieren?', 'Soll ich das festhalten?'"
+      - "Approval checkpoints at the end of a task step"
+    not_when:
+      - "Collecting free-form content: title, abstract, learning objectives, examples"
+      - "Open discussion, brainstorming, or exploring didactic ideas"
+      - "The instructor is providing background or context"
+      - "The question requires a nuanced multi-sentence answer"
+
+  task_notation:
+    structured: "🎛️ — use structured question (vscode_askQuestions) for this step"
+    freetext: "💬 — use free-form dialog for this step"
+
 epistemic_rules:
   principle: "Never invent facts. Be explicit about uncertainty. Always offer a research path."
 
@@ -187,6 +208,7 @@ note_saving:
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
+  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate context.md, outline.md, didactics.md, agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
@@ -210,6 +232,7 @@ dependencies:
   tasks:
     - init.md
     - analyze-existing.md
+    - scaffold-course.md
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
@@ -506,11 +529,10 @@ Offers two paths for each missing core document:
    - ⚠️ exists but likely incomplete (e.g., missing sections)
    - ❌ missing
 
-4. For each **missing** core document (`outline.md`, `didactics.md`), ask the instructor:
-   > "Für `[document]` gibt es drei Optionen:
-   > 1. **Auto-generieren** — ich lese deine bestehenden Materialien und erstelle einen Entwurf
-   > 2. **Interaktiv erstellen** — ich führe dich durch das passende Erstellungs-Kommando
-   > 3. **Überspringen** — weiter ohne dieses Dokument"
+4. For each **missing** core document (`outline.md`, `didactics.md`), 🎛️ ask with structured question (single choice):
+   - **Auto-generieren** — ich lese deine bestehenden Materialien und erstelle einen Entwurf
+   - **Interaktiv erstellen** — ich führe dich durch das passende Erstellungs-Kommando
+   - **Überspringen** — weiter ohne dieses Dokument
 
 5. If **auto-generate** is chosen:
    - Read all available files in `skeletons/` and `materials/`
@@ -676,8 +698,9 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
-8. After approval, suggest running a session-level syntax and content check:
-   > "Material gespeichert. Soll ich eine kurze Validierung machen (`/validate-course {number} {type}`) um Syntax und Lernziele zu prüfen?"
+8. After approval, 🎛️ ask with structured question (single choice):
+   - **Ja, jetzt validieren** — führe `/validate-course {number} {type}` aus
+   - **Später** — Validierung überspringen, direkt zur nächsten Session
 
 ## Special Features
 
@@ -724,7 +747,11 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 1. Read `context.md`:
    - Check `agenda` field in the profile:
      - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
-     - **`optional`** → Ask: "Möchtest du jetzt eine Agenda erstellen, um die Struktur zu planen? (Ja / Nein / Später)". If no: redirect to `/create-session`. If yes: continue.
+     - **`optional`** → 🎛️ Ask with structured question (single choice):
+       - **Ja** — Agenda erstellen, um die Struktur zu planen
+       - **Nein** — direkt zu `/create-session`
+       - **Später** — Agenda überspringen, später nachholen
+       If no: redirect to `/create-session`. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.
@@ -772,16 +799,19 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 
 1. Read `context.md` for course type, persona type, and conventions.
 2. Read abstract, target audience, and learning objectives from `outline.md`.
-3. Design a suitable didactic concept (teaching methods, learning phases) adapted to the course type:
+3. 💬 Design a suitable didactic concept (teaching methods, learning phases) adapted to the course type — discuss with instructor if unclear:
    - **lecture-series**: structured phases, presenter-driven, attendance-based
    - **self-paced**: modular, learner-driven, self-check oriented
    - **workshop**: activity-driven, collaborative, time-boxed
    - **single-lesson**: focused, compact, single arc
-4. Describe the instructor persona (expertise, role, style) aligned with the persona type from `context.md`.
-5. Define style & difficulty level (humorous, scientific, practical, etc.).
-6. Set the delivery format consistent with the course type.
-7. Fill the `templates/course-didactics.yaml` template with the results.
-8. Save the file as `didactics.md`.
+4. 💬 Describe the instructor persona (expertise, role, background) — free text, discuss with instructor.
+5. 🎛️ Define teaching style (structured question — single choice with optional free-text addition):
+   - humorous / academic / practical / conversational / mixed
+6. 🎛️ Set difficulty level (structured question — single choice):
+   - beginner / intermediate / advanced
+7. Set the delivery format consistent with the course type.
+8. Fill the `templates/course-didactics.yaml` template with the results.
+9. Save the file as `didactics.md`.
 
 ==================== END: .bmad-core/tasks/create-didactics.md ====================
 
@@ -1164,14 +1194,14 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Steps
 
 1. Welcome the instructor and briefly explain the workflow.
-2. Ask for the **course type**:
+2. 🎛️ Ask for the **course type** (structured question — single choice):
    1. **lecture-series** – Semester course / lecture series with instructor
    2. **self-paced** – Self-learning course, asynchronous, no live sessions
    3. **workshop** – Intensive, interactive, time-boxed (1–3 days)
    4. **single-lesson** – One standalone lesson or tutorial
    5. **improve-existing** – Analyze and improve an existing course
-3. Ask for a working title (optional).
-4. Ask about the target platform (LiaScript / other).
+3. 💬 Ask for a working title (optional, free text).
+4. 🎛️ Ask about the target platform (structured question — single choice: LiaScript / Other).
 5. Based on the course type, set the profile defaults:
 
    | Type | Terminology | Persona | Agenda default | Pacing | Assessment |
@@ -1182,20 +1212,19 @@ The course context acts as the governance layer: it defines the course type, ter
    | single-lesson | lesson | tutor | optional | n/a | optional quiz |
    | improve-existing | (from existing) | (from existing) | optional | (from existing) | (from existing) |
 
-   For **self-paced** and **single-lesson**, ask the instructor:
-   > "Möchtest du eine Agenda / Gliederung erstellen?  
-   > – **Ja**: hilft bei der Strukturplanung, besonders bei längeren Inhalten  
-   > – **Nein**: direkt weiter zu Skeleton und Materialien"
+   For **self-paced** and **single-lesson**, 🎛️ ask agenda preference (structured question — single choice):
+   - **Ja** — hilft bei der Strukturplanung, besonders bei längeren Inhalten
+   - **Nein** — direkt weiter zu Skeleton und Materialien
 
    Set `agenda` in the profile to `yes` or `no` based on the answer.
    For **lecture-series** and **workshop**, agenda is always `yes` (required, no question needed).
 
-6. Ask about project-level conventions:
-   - Language (de / en / other)
-   - Tone (formal / informal / conversational)
-   - Person (Sie / Du / you)
-   - Accessibility requirements
-   - Any LiaScript-specific conventions
+6. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
+   - Language: de / en / other (+ free text if other)
+   - Tone: formal / informal / conversational
+   - Person: Sie / Du / you
+   - Accessibility: required / optional / not needed
+   - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
 8. Save the file as `context.md`.
@@ -1364,6 +1393,140 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 | Persona tone inconsistent throughout | `/coauthor-materials` |
 
 ==================== END: .bmad-core/tasks/quick-fix.md ====================
+
+
+==================== START: .bmad-core/tasks/scaffold-course.md ====================
+
+# Task: scaffold-course
+
+## Purpose
+
+Runs all structural setup steps in one automated pass — without stopping for approval after each step.
+
+The instructor answers all questions **upfront in a single intake interview**. The agent then generates `context.md`, `outline.md`, `didactics.md`, `agenda.md`, and all session skeletons automatically. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
+
+This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
+
+## Inputs
+
+All collected in a single intake interview at the start:
+
+- Course type
+- Working title
+- Target audience
+- Language, tone, person (Sie/Du/you)
+- Accessibility requirements
+- Time commitment (where applicable)
+- Abstract (topics, benefits)
+- 3–5 learning objectives
+- Didactic concept preference (structured/exploratory/project-based/mixed)
+- Instructor persona style (humorous/academic/practical/conversational)
+- Difficulty level
+- Session count and titles (or leave titles open for auto-generation)
+- Agenda required? (for self-paced / single-lesson)
+
+## Output
+
+Generated in sequence without interruption:
+- `context.md`
+- `outline.md`
+- `didactics.md`
+- `agenda.md` (if applicable)
+- `skeletons/{n}-{type}.md` for each session
+- `sessions.md` (tracking table)
+
+## Steps
+
+### Phase 1: Intake Interview
+
+1. Announce scaffold mode:
+   > "Scaffold-Modus gestartet. Ich stelle dir jetzt alle Fragen auf einmal — danach generiere ich die komplette Kursstruktur automatisch. Du kannst danach alles noch anpassen."
+
+2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
+
+   **🎛️ Block 1 — Course basics (structured questions, one pass):**
+   - Course type: lecture-series / self-paced / workshop / single-lesson
+   - Language: de / en / other (+ free text if other)
+   - Tone: formal / informal / conversational
+   - Person: Sie / Du / you
+   - Accessibility: required / optional / not needed
+
+   **💬 Block 2 — Content (free text, discuss if needed):**
+   - Working title
+   - Target audience
+   - Abstract (topics, benefits, application)
+   - 3–5 learning objectives
+
+   **🎛️ Block 3 — Didactics (structured questions):**
+   - Teaching style: humorous / academic / practical / conversational / mixed
+   - Difficulty level: beginner / intermediate / advanced
+   - Didactic concept: structured/presenter-driven / exploratory / project-based / mixed
+
+   **🎛️ Block 4 — Structure (structured questions):**
+   - Agenda needed? (for self-paced / single-lesson): yes / no
+   - Session approach after scaffold: iterative (one at a time) / batch (all at once)
+   - Session count: 💬 free text (number + optional titles, or leave for auto-generation)
+
+3. Present a **summary of all inputs** and ask for confirmation:
+   > "Zusammenfassung: [display all inputs]. Soll ich jetzt die Struktur generieren? (Ja / Anpassen)"
+
+4. If adjustments needed: ask which block to revise, update, confirm again.
+
+### Phase 2: Automated Generation
+
+Run each step silently (no approval prompts between steps):
+
+1. Generate and save `context.md` from collected inputs.
+2. Generate and save `outline.md`.
+3. Generate and save `didactics.md` — including the **Persona Voice Sample** section.
+4. Generate and save `agenda.md` (skip if agenda = no).
+5. For each session: generate and save `skeletons/{n}-{type}.md`.
+6. Create `sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Fertig ❌.
+
+After each file is saved, print a brief progress line:
+```
+✅ context.md
+✅ outline.md
+✅ didactics.md
+✅ agenda.md
+✅ skeletons/1-lecture.md
+✅ skeletons/2-lecture.md
+...
+✅ sessions.md
+```
+
+### Phase 3: Handoff
+
+7. Print completion summary:
+   > "Scaffold abgeschlossen. [N] Dateien erstellt."
+   >
+   > | Datei | Status |
+   > |---|---|
+   > | context.md | ✅ |
+   > | outline.md | ✅ |
+   > | didactics.md | ✅ |
+   > | agenda.md | ✅ / übersprungen |
+   > | skeletons/ | ✅ [N] Dateien |
+   > | sessions.md | ✅ |
+   >
+   > "Nächster Schritt: `/coauthor-materials` um mit Session 1 zu starten."
+
+8. Offer a note save:
+   > "Soll ich die Kursstruktur-Entscheidungen als Decision-Note festhalten? (`/save-decision kursstruktur`)"
+
+## Escalation Rules
+
+- If a required input is missing and cannot be reasonably inferred: **pause and ask** — do not guess.
+- If the session count is unusually high (>12 for a single-lesson or >20 overall): flag it and ask to confirm before continuing.
+- If course type is `improve-existing`: redirect to `/analyze-existing` instead.
+
+## Notes
+
+- Scaffold mode does NOT run `/promote-session` or `/coauthor-materials` — those remain interactive.
+- All generated files are drafts. The instructor reviews and refines them during co-authoring.
+- The Persona Voice Sample in `didactics.md` is especially important — it anchors tone for all future co-authoring sessions.
+
+==================== END: .bmad-core/tasks/scaffold-course.md ====================
 
 
 ==================== START: .bmad-core/tasks/update-project.md ====================
@@ -2489,6 +2652,20 @@ workflow:
         - Define project-level conventions (language, tone, accessibility)
         - All subsequent steps read this file as their governance layer
 
+    # Phase 0-alt: Scaffold Fast-Track (replaces Phase 0–3 in one pass)
+    - step: scaffold
+      agent: teaching
+      command: /scaffold {course-type?}
+      output: context.md, outline.md, didactics.md, agenda.md, skeletons/, sessions.md
+      alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
+      notes: |
+        Fast-track for instructors who know what they want:
+        - Single intake interview collects all inputs upfront
+        - Auto-generates all structural artefacts in one pass (no approval between steps)
+        - Stops before /coauthor-materials — content authoring remains interactive
+        - Use instead of running /init → /create-outline → /create-didactics → /create-agenda → /create-session separately
+        - Not suitable for improve-existing (use /analyze-existing instead)
+
     # Phase 0b: Existing Course Analysis (improve-existing only)
     - step: analyze_existing
       agent: teaching
@@ -2637,6 +2814,11 @@ workflow:
         - Re-run /validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
 
+        Publishing Gate (enforced):
+        - PASS → proceed to /create-project or /assemble-bundle
+        - FAIL → publishing commands blocked until re-validation passes
+        - PASS with concerns → instructor decides explicitly
+
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
       agent: development
@@ -2655,9 +2837,9 @@ workflow:
       command: /create-project
       output: project.yaml + .github/workflows/
       optional: true
-      condition: user_requests_publishing AND first_time_setup
+      condition: user_requests_publishing AND first_time_setup AND validation_report == PASS
       notes: |
-        Only when the instructor explicitly wants to publish.
+        Only when the instructor explicitly wants to publish AND validation-report.md shows PASS.
         Recommended when multiple materials exist and the course is ready to share.
         - Generate project.yaml with all materials from materials/
         - Apply visuals colors to project.yaml
@@ -2680,13 +2862,15 @@ workflow:
     - step: assemble_bundle
       agent: teaching
       command: /assemble-bundle
-      output: course-bundle/ or .zip
+      output: course-bundle/
       optional: true
+      condition: validation_report == PASS
       notes: |
-        Create complete package:
-        - Collect all documents
-        - Generate index file
-        - Bundle everything together
+        Create complete distributable package (requires PASS in validation-report.md):
+        - Pre-flight check: blocks if validation-report.md is missing or FAIL
+        - Collects context.md, outline.md, didactics.md, sessions.md, all materials/
+        - Conditionally includes agenda.md, skeletons/, assets/, notes/
+        - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
     This workflow is flexible:
@@ -2804,6 +2988,7 @@ workflow:
 
     teaching_agent_commands:
       - /init
+      - /scaffold {course-type?}
       - /analyze-existing
       - /create-outline
       - /create-didactics
@@ -2811,6 +2996,7 @@ workflow:
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials
+      - /quick-fix {number} {type} {description}
       - /validate-course
       - /assemble-bundle
 
