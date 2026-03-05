@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Creates the document **Lecture Didactics & Style**.  
-Defines the didactic concept, professor persona, style, and course type of the lecture.  
-Builds on the Lecture Outline to ensure a consistent teaching strategy.
+Creates the document **Course Didactics & Style**.  
+Defines the didactic concept, instructor persona, style, and course type.  
+Builds on the outline to ensure a consistent teaching strategy aligned with the course type from `context.md`.
 
 ## Inputs
 
@@ -21,10 +21,14 @@ Builds on the Lecture Outline to ensure a consistent teaching strategy.
 ## Steps
 
 1. Read `context.md` for course type, persona type, and conventions.
-2. Read abstract, target audience, time commitment, and learning objectives from the outline.
-3. Design a suitable didactic concept (teaching methods, learning phases).
-4. Describe the instructor persona (expertise, role, style) aligned with the persona type from course-context.
+2. Read abstract, target audience, and learning objectives from `outline.md`.
+3. Design a suitable didactic concept (teaching methods, learning phases) adapted to the course type:
+   - **lecture-series**: structured phases, presenter-driven, attendance-based
+   - **self-paced**: modular, learner-driven, self-check oriented
+   - **workshop**: activity-driven, collaborative, time-boxed
+   - **single-lesson**: focused, compact, single arc
+4. Describe the instructor persona (expertise, role, style) aligned with the persona type from `context.md`.
 5. Define style & difficulty level (humorous, scientific, practical, etc.).
-6. Set the course type (introductory, advanced, practice-oriented, group work, self-learning).
+6. Set the delivery format consistent with the course type.
 7. Fill the `templates/course-didactics.yaml` template with the results.
 8. Save the file as `didactics.md`.

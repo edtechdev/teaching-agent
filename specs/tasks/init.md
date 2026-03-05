@@ -31,13 +31,21 @@ The course context acts as the governance layer: it defines the course type, ter
 4. Ask about the target platform (LiaScript / other).
 5. Based on the course type, set the profile defaults:
 
-   | Type | Terminology | Persona | Agenda | Pacing | Assessment |
+   | Type | Terminology | Persona | Agenda default | Pacing | Assessment |
    |---|---|---|---|---|---|
    | lecture-series | session / lecture | professor | required | scheduled | quizzes + assignments |
    | self-paced | unit / module | coach | optional | learner-driven | self-check quizzes |
    | workshop | block / activity | facilitator | required | event-based | reflection + group work |
-   | single-lesson | lesson | tutor | no | n/a | optional quiz |
+   | single-lesson | lesson | tutor | optional | n/a | optional quiz |
    | improve-existing | (from existing) | (from existing) | optional | (from existing) | (from existing) |
+
+   For **self-paced** and **single-lesson**, ask the instructor:
+   > "Möchtest du eine Agenda / Gliederung erstellen?  
+   > – **Ja**: hilft bei der Strukturplanung, besonders bei längeren Inhalten  
+   > – **Nein**: direkt weiter zu Skeleton und Materialien"
+
+   Set `agenda` in the profile to `yes` or `no` based on the answer.
+   For **lecture-series** and **workshop**, agenda is always `yes` (required, no question needed).
 
 6. Ask about project-level conventions:
    - Language (de / en / other)
@@ -49,8 +57,9 @@ The course context acts as the governance layer: it defines the course type, ter
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
 8. Save the file as `context.md`.
 9. Confirm completion and suggest the next step based on course type:
-   - **lecture-series / self-paced / workshop** → `/create-outline`
-   - **single-lesson** → `/create-outline`, then directly `/create-session 1 lecture`
+   - **lecture-series / workshop** → `/create-outline`
+   - **self-paced** → `/create-outline` (agenda depends on instructor answer)
+   - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
    - **improve-existing** → ask the instructor to share the existing materials first
 
 ## Notes

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Creates a **Session Skeleton** (lecture or exercise) as a structured framework.  
+Creates a **skeleton** for one session (or unit/block/lesson — see `context.md` for terminology) as a structured framework.  
 **The agent also adopts the instructor persona and style from `didactics.md` into its own persona, so all content is written in this voice.**
 
 ## Inputs

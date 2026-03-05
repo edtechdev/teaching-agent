@@ -22,8 +22,14 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 ## Steps
 
 1. Read `context.md` to determine course type and conventions.
-2. Collect title, target audience, time commitment, and abstract.
-3. Define 3–5 concrete learning objectives.
-4. Optionally add a logo prompt.
-5. Fill the `templates/course-outline.yaml` with the inputs.
-6. Save the file as `outline.md`.
+2. Collect title and target audience.
+3. Collect time commitment — adapted by course type:
+   - **lecture-series**: required (e.g., semester hours/week, total hours)
+   - **workshop**: required (e.g., 1-day, 2-day block)
+   - **self-paced**: optional (estimated self-study hours recommended, but not mandatory)
+   - **single-lesson**: skip — not applicable
+4. Collect abstract (topics, content, benefits).
+5. Define 3–5 concrete learning objectives.
+6. Optionally add a logo prompt.
+7. Fill the `templates/course-outline.yaml` with the inputs.
+8. Save the file as `outline.md`.

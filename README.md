@@ -19,6 +19,10 @@
 
 ---
 
+
+
+
+
 ## Philosophy: Spec-Driven Development
 
 Traditional course development often starts with writing content directly — slides, notes, exercises — without a clear roadmap. This leads to:
@@ -63,43 +67,42 @@ Teaching-Agent implements BMad principles by:
 
 ## Teaching-Agent Workflow
 
-Teaching-Agent guides you through **5 core phases**:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Phase 1: FOUNDATION                                        │
-│  → /create-outline: Define scope, audience, objectives      │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│  Phase 2: DIDACTICS                                         │
-│  → /create-didactics: Design teaching approach & persona    │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│  Phase 3: PLANNING                                          │
-│  → /create-agenda: Structure sessions & timeline            │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│  Phase 4: DEVELOPMENT                                       │
-│  → /create-session: Build session skeletons                 │
-│  → /promote-session: Expand into full materials             │
-│  → /coauthor-materials: Collaborate on content              │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│  Phase 5: FINALIZATION                                      │
-│  → /validate-lecture: Check consistency                     │
-│  → /assemble-bundle: Package everything                     │
-└─────────────────────────────────────────────────────────────┘
+
+
+Teaching-Agent guides you through **6 phases** — starting with project initialization, then building iteratively toward published materials.
+
+```mermaid
+flowchart TD
+    INIT["**Phase 0 · INIT**<br/>/init<br/>→ context.md"]
+    OUTLINE["**Phase 1 · FOUNDATION**<br/>/create-outline<br/>→ outline.md"]
+    DIDACTICS["**Phase 2 · DIDACTICS**<br/>/create-didactics<br/>→ didactics.md"]
+    AGENDA["**Phase 3 · PLANNING**<br/>/create-agenda<br/>→ agenda.md"]
+    DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → skeletons/<br/>/promote-session → materials/<br/>/coauthor-materials"]
+    FINAL["**Phase 5 · FINALIZATION**<br/>/validate-course<br/>/assemble-bundle"]
+
+    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ visuals.md"]
+    ART2["🎨 **Artist-Agent**<br/>/create-image<br/>(on demand)"]
+    DEVAGT["🛠️ **Development-Agent**<br/>/manage-git · /create-project<br/>(anytime)"]
+
+    INIT --> OUTLINE --> DIDACTICS --> AGENDA --> DEV --> FINAL
+    DIDACTICS -.->|optional| ART1 -.-> AGENDA
+    DEV <-.->|on demand| ART2
+    FINAL -.->|publish| DEVAGT
+    DEVAGT -.->|anytime| INIT
+
+    style INIT fill:#0B6E75,color:#fff
+    style FINAL fill:#FF8C42,color:#fff
+    style ART1 fill:#6B4E9B,color:#fff
+    style ART2 fill:#6B4E9B,color:#fff
+    style DEVAGT fill:#2E7D32,color:#fff
 ```
 
 ### Key Principles
 
 - **Progressive refinement**: Each phase builds on the previous
 - **Interactive dialogue**: The agent asks clarifying questions when needed
-- **Professor persona adoption**: From Phase 3 onward, materials reflect your defined teaching style
+- **Instructor persona adoption**: From Phase 2 onward, materials reflect your defined teaching style
 - **LiaScript-native**: All materials use LiaScript syntax for interactive, web-based courses
 
 ---
