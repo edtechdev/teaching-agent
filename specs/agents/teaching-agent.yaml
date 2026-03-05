@@ -52,6 +52,11 @@ agent_coordination:
     - "Read context.md if it exists to understand course type, terminology, and conventions"
     - "Check which core docs exist (outline.md, didactics.md, agenda.md) and mention status if relevant"
 
+  suggest_escalation_when:
+    - "Session count grows significantly beyond what was scoped in /init → suggest reviewing course type or splitting the course"
+    - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
+    - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
+
 epistemic_rules:
   principle: "Never invent facts. Be explicit about uncertainty. Always offer a research path."
 
@@ -116,20 +121,30 @@ note_saving:
     ---
     [content]
 
+    For type: decision, use ADR structure:
+    **Context:** [What situation or constraint led to this decision?]
+    **Options considered:**
+    1. [Option A] — [brief pros/cons]
+    2. [Option B] — [brief pros/cons]
+    **Decision:** [What was chosen]
+    **Rationale:** [Why this option over the alternatives]
+    **Consequences:** [What this implies for future steps, constraints, or other documents]
+
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
+  /quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
   /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing; with {number} {type}: session-level syntax + content check after coauthor"
   /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
   /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
+  /save-decision {title}: "Save a structured decision record (ADR format) — context, options considered, decision, rationale, consequences"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
@@ -147,6 +162,7 @@ dependencies:
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
+    - quick-fix.md
     - validate-course.md
     - assemble-bundle.md
   templates:

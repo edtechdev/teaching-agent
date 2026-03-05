@@ -106,6 +106,11 @@ agent_coordination:
     - "Read context.md if it exists to understand course type, terminology, and conventions"
     - "Check which core docs exist (outline.md, didactics.md, agenda.md) and mention status if relevant"
 
+  suggest_escalation_when:
+    - "Session count grows significantly beyond what was scoped in /init → suggest reviewing course type or splitting the course"
+    - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
+    - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
+
 epistemic_rules:
   principle: "Never invent facts. Be explicit about uncertainty. Always offer a research path."
 
@@ -170,20 +175,30 @@ note_saving:
     ---
     [content]
 
+    For type: decision, use ADR structure:
+    **Context:** [What situation or constraint led to this decision?]
+    **Options considered:**
+    1. [Option A] — [brief pros/cons]
+    2. [Option B] — [brief pros/cons]
+    **Decision:** [What was chosen]
+    **Rationale:** [Why this option over the alternatives]
+    **Consequences:** [What this implies for future steps, constraints, or other documents]
+
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
+  /quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
   /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing; with {number} {type}: session-level syntax + content check after coauthor"
   /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
   /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
+  /save-decision {title}: "Save a structured decision record (ADR format) — context, options considered, decision, rationale, consequences"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
@@ -201,6 +216,7 @@ dependencies:
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
+    - quick-fix.md
     - validate-course.md
     - assemble-bundle.md
   templates:
@@ -532,18 +548,85 @@ Offers two paths for each missing core document:
 
 ## Purpose
 
-Combines all documents of a course into a complete package.
+Combines all course documents into a complete, distributable package for handoff, archiving, or offline use.
+Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artefacts.
+
+## Inputs
+
+- `context.md` — course metadata and conventions
+- `outline.md` — course title and abstract (used in bundle index)
+- `didactics.md` — teaching approach and persona documentation
+- `agenda.md` — session schedule (if exists)
+- `sessions.md` — production status tracking
+- `skeletons/` — session skeletons (optional, for documentation trail)
+- `materials/` — full session materials (primary content)
+- `visuals.md` + `assets/` — visual style guide and assets (if exists)
+- `validation-report.md` — latest QA report (**required, must show PASS**)
+- `notes/` — decision records and summaries (optional)
 
 ## Output
 
-- `course-bundle/` or `.zip`
+```
+course-bundle/
+├── bundle-index.md          ← auto-generated index
+├── context.md
+├── outline.md
+├── didactics.md
+├── agenda.md                ← if exists
+├── sessions.md
+├── validation-report.md
+├── materials/
+│   └── {n}-{type}.md
+├── skeletons/               ← optional
+│   └── {n}-{type}.md
+├── assets/                  ← if exists
+└── notes/                   ← if exists
+```
 
 ## Steps
 
-1. Collect all documents.
-2. Build the structure.
-3. Generate index file `bundle-index.md`.
-4. Bundle everything together.
+1. **Pre-flight check:** Confirm `validation-report.md` exists and shows PASS.
+   - If missing or FAIL: block bundling. State: "⛔ Bitte führe zuerst `/validate-course` aus und behebe alle Issues, bevor das Bundle erstellt wird."
+
+2. Read course title and abstract from `outline.md`.
+
+3. Scan all source folders and collect files:
+   - **Required:** `context.md`, `outline.md`, `didactics.md`, `sessions.md`, all files in `materials/`, `validation-report.md`
+   - **Conditional:** `agenda.md` (if exists), `skeletons/` (if exists), `assets/` (if exists), `notes/` (if exists)
+
+4. Generate `bundle-index.md`:
+
+   ```markdown
+   # Course Bundle: [Course Title]
+
+   Generated: YYYY-MM-DD
+   Course type: [type from context.md]
+   Validation: PASS (see validation-report.md)
+
+   ## Contents
+
+   | File | Description |
+   |------|-------------|
+   | context.md | Course governance and conventions |
+   | outline.md | Title, audience, learning objectives |
+   | didactics.md | Teaching approach and instructor persona |
+   | agenda.md | Session schedule and structure |
+   | sessions.md | Production status per session |
+   | validation-report.md | Quality validation results |
+   | materials/{n}-{type}.md | Session N: [title from agenda.md] |
+
+   ## Quick Start
+
+   - **Instructor handoff:** Start with `outline.md` and `didactics.md`
+   - **LiaScript publish:** Use files in `materials/` directly
+   - **Quality audit:** See `validation-report.md`
+   ```
+
+5. Copy all collected files into `course-bundle/` preserving subfolder structure.
+
+6. Confirm completion:
+   > "Bundle erstellt in `course-bundle/`. Enthält [N] Materialdateien, [agenda.md ✅ / kein Agenda], [assets/ ✅ / keine Assets]."
+   > "Nächster Schritt: `/agent development` → `/create-project` um den Kurs zu veröffentlichen."
 
 ==================== END: .bmad-core/tasks/assemble-bundle.md ====================
 
@@ -1223,6 +1306,66 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 ==================== END: .bmad-core/tasks/promote-session.md ====================
 
 
+==================== START: .bmad-core/tasks/quick-fix.md ====================
+
+# Task: quick-fix
+
+## Purpose
+
+Fast, focused correction of a single well-defined issue in an existing material file, without running a full co-authoring session.
+
+Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted changes (typos, broken syntax, swapping one example, fixing a quiz answer, correcting a link).
+
+## Inputs
+
+- `number`: session number
+- `type`: session type (`lecture` or `exercise`)
+- `description`: what to fix (brief, e.g. "Tippfehler in Abschnitt 3", "Quiz-Syntax in Folie 5 korrigieren", "Beispiel für Lernziel 2 ersetzen")
+- `materials/{number}-{type}.md` — the file to change
+- `context.md` — for conventions and terminology
+- `data/liascript-cheat-sheet.md` — for syntax reference if the fix involves LiaScript
+
+## Output
+
+- Updated `materials/{number}-{type}.md` (single targeted change only)
+- Short inline confirmation of what was changed and PASS/FAIL of mini-validation
+
+## Steps
+
+1. **Scope confirmation:** State what will be changed and the acceptance criterion:
+   - "Ich werde [beschreibe Änderung] in `materials/{number}-{type}.md`. Die Änderung ist abgeschlossen wenn [condition]. Korrekt? (Ja / Scope anpassen)"
+
+2. **Make the targeted change only** — no refactoring, no adjacent edits, no style improvements beyond the stated fix.
+
+3. **Mini-validation of the affected section:**
+   - LiaScript syntax correct in the changed area?
+   - Persona/tone consistent with `didactics.md`?
+   - No unintended regression in surrounding content?
+
+4. **Report result:**
+   - ✅ "Fix angewendet und validiert — fertig."
+   - ⚠️ "Das Problem ist größer als erwartet: [describe]. Soll ich `/coauthor-materials {number} {type}` öffnen?"
+
+5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `/coauthor-materials` — do NOT proceed silently.
+
+---
+
+## When to use vs. /coauthor-materials
+
+| Situation | Use |
+|---|---|
+| Single typo or broken syntax | `/quick-fix` |
+| Wrong link or missing alt text | `/quick-fix` |
+| Swap one example or code snippet | `/quick-fix` |
+| Fix one quiz answer | `/quick-fix` |
+| Multiple sections need rework | `/coauthor-materials` |
+| Learning objective not covered | `/coauthor-materials` |
+| Structural or content change | `/coauthor-materials` |
+| Persona tone inconsistent throughout | `/coauthor-materials` |
+
+==================== END: .bmad-core/tasks/quick-fix.md ====================
+
+
 ==================== START: .bmad-core/tasks/update-project.md ====================
 
 # Task: update-project
@@ -1385,6 +1528,20 @@ Can be run in two modes:
     - If issues exist: "Öffne `/coauthor-materials {number} {type}` um die Issues in Session X zu beheben, dann erneut `/validate-course` ausführen."
     - If no issues: "Kurs ist bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`"
 
+---
+
+## Publishing Gate
+
+**Enforced after every course-mode validation run. Controls access to publishing commands.**
+
+| Result | Agent behavior |
+|---|---|
+| 🔴 FAIL | Block publishing. State: "⛔ Publishing Gate: FAIL. Bitte behebe zuerst alle Issues in `validation-report.md` und führe `/validate-course` erneut aus. `/create-project` und `/update-project` sind gesperrt bis PASS." |
+| 🟡 PASS with concerns | Ask: "Es gibt offene Punkte, aber keine harten Blocker. Möchtest du trotzdem zu Publishing weitergehen? (Ja / Nein / Issues zuerst beheben)" |
+| 🟢 PASS | Suggest handoff: "✅ Publishing Gate: PASS. Bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`" |
+
+**Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `validation-report.md` contains FAIL — regardless of how the instructor asks.
+
 ==================== END: .bmad-core/tasks/validate-course.md ====================
 
 
@@ -1490,6 +1647,13 @@ template:
     - id: difficulty-level
       title: Difficulty Level
       template: 'Intended difficulty level (beginner, intermediate, advanced).'
+    - id: persona-sample
+      title: Persona Voice Sample
+      template: |
+        A short example paragraph (3–5 sentences) written in the exact voice of this persona.
+        Used by agents as a concrete reference when co-authoring or reviewing materials.
+        Matches the persona's register, tone, typical phrasing, and level of formality.
+        Example: [Write a brief passage explaining a core course concept as this persona would]
 ```
 
 ==================== END: .bmad-core/templates/course-didactics.yaml ====================

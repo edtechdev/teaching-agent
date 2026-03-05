@@ -22,3 +22,10 @@ template:
     - id: difficulty-level
       title: Difficulty Level
       template: 'Intended difficulty level (beginner, intermediate, advanced).'
+    - id: persona-sample
+      title: Persona Voice Sample
+      template: |
+        A short example paragraph (3–5 sentences) written in the exact voice of this persona.
+        Used by agents as a concrete reference when co-authoring or reviewing materials.
+        Matches the persona's register, tone, typical phrasing, and level of formality.
+        Example: [Write a brief passage explaining a core course concept as this persona would]

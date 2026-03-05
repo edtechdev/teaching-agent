@@ -118,3 +118,17 @@ Can be run in two modes:
 10. After report is created: suggest next step.
     - If issues exist: "Öffne `/coauthor-materials {number} {type}` um die Issues in Session X zu beheben, dann erneut `/validate-course` ausführen."
     - If no issues: "Kurs ist bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`"
+
+---
+
+## Publishing Gate
+
+**Enforced after every course-mode validation run. Controls access to publishing commands.**
+
+| Result | Agent behavior |
+|---|---|
+| 🔴 FAIL | Block publishing. State: "⛔ Publishing Gate: FAIL. Bitte behebe zuerst alle Issues in `validation-report.md` und führe `/validate-course` erneut aus. `/create-project` und `/update-project` sind gesperrt bis PASS." |
+| 🟡 PASS with concerns | Ask: "Es gibt offene Punkte, aber keine harten Blocker. Möchtest du trotzdem zu Publishing weitergehen? (Ja / Nein / Issues zuerst beheben)" |
+| 🟢 PASS | Suggest handoff: "✅ Publishing Gate: PASS. Bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`" |
+
+**Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `validation-report.md` contains FAIL — regardless of how the instructor asks.

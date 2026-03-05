@@ -183,6 +183,11 @@ workflow:
         - Re-run /validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
 
+        Publishing Gate (enforced):
+        - PASS → proceed to /create-project or /assemble-bundle
+        - FAIL → publishing commands blocked until re-validation passes
+        - PASS with concerns → instructor decides explicitly
+
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
       agent: development
@@ -201,9 +206,9 @@ workflow:
       command: /create-project
       output: project.yaml + .github/workflows/
       optional: true
-      condition: user_requests_publishing AND first_time_setup
+      condition: user_requests_publishing AND first_time_setup AND validation_report == PASS
       notes: |
-        Only when the instructor explicitly wants to publish.
+        Only when the instructor explicitly wants to publish AND validation-report.md shows PASS.
         Recommended when multiple materials exist and the course is ready to share.
         - Generate project.yaml with all materials from materials/
         - Apply visuals colors to project.yaml
@@ -226,13 +231,15 @@ workflow:
     - step: assemble_bundle
       agent: teaching
       command: /assemble-bundle
-      output: course-bundle/ or .zip
+      output: course-bundle/
       optional: true
+      condition: validation_report == PASS
       notes: |
-        Create complete package:
-        - Collect all documents
-        - Generate index file
-        - Bundle everything together
+        Create complete distributable package (requires PASS in validation-report.md):
+        - Pre-flight check: blocks if validation-report.md is missing or FAIL
+        - Collects context.md, outline.md, didactics.md, sessions.md, all materials/
+        - Conditionally includes agenda.md, skeletons/, assets/, notes/
+        - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
     This workflow is flexible:
@@ -357,6 +364,7 @@ workflow:
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials
+      - /quick-fix {number} {type} {description}
       - /validate-course
       - /assemble-bundle
 
