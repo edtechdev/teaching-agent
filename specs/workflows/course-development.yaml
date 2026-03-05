@@ -167,7 +167,7 @@ workflow:
         - Check outline ↔ didactics ↔ agenda ↔ sessions consistency
         - Ensure all materials exist and are complete
 
-    # Phase 6: Publishing
+    # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
       agent: development
       command: /manage-git
@@ -184,11 +184,12 @@ workflow:
       agent: development
       command: /create-project
       output: project.yaml + .github/workflows/
-      condition: first_time_setup
-      dependencies: [validate_course]
+      optional: true
+      condition: user_requests_publishing AND first_time_setup
       notes: |
-        Initial project setup:
-        - Generate project.yaml with all materials
+        Only when the instructor explicitly wants to publish.
+        Recommended when multiple materials exist and the course is ready to share.
+        - Generate project.yaml with all materials from materials/
         - Apply visuals colors to project.yaml
         - Create GitHub Actions workflow (force_orphan: true)
         - Ask about GitHub Pages activation
@@ -197,10 +198,10 @@ workflow:
     - step: update_publishing
       agent: development
       command: /update-project
-      condition: updates_to_existing_project
-      dependencies: [validate_course]
+      optional: true
+      condition: user_requests_publishing AND updates_to_existing_project
       notes: |
-        Update existing project:
+        Only when the instructor explicitly wants to publish updates.
         - Update project.yaml with new/changed materials
         - Commit and push changes
         - Trigger GitHub Pages workflow
@@ -223,7 +224,8 @@ workflow:
     - Git operations (manage-git) available anytime
     - Image creation on-demand during coauthoring
     - Choose iterative or batch approach for sessions
-    - Publishing can be initial setup or incremental updates
+    - Publishing is optional and user-initiated — only when explicitly requested
+    - /create-project recommended when multiple materials exist and course is ready to share
     - sessions.md tracks skeleton/material/done status per session automatically
 
   flow_diagram: |
@@ -252,13 +254,13 @@ workflow:
 
         C --> VAL
 
-        VAL --> T{First time?}
-        T -->|Yes| U[development: create-project]
-        T -->|No| W[development: update-project]
+        VAL --> T{Publish?}
+        T -->|Yes, first time| U[development: create-project]
+        T -->|Yes, update| W[development: update-project]
+        T -->|Not yet| Y
 
         U --> X[development: manage-git - anytime]
         W --> X
-
         X --> Y[Optional: teaching: assemble-bundle]
         Y --> END[Published Course]
 
@@ -312,18 +314,23 @@ workflow:
   quick_reference:
     course_type_paths:
       lecture-series:
-        sequence: [/init, /create-outline, /create-didactics, /create-visuals, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course, /create-project]
+        sequence: [/init, /create-outline, /create-didactics, /create-visuals, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        publishing: "optional: /create-project when ready to share"
       self-paced:
-        sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course, /create-project]
+        sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
         note: "Agenda optional — decided at /init"
+        publishing: "optional: /create-project when ready to share"
       workshop:
-        sequence: [/init, /create-outline, /create-didactics, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course, /create-project]
+        sequence: [/init, /create-outline, /create-didactics, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        publishing: "optional: /create-project when ready to share"
       single-lesson:
         sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
         note: "No agenda needed; one session only"
+        publishing: "usually not needed for a single lesson"
       improve-existing:
-        sequence: [/init, /analyze-existing, /coauthor-materials, /validate-course, /update-project]
+        sequence: [/init, /analyze-existing, /coauthor-materials, /validate-course]
         note: "/analyze-existing scans for missing docs and offers to auto-generate or create them interactively"
+        publishing: "optional: /update-project if project.yaml already exists"
 
     teaching_agent_commands:
       - /init
