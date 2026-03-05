@@ -3,16 +3,17 @@
 ## Purpose
 
 Converts a **Session Skeleton** into a detailed **Session Material**.  
-**The agent also adopts the professor persona and style from `docs/lecture-didactics.md` into its own persona, so all content is written in this voice.**
+**The agent also adopts the instructor persona and style from `docs/course-didactics.md` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
 - number, type
 - skeleton: file from `skeletons/`
-- didactics: content from `docs/lecture-didactics.md`
-- agenda: content from `docs/lecture-agenda.md`
-- **Professor persona from `docs/lecture-didactics.md` (mandatory handoff)**
-- **Style & difficulty level from `docs/lecture-didactics.md` (mandatory handoff)**
+- didactics: content from `docs/course-didactics.md`
+- agenda: content from `docs/course-agenda.md`
+- **Instructor persona from `docs/course-didactics.md` (mandatory handoff)**
+- **Style & difficulty level from `docs/course-didactics.md` (mandatory handoff)**
+- Terminology from `docs/course-context.md`
 
 ## Output
 
@@ -22,8 +23,9 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 ## Steps
 
 1. Load skeleton.
-2. Adopt didactic concept and course type from Didactics.
-3. **Agent adopts the professor persona & style from Didactics into its own persona.**
+2. Read `docs/course-context.md` for terminology and conventions.
+3. Adopt didactic concept and course type from Didactics.
+4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
 
 - From this step, the agent writes in the tone of the professor persona.
 - All agenda descriptions reflect this style.

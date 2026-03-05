@@ -10,7 +10,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 - User description: what should be visualized (provided as command parameter)
 - Image style guidelines from `docs/style-guide.md#image-prompt-style`
 - Website color palette from `docs/style-guide.md#website-colors`
-- Course context from `docs/lecture-outline.md#abstract` (for thematic alignment)
+- Course context from `docs/course-outline.md#abstract` (for thematic alignment)
 
 ## Output
 
@@ -22,7 +22,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 1. Receive user description of what should be visualized.
 2. Read image style guidelines from `docs/style-guide.md#image-prompt-style`.
 3. Read color palette from `docs/style-guide.md#website-colors`.
-4. Read course theme from `docs/lecture-outline.md#abstract` for context.
+4. Read course theme from `docs/course-outline.md#abstract` for context.
 5. Analyze user description and extract:
    - Main subject/concept
    - Required elements or details

@@ -1,11 +1,11 @@
 template:
-  id: lecture-didactics
-  name: 'Lecture Didactics'
+  id: course-didactics
+  name: 'Course Didactics'
   version: 1.0
   output:
     format: markdown
-    filename: docs/lecture-didactics.md
-  title: 'Lecture Didactics'
+    filename: docs/course-didactics.md
+  title: 'Course Didactics'
   sections:
     - id: didactic-concept
       title: Didactic Concept

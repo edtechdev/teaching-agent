@@ -1,4 +1,4 @@
-# Checklist: Lecture Quality
+# Checklist: Course Quality
 
 ## Outline
 

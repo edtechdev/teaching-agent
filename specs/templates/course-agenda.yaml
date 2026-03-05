@@ -1,11 +1,11 @@
 template:
-  id: lecture-agenda
-  name: 'Lecture Agenda'
+  id: course-agenda
+  name: 'Course Agenda'
   version: 1.0
   output:
     format: markdown
-    filename: docs/lecture-agenda.md
-  title: 'Lecture Agenda'
+    filename: docs/course-agenda.md
+  title: 'Course Agenda'
   sections:
     - id: overview
       title: Overview

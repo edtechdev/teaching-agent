@@ -8,12 +8,12 @@ Ensures all visual materials across lectures maintain a consistent brand identit
 
 ## Inputs
 
-- Title from `docs/lecture-outline.md#title`
-- Abstract from `docs/lecture-outline.md#abstract`
-- Professor persona from `docs/lecture-didactics.md#professor-persona`
-- Teaching style from `docs/lecture-didactics.md#teaching-style`
-- Difficulty level from `docs/lecture-didactics.md#difficulty-level`
-- Course type from `docs/lecture-didactics.md#course-type`
+- Title from `docs/course-outline.md#title`
+- Abstract from `docs/course-outline.md#abstract`
+- Professor persona from `docs/course-didactics.md#professor-persona`
+- Teaching style from `docs/course-didactics.md#teaching-style`
+- Difficulty level from `docs/course-didactics.md#difficulty-level`
+- Course type from `docs/course-didactics.md#course-type`
 - Additional preferences (optional): color schemes, visual style, brand guidelines
 
 ## Output
@@ -23,8 +23,8 @@ Ensures all visual materials across lectures maintain a consistent brand identit
 
 ## Steps
 
-1. Read title and abstract from `docs/lecture-outline.md`.
-2. Read professor persona, teaching style, difficulty level, and course type from `docs/lecture-didactics.md`.
+1. Read title and abstract from `docs/course-outline.md`.
+2. Read professor persona, teaching style, difficulty level, and course type from `docs/course-didactics.md`.
 3. Align visual identity with professor persona and teaching style.
    - Example: Playful persona → colorful, informal visuals
    - Example: Academic persona → formal, professional tones

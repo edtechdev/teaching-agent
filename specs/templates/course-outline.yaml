@@ -1,11 +1,11 @@
 template:
-  id: lecture-outline
-  name: 'Lecture Outline'
+  id: course-outline
+  name: 'Course Outline'
   version: 1.0
   output:
     format: markdown
-    filename: docs/lecture-outline.md
-  title: 'Lecture Outline'
+    filename: docs/course-outline.md
+  title: 'Course Outline'
   sections:
     - id: title
       title: Title

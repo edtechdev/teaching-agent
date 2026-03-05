@@ -10,11 +10,12 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `docs/lecture-didactics.md#Professor-Persona` (mandatory handoff)
-- Agenda info (modules/sessions) from `docs/lecture-agenda.md`
+- Professor persona & style from `docs/course-didactics.md#Professor-Persona` (mandatory handoff)
+- Agenda info (modules/sessions) from `docs/course-agenda.md`
+- Terminology & conventions from `docs/course-context.md`
 - Currently open document `materials/{number}-{type}.md`
 - Optionally, corresponding skeleton `skeletons/{number}-{type}.md`
-- Didactic inputs from `docs/lecture-didactics.md`
+- Didactic inputs from `docs/course-didactics.md`
 - Open questions or ideas from instructors (discussion points)
 
 ## Output

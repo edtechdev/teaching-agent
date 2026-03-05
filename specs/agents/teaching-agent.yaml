@@ -28,13 +28,14 @@ persona:
 customization: null
 
 commands:
-  /create-outline: "run task `tasks/create-outline.md` with `templates/lecture-outline-template.yaml`"
-  /create-didactics: "run task `tasks/create-didactics.md` with `templates/lecture-didactics-template.yaml`"
-  /create-agenda: "run task `tasks/create-agenda.md` with `templates/lecture-agenda-template.yaml`"
+  /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
+  /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
+  /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
+  /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
-  /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material-template.yaml`"
+  /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
-  /validate-lecture: "run task `tasks/validate-lecture.md` with `templates/lecture-quality-checklist.md`"
+  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
@@ -45,22 +46,24 @@ dependencies:
   agents:
     - artist-agent.yaml
   tasks:
+    - init.md
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
-    - validate-lecture.md
+    - validate-course.md
     - assemble-bundle.md
   templates:
-    - lecture-outline.yaml
-    - lecture-didactics.yaml
-    - lecture-agenda.yaml
+    - course-context.yaml
+    - course-outline.yaml
+    - course-didactics.yaml
+    - course-agenda.yaml
     - session-skeleton.yaml
     - session-material.yaml
   checklists:
-    - lecture-quality-checklist.md
+    - course-quality-checklist.md
   data:
     - liascript-cheat-sheet.md
   workflows:

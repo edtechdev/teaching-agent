@@ -8,21 +8,23 @@ Builds on the Lecture Outline to ensure a consistent teaching strategy.
 
 ## Inputs
 
-- Abstract from `docs/lecture-outline.md`
-- Target audience from `docs/lecture-outline.md`
-- Learning objectives from `docs/lecture-outline.md`
+- Abstract from `docs/course-outline.md`
+- Target audience from `docs/course-outline.md`
+- Learning objectives from `docs/course-outline.md`
+- Course type & conventions from `docs/course-context.md`
 
 ## Output
 
-- `docs/lecture-didactics.md` (Markdown file)
-- Structure based on `templates/lecture-didactics.yaml`
+- `docs/course-didactics.md` (Markdown file)
+- Structure based on `templates/course-didactics.yaml`
 
 ## Steps
 
-1. Read abstract, target audience, time commitment, and learning objectives from the outline.
-2. Design a suitable didactic concept (teaching methods, learning phases).
-3. Describe the professor persona (expertise, role, style).
-4. Define style & difficulty level (humorous, scientific, practical, etc.).
-5. Set the course type (introductory, advanced, practice-oriented, group work, self-learning).
-6. Fill the `templates/lecture-didactics.yaml` template with the results.
-7. Save the file as `docs/lecture-didactics.md`.
+1. Read `docs/course-context.md` for course type, persona type, and conventions.
+2. Read abstract, target audience, time commitment, and learning objectives from the outline.
+3. Design a suitable didactic concept (teaching methods, learning phases).
+4. Describe the instructor persona (expertise, role, style) aligned with the persona type from course-context.
+5. Define style & difficulty level (humorous, scientific, practical, etc.).
+6. Set the course type (introductory, advanced, practice-oriented, group work, self-learning).
+7. Fill the `templates/course-didactics.yaml` template with the results.
+8. Save the file as `docs/course-didactics.md`.

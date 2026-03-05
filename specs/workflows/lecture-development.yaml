@@ -23,13 +23,26 @@ workflow:
       role: "Version control and publishing"
 
   sequence:
+    # Phase 0: Project Initialization
+    - step: init
+      agent: teaching
+      command: /init
+      output: docs/course-context.md
+      notes: |
+        First mandatory step for every new course:
+        - Choose course type (lecture-series / self-paced / workshop / single-lesson / improve-existing)
+        - Set terminology, persona type, pacing, assessment defaults
+        - Define project-level conventions (language, tone, accessibility)
+        - All subsequent steps read this file as their governance layer
+
     # Phase 1: Foundation
     - step: create_outline
       agent: teaching
       command: /create-outline
-      output: docs/lecture-outline.md
+      output: docs/course-outline.md
+      dependencies: [init]
       notes: |
-        Define the lecture foundation:
+        Define the course foundation:
         - Title, target audience, time commitment
         - Abstract with topics and benefits
         - 3-5 clear learning objectives
@@ -37,7 +50,7 @@ workflow:
     - step: create_didactics
       agent: teaching
       command: /create-didactics
-      output: docs/lecture-didactics.md
+      output: docs/course-didactics.md
       dependencies: [create_outline]
       notes: |
         Define teaching approach:
@@ -45,7 +58,6 @@ workflow:
         - Professor persona and style
         - Course type and difficulty level
 
-    # Phase 2: Visual Identity
     - step: create_style_guide
       agent: artist
       command: /create-style-guide
@@ -71,11 +83,11 @@ workflow:
     - step: create_agenda
       agent: teaching
       command: /create-agenda
-      output: docs/lecture-agenda.md
+      output: docs/course-agenda.md
       dependencies: [create_didactics, create_style_guide]
       notes: |
-        Build session structure:
-        - Define all sessions/modules
+        Build session structure (skipped for single-lesson):
+        - Define all sessions/modules using terminology from course-context
         - Assign learning objectives per session
         - Set duration and type (lecture/exercise)
 
@@ -129,10 +141,10 @@ workflow:
         - Batch: Create all structure first, then fill in content (overview)
 
     # Phase 5: Validation
-    - step: validate_lecture
+    - step: validate_course
       agent: teaching
-      command: /validate-lecture
-      output: docs/validation-report.md
+      command: /validate-course
+      output: docs/course-validation-report.md
       dependencies: [session_development]
       notes: |
         Check consistency and completeness:
@@ -158,7 +170,7 @@ workflow:
       command: /create-project
       output: project.yaml + .github/workflows/
       condition: first_time_setup
-      dependencies: [validate_lecture]
+      dependencies: [validate_course]
       notes: |
         Initial project setup:
         - Generate project.yaml with all materials
@@ -171,7 +183,7 @@ workflow:
       agent: development
       command: /update-project
       condition: updates_to_existing_project
-      dependencies: [validate_lecture]
+      dependencies: [validate_course]
       notes: |
         Update existing project:
         - Update project.yaml with new/changed materials
@@ -316,7 +328,7 @@ workflow:
   flow_diagram: |
     ```mermaid
     graph TD
-        A[Start: Lecture Development] --> B[teaching: create-outline]
+        A[Start: /init] --> B[teaching: create-outline]
         B --> C[teaching: create-didactics]
         C --> D[artist: create-style-guide]
         D --> E[artist: create-logo - optional]
@@ -330,7 +342,7 @@ workflow:
         J --> K[artist: create-image - as needed]
         K --> L{More sessions?}
         L -->|Yes| H
-        L -->|No| M[teaching: validate-lecture]
+        L -->|No| M[teaching: validate-course]
         
         G -->|Batch| N[teaching: create all skeletons]
         N --> O[teaching: promote all sessions]
@@ -450,13 +462,14 @@ workflow:
 
   quick_reference:
     teaching_agent_commands:
+      - /init
       - /create-outline
       - /create-didactics
       - /create-agenda
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials
-      - /validate-lecture
+      - /validate-course
       - /assemble-bundle
 
     artist_agent_commands:
