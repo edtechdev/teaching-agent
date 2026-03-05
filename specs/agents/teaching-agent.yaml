@@ -133,6 +133,7 @@ note_saving:
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
+  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate context.md, outline.md, didactics.md, agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
@@ -156,6 +157,7 @@ dependencies:
   tasks:
     - init.md
     - analyze-existing.md
+    - scaffold-course.md
     - create-outline.md
     - create-didactics.md
     - create-agenda.md

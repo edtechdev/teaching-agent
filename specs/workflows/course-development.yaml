@@ -35,6 +35,20 @@ workflow:
         - Define project-level conventions (language, tone, accessibility)
         - All subsequent steps read this file as their governance layer
 
+    # Phase 0-alt: Scaffold Fast-Track (replaces Phase 0–3 in one pass)
+    - step: scaffold
+      agent: teaching
+      command: /scaffold {course-type?}
+      output: context.md, outline.md, didactics.md, agenda.md, skeletons/, sessions.md
+      alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
+      notes: |
+        Fast-track for instructors who know what they want:
+        - Single intake interview collects all inputs upfront
+        - Auto-generates all structural artefacts in one pass (no approval between steps)
+        - Stops before /coauthor-materials — content authoring remains interactive
+        - Use instead of running /init → /create-outline → /create-didactics → /create-agenda → /create-session separately
+        - Not suitable for improve-existing (use /analyze-existing instead)
+
     # Phase 0b: Existing Course Analysis (improve-existing only)
     - step: analyze_existing
       agent: teaching
@@ -357,6 +371,7 @@ workflow:
 
     teaching_agent_commands:
       - /init
+      - /scaffold {course-type?}
       - /analyze-existing
       - /create-outline
       - /create-didactics
