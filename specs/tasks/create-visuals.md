@@ -4,7 +4,7 @@
 
 Creates the document **Visual Style Guide**.  
 Defines logo generation guidelines, course image style, website color palette, typography, and visual consistency rules.  
-Ensures all visual materials across lectures maintain a consistent brand identity.
+Ensures all visual materials across courses maintain a consistent brand identity.
 
 ## Inputs
 
@@ -35,14 +35,14 @@ Ensures all visual materials across lectures maintain a consistent brand identit
 7. Set image consistency rules to maintain visual coherence.
 8. Define website color palette (primary, secondary, accent, neutral, semantic colors).
 9. Specify typography (headings, body text, monospace fonts) matching the course style.
-10. Create example prompts for logos, images, and diagrams based on lecture theme.
+10. Create example prompts for logos, images, and diagrams based on course theme.
 11. Fill the `templates/visuals.yaml` template with the results.
 12. Save the file as `visuals.md`.
 
 ## Usage
 
 This style guide will be referenced by the Teaching-Agent when:
-- Creating logos for lectures (`/create-outline`)
+- Creating logos for courses (`/create-outline`)
 - Generating image prompts during material co-authoring (`/coauthor-materials`)
-- Designing visual elements for the lecture bundle
+- Designing visual elements for the course bundle
 - Ensuring consistent branding across all course materials

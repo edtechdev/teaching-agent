@@ -2,11 +2,11 @@
 
 ## Purpose
 
-Combines all documents of a lecture into a complete package.
+Combines all documents of a course into a complete package.
 
 ## Output
 
-- `lecture-bundle/` or `.zip`
+- `course-bundle/` or `.zip`
 
 ## Steps
 

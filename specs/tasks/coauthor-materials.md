@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Enables the agent **in the professor persona** to act as a co-author when creating and refining lecture materials.  
+Enables the agent **in the instructor persona** to act as a co-author when creating and refining course materials.  
 This task is **interactive**: instructors discuss content, tone, and structure with the agent before these are incorporated into the materials.
 Suggest images for visualization, either as a search term or as a concrete image prompt. Images can be inserted as diagrams (e.g., Mermaid, ASCII art).
 

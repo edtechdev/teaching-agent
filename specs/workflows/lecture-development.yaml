@@ -1,13 +1,13 @@
 workflow:
-  id: lecture-development
-  name: Lecture Development Workflow
+  id: course-development
+  name: Course Development Workflow
   description: >-
-    Multi-agent workflow for creating complete lecture materials from outline to publication.
+    Multi-agent workflow for creating complete course materials from outline to publication.
     Coordinates Teaching-Agent, Artist-Agent, and Development-Agent to build structured,
     visually consistent course content with automated publishing.
   type: educational
   project_types:
-    - lecture-creation
+    - course-creation
     - course-development
     - educational-materials
 
@@ -194,7 +194,7 @@ workflow:
     - step: assemble_bundle
       agent: teaching
       command: /assemble-bundle
-      output: lecture-bundle/ or .zip
+      output: course-bundle/ or .zip
       optional: true
       notes: |
         Create complete package:
@@ -423,16 +423,16 @@ workflow:
 
   decision_guidance:
     when_to_use:
-      - Creating new lecture materials from scratch
+      - Creating new course materials from scratch
       - Developing complete course content
       - Building structured educational materials
       - Coordinating pedagogical, visual, and technical aspects
 
   handoff_prompts:
     foundation_complete: |
-      Lecture foundation created:
+      Course foundation created:
       - Outline: {{title}} for {{target_audience}}
-      - Didactics: {{professor_persona}} with {{teaching_style}} style
+      - Didactics: {{instructor_persona}} with {{teaching_style}} style
       Ready for visual identity creation.
 
     visual_identity_complete: |
@@ -442,7 +442,7 @@ workflow:
       Ready for agenda and session planning.
 
     structure_complete: |
-      Lecture structure defined:
+      Course structure defined:
       - Agenda with {{session_count}} sessions
       Choose approach:
       1. Iterative: Create→Promote→Coauthor one session at a time

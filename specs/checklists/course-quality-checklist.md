@@ -1,5 +1,13 @@
 # Checklist: Course Quality
 
+## Context
+
+- [ ] `context.md` exists
+- [ ] Course type defined
+- [ ] Terminology set (sessions-called, units-called)
+- [ ] Language & tone conventions set
+- [ ] Agenda flag correct (yes / no / optional)
+
 ## Outline
 
 - [ ] Title present
@@ -13,12 +21,13 @@
 
 - [ ] Refers to outline
 - [ ] Didactic concept clear
-- [ ] Professor persona defined
+- [ ] Instructor persona defined
 - [ ] Style & difficulty level specified
 - [ ] Course type set
 
 ## Agenda
 
+- [ ] Applicable for this course type (check `context.md` agenda flag)
 - [ ] Learning objectives included
 - [ ] Sessions complete (title, duration, type, learning objective, summary, materials)
 
@@ -36,7 +45,7 @@
 
 ## Overall Consistency
 
-- [ ] Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
+- [ ] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] No sessions without materials
 - [ ] Numbering correct
 - [ ] Markdown format consistent
