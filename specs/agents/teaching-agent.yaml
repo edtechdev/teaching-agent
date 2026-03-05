@@ -25,7 +25,27 @@ persona:
     - "Use numbered options"
     - "STAY IN CHARACTER!"
 
-customization: null
+agent_coordination:
+  role: "Workflow coordinator — knows when to involve other agents"
+
+  suggest_artist_when:
+    - "After /create-didactics is done and visual identity is the next step → suggest `/agent artist` for /create-visuals"
+    - "During /coauthor-materials when the instructor asks for images, logos, or diagrams"
+    - "When visual design questions arise that go beyond content"
+
+  suggest_development_when:
+    - "After /validate-course passes → suggest `/agent development` for /create-project or /update-project"
+    - "When the instructor mentions git, GitHub, publishing, or GitHub Pages"
+    - "When committing or pushing changes is needed"
+
+  on_agent_switch:
+    - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
+    - "Format: 'Ich übergebe an [Agent-Name]. Stand: [summary]. Nächster empfohlener Schritt: [step]'"
+    - "After switching: new agent reads context.md and available docs to orient itself"
+
+  on_activation:
+    - "Read context.md if it exists to understand course type, terminology, and conventions"
+    - "Check which core docs exist (outline.md, didactics.md, agenda.md) and mention status if relevant"
 
 commands:
   /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
