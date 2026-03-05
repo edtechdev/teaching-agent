@@ -31,6 +31,13 @@
 - [ ] Learning objectives included
 - [ ] Sessions complete (title, duration, type, learning objective, summary, materials)
 
+## Session Progress (sessions.md)
+
+- [ ] `sessions.md` exists
+- [ ] All expected sessions have a row
+- [ ] No session marked ✅ Material without a file in `materials/`
+- [ ] All sessions marked ✅ Fertig before publishing
+
 ## Session Skeletons
 
 - [ ] Exist for all sessions

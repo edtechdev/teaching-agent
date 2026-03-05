@@ -16,6 +16,7 @@ Checks the consistency and completeness of all course documents based on the did
 3. Check the outline.
 4. Check the didactics.
 5. Check the agenda (if applicable for the course type).
-6. Check the session skeletons.
-7. Check the materials.
-8. Create the report.
+6. Load `sessions.md` if it exists — use it as the primary source for skeleton/material/done status per session.
+7. Cross-check: verify that every row marked ✅ in `sessions.md` has a corresponding file in `skeletons/` or `materials/`.
+8. Check the materials.
+9. Create the report.

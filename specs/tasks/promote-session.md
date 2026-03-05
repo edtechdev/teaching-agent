@@ -35,3 +35,6 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 6. Generate planned outline.
 7. Apply template.
 8. Save the file.
+9. Update `sessions.md`: set Material column to ✅ for session `{number}`.
+7. Apply template.
+8. Save the file.

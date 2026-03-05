@@ -33,3 +33,11 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `context.md
 4. Generate the basic structure for the session.
 5. Fill out template `templates/session-skeleton.yaml`.
 6. Save the file.
+7. Update `sessions.md`:
+   - If `sessions.md` does not exist yet, create it with the header:
+     ```
+     | # | Titel | Typ | Skeleton | Material | Fertig | Notizen |
+     |---|---|---|---|---|---|---|
+     ```
+   - Add a new row: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
+   - If a row for this session already exists, update the Skeleton column to ✅.

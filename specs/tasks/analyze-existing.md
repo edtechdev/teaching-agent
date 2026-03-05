@@ -57,6 +57,11 @@ Offers two paths for each missing core document:
    - `didactics.md` → `/create-didactics`
    - `agenda.md` → `/create-agenda`
 
+6b. Reconstruct or create `sessions.md` from the existing file system:
+   - Scan `skeletons/` and `materials/` for files matching `{number}-{type}.md`
+   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - Save as `sessions.md` in the project root
+
 7. After all missing docs are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials
    - Materials without skeletons
