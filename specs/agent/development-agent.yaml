@@ -37,7 +37,7 @@ dependencies:
     - create-project.md
     - update-project.md
   templates:
-    - style-guide.yaml
+    - visuals.yaml
 
 activation-instructions:
   - ONLY load dependency files when explicitly invoked

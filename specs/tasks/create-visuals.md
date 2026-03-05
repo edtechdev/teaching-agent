@@ -1,4 +1,4 @@
-# Task: create-style-guide
+# Task: create-visuals
 
 ## Purpose
 
@@ -18,8 +18,8 @@ Ensures all visual materials across lectures maintain a consistent brand identit
 
 ## Output
 
-- `style-guide.md` (Markdown file)
-- Structure based on `templates/style-guide.yaml`
+- `visuals.md` (Markdown file)
+- Structure based on `templates/visuals.yaml`
 
 ## Steps
 
@@ -36,8 +36,8 @@ Ensures all visual materials across lectures maintain a consistent brand identit
 8. Define website color palette (primary, secondary, accent, neutral, semantic colors).
 9. Specify typography (headings, body text, monospace fonts) matching the course style.
 10. Create example prompts for logos, images, and diagrams based on lecture theme.
-11. Fill the `templates/style-guide.yaml` template with the results.
-12. Save the file as `style-guide.md`.
+11. Fill the `templates/visuals.yaml` template with the results.
+12. Save the file as `visuals.md`.
 
 ## Usage
 

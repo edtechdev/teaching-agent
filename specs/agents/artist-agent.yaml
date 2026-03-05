@@ -25,7 +25,7 @@ persona:
 customization: null
 
 commands:
-  /create-style-guide: "run task `tasks/create-style-guide.md` with `templates/style-guide.yaml`"
+  /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   /create-logo: "run task `tasks/create-logo.md`"
   /create-image {description}: "run task `tasks/create-image.md`"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
@@ -35,11 +35,11 @@ commands:
 
 dependencies:
   tasks:
-    - create-style-guide.md
+    - create-visuals.md
     - create-logo.md
     - create-image.md
   templates:
-    - style-guide.yaml
+    - visuals.yaml
 
 activation-instructions:
   - ONLY load dependency files when explicitly invoked

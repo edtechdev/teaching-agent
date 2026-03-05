@@ -60,8 +60,8 @@ workflow:
 
     - step: create_style_guide
       agent: artist
-      command: /create-style-guide
-      output: style-guide.md
+      command: /create-visuals
+      output: visuals.md
       dependencies: [create_outline, create_didactics]
       notes: |
         Create visual identity aligned with teaching persona:
@@ -174,7 +174,7 @@ workflow:
       notes: |
         Initial project setup:
         - Generate project.yaml with all materials
-        - Apply style-guide colors to project.yaml
+        - Apply visuals colors to project.yaml
         - Create GitHub Actions workflow (force_orphan: true)
         - Ask about GitHub Pages activation
         - Commit and push to repository
@@ -330,7 +330,7 @@ workflow:
     graph TD
         A[Start: /init] --> B[teaching: create-outline]
         B --> C[teaching: create-didactics]
-        C --> D[artist: create-style-guide]
+        C --> D[artist: create-visuals]
         D --> E[artist: create-logo - optional]
         E --> F[teaching: create-agenda]
         
@@ -473,7 +473,7 @@ workflow:
       - /assemble-bundle
 
     artist_agent_commands:
-      - /create-style-guide
+      - /create-visuals
       - /create-logo
       - /create-image {description}
 

@@ -1,10 +1,10 @@
 template:
-  id: style-guide
+  id: visuals
   name: 'Style Guide'
   version: 1.0
   output:
     format: markdown
-    filename: style-guide.md
+    filename: visuals.md
   title: 'Visual Style Guide'
   
   sections:
