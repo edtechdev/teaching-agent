@@ -107,7 +107,7 @@ agent_coordination:
     - "Check which core docs exist (outline.md, didactics.md, agenda.md) and mention status if relevant"
 
   suggest_escalation_when:
-    - "Session count grows significantly beyond what was scoped in /init → suggest reviewing course type or splitting the course"
+    - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
     - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
     - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
 
@@ -206,7 +206,7 @@ note_saving:
     **Consequences:** [What this implies for future steps, constraints, or other documents]
 
 commands:
-  /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
+  /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
   /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate context.md, outline.md, didactics.md, agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
@@ -230,7 +230,7 @@ dependencies:
   agents:
     - artist-agent.yaml
   tasks:
-    - init.md
+    - init-course.md
     - analyze-existing.md
     - scaffold-course.md
     - create-outline.md
@@ -491,7 +491,7 @@ fuzzy-matching:
 ## Purpose
 
 Analyzes an existing course project to identify which documentation is present and which is missing.
-Used as the **second step after `/init`** when the course type is `improve-existing`.
+Used as the **second step after `/init-course`** when the course type is `improve-existing`.
 
 Offers two paths for each missing core document:
 - **Auto-generate** — agent reads existing materials and reverse-engineers a draft
@@ -499,7 +499,7 @@ Offers two paths for each missing core document:
 
 ## Inputs
 
-- `context.md` (created by `/init`, mandatory)
+- `context.md` (created by `/init-course`, mandatory)
 - Existing project files in the project root: `outline.md`, `didactics.md`, `agenda.md`, `visuals.md`
 - Existing folders: `skeletons/`, `materials/`
 
@@ -1168,7 +1168,7 @@ This style guide will be referenced by the Teaching-Agent when:
 ==================== END: .bmad-core/tasks/create-visuals.md ====================
 
 
-==================== START: .bmad-core/tasks/init.md ====================
+==================== START: .bmad-core/tasks/init-course.md ====================
 
 # Task: init
 
@@ -1239,7 +1239,7 @@ The course context acts as the governance layer: it defines the course type, ter
 - The profile defaults are suggestions; the instructor can override any field.
 - For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing docs before improvement work begins.
 
-==================== END: .bmad-core/tasks/init.md ====================
+==================== END: .bmad-core/tasks/init-course.md ====================
 
 
 ==================== START: .bmad-core/tasks/manage-git.md ====================
@@ -1404,7 +1404,7 @@ Runs all structural setup steps in one automated pass — without stopping for a
 
 The instructor answers all questions **upfront in a single intake interview**. The agent then generates `context.md`, `outline.md`, `didactics.md`, `agenda.md`, and all session skeletons automatically. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
 
-This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
+This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
 
 ## Inputs
 
@@ -2642,7 +2642,7 @@ workflow:
     # Phase 0: Project Initialization
     - step: init
       agent: teaching
-      command: /init
+      command: /init-course
       output: context.md
       notes: |
         First mandatory step for every new course:
@@ -2662,7 +2662,7 @@ workflow:
         - Single intake interview collects all inputs upfront
         - Auto-generates all structural artefacts in one pass (no approval between steps)
         - Stops before /coauthor-materials — content authoring remains interactive
-        - Use instead of running /init → /create-outline → /create-didactics → /create-agenda → /create-session separately
+        - Use instead of running /init-course → /create-outline → /create-didactics → /create-agenda → /create-session separately
         - Not suitable for improve-existing (use /analyze-existing instead)
 
     # Phase 0b: Existing Course Analysis (improve-existing only)
@@ -2884,7 +2884,7 @@ workflow:
   flow_diagram: |
     ```mermaid
     graph TD
-        A[Start: /init] --> B{Course Type?}
+        A[Start: /init-course] --> B{Course Type?}
         B -->|improve-existing| C[teaching: analyze-existing]
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
@@ -2967,26 +2967,26 @@ workflow:
   quick_reference:
     course_type_paths:
       lecture-series:
-        sequence: [/init, /create-outline, /create-didactics, /create-visuals, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        sequence: [/init-course, /create-outline, /create-didactics, /create-visuals, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
         publishing: "optional: /create-project when ready to share"
       self-paced:
-        sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
-        note: "Agenda optional — decided at /init"
+        sequence: [/init-course, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        note: "Agenda optional — decided at /init-course"
         publishing: "optional: /create-project when ready to share"
       workshop:
-        sequence: [/init, /create-outline, /create-didactics, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        sequence: [/init-course, /create-outline, /create-didactics, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
         publishing: "optional: /create-project when ready to share"
       single-lesson:
-        sequence: [/init, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        sequence: [/init-course, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
         note: "No agenda needed; one session only"
         publishing: "usually not needed for a single lesson"
       improve-existing:
-        sequence: [/init, /analyze-existing, /coauthor-materials, /validate-course]
+        sequence: [/init-course, /analyze-existing, /coauthor-materials, /validate-course]
         note: "/analyze-existing scans for missing docs and offers to auto-generate or create them interactively"
         publishing: "optional: /update-project if project.yaml already exists"
 
     teaching_agent_commands:
-      - /init
+      - /init-course
       - /scaffold {course-type?}
       - /analyze-existing
       - /create-outline

@@ -53,7 +53,7 @@ agent_coordination:
     - "Check which core docs exist (outline.md, didactics.md, agenda.md) and mention status if relevant"
 
   suggest_escalation_when:
-    - "Session count grows significantly beyond what was scoped in /init → suggest reviewing course type or splitting the course"
+    - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
     - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
     - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
 
@@ -152,7 +152,7 @@ note_saving:
     **Consequences:** [What this implies for future steps, constraints, or other documents]
 
 commands:
-  /init: "run task `tasks/init.md` with `templates/course-context.yaml`"
+  /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
   /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate context.md, outline.md, didactics.md, agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
@@ -176,7 +176,7 @@ dependencies:
   agents:
     - artist-agent.yaml
   tasks:
-    - init.md
+    - init-course.md
     - analyze-existing.md
     - scaffold-course.md
     - create-outline.md

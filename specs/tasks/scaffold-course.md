@@ -6,7 +6,7 @@ Runs all structural setup steps in one automated pass — without stopping for a
 
 The instructor answers all questions **upfront in a single intake interview**. The agent then generates `context.md`, `outline.md`, `didactics.md`, `agenda.md`, and all session skeletons automatically. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
 
-This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
+This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
 
 ## Inputs
 

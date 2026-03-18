@@ -3,7 +3,7 @@
 ## Purpose
 
 Analyzes an existing course project to identify which documentation is present and which is missing.
-Used as the **second step after `/init`** when the course type is `improve-existing`.
+Used as the **second step after `/init-course`** when the course type is `improve-existing`.
 
 Offers two paths for each missing core document:
 - **Auto-generate** — agent reads existing materials and reverse-engineers a draft
@@ -11,7 +11,7 @@ Offers two paths for each missing core document:
 
 ## Inputs
 
-- `context.md` (created by `/init`, mandatory)
+- `context.md` (created by `/init-course`, mandatory)
 - Existing project files in the project root: `outline.md`, `didactics.md`, `agenda.md`, `visuals.md`
 - Existing folders: `skeletons/`, `materials/`
 
