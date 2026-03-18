@@ -3,7 +3,7 @@
 ## Purpose
 
 Combines all course documents into a complete, distributable package for handoff, archiving, or offline use.
-Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artefacts.
+Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artifacts.
 
 ## Inputs
 
@@ -40,7 +40,7 @@ course-bundle/
 ## Steps
 
 1. **Pre-flight check:** Confirm `validation-report.md` exists and shows PASS.
-   - If missing or FAIL: block bundling. State: "⛔ Bitte führe zuerst `/validate-course` aus und behebe alle Issues, bevor das Bundle erstellt wird."
+   - If missing or FAIL: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
 
 2. Read course title and abstract from `outline.md`.
 
@@ -59,15 +59,15 @@ course-bundle/
 
    ## Contents
 
-   | File | Description |
-   |------|-------------|
-   | context.md | Course governance and conventions |
-   | outline.md | Title, audience, learning objectives |
-   | didactics.md | Teaching approach and instructor persona |
-   | agenda.md | Session schedule and structure |
-   | sessions.md | Production status per session |
-   | validation-report.md | Quality validation results |
-   | materials/{n}-{type}.md | Session N: [title from agenda.md] |
+   | File                    | Description                              |
+   |-------------------------|------------------------------------------|
+   | context.md              | Course governance and conventions        |
+   | outline.md              | Title, audience, learning objectives     |
+   | didactics.md            | Teaching approach and instructor persona |
+   | agenda.md               | Session schedule and structure           |
+   | sessions.md             | Production status per session            |
+   | validation-report.md    | Quality validation results               |
+   | materials/{n}-{type}.md | Session N: [title from agenda.md]        |
 
    ## Quick Start
 
@@ -79,5 +79,5 @@ course-bundle/
 5. Copy all collected files into `course-bundle/` preserving subfolder structure.
 
 6. Confirm completion:
-   > "Bundle erstellt in `course-bundle/`. Enthält [N] Materialdateien, [agenda.md ✅ / kein Agenda], [assets/ ✅ / keine Assets]."
-   > "Nächster Schritt: `/agent development` → `/create-project` um den Kurs zu veröffentlichen."
+   > "Bundle created in `course-bundle/`. Contains [N] material files, [agenda.md ✅ / no agenda], [assets/ ✅ / no assets]."
+   > "Next step: `/agent development` → `/create-project` to publish the course."

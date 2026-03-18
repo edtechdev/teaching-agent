@@ -31,17 +31,17 @@ The course context acts as the governance layer: it defines the course type, ter
 4. 🎛️ Ask about the target platform (structured question — single choice: LiaScript / Other).
 5. Based on the course type, set the profile defaults:
 
-   | Type | Terminology | Persona | Agenda default | Pacing | Assessment |
-   |---|---|---|---|---|---|
-   | lecture-series | session / lecture | professor | required | scheduled | quizzes + assignments |
-   | self-paced | unit / module | coach | optional | learner-driven | self-check quizzes |
-   | workshop | block / activity | facilitator | required | event-based | reflection + group work |
-   | single-lesson | lesson | tutor | optional | n/a | optional quiz |
-   | improve-existing | (from existing) | (from existing) | optional | (from existing) | (from existing) |
+   | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
+   | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
+   | lecture-series   | session / lecture | professor       | required       | scheduled       | quizzes + assignments   |
+   | self-paced       | unit / module     | coach           | optional       | learner-driven  | self-check quizzes      |
+   | workshop         | block / activity  | facilitator     | required       | event-based     | reflection + group work |
+   | single-lesson    | lesson            | tutor           | optional       | n/a             | optional quiz           |
+   | improve-existing | (from existing)   | (from existing) | optional       | (from existing) | (from existing)         |
 
    For **self-paced** and **single-lesson**, 🎛️ ask agenda preference (structured question — single choice):
-   - **Ja** — hilft bei der Strukturplanung, besonders bei längeren Inhalten
-   - **Nein** — direkt weiter zu Skeleton und Materialien
+   - **Yes** — helps with structure planning, especially for longer content
+   - **No** — proceed directly to skeleton and materials
 
    Set `agenda` in the profile to `yes` or `no` based on the answer.
    For **lecture-series** and **workshop**, agenda is always `yes` (required, no question needed).

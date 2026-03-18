@@ -49,7 +49,7 @@ Can be run in two modes:
    - [ ] No unclosed `<div>` blocks
 
 5. Report issues clearly with line references where possible.
-6. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax und Inhalt geprüft."
+6. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified."
 7. If issues found: list them and ask the instructor whether to open `/coauthor-materials` to fix them.
 
 ---
@@ -74,7 +74,7 @@ Can be run in two modes:
    - All expected sessions have a row
    - Cross-check: every ✅ Skeleton row has a file in `skeletons/`
    - Cross-check: every ✅ Material row has a file in `materials/`
-   - All sessions marked ✅ Fertig `[required before publishing]`
+   - All sessions marked ✅ Ready `[required before publishing]`
 
 7. **Check each material file** in `materials/` (same LiaScript + content checks as Session Mode Step 4).
 
@@ -116,8 +116,8 @@ Can be run in two modes:
    ```
 
 10. After report is created: suggest next step.
-    - If issues exist: "Öffne `/coauthor-materials {number} {type}` um die Issues in Session X zu beheben, dann erneut `/validate-course` ausführen."
-    - If no issues: "Kurs ist bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`"
+    - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
+    - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
 
 ---
 
@@ -125,10 +125,10 @@ Can be run in two modes:
 
 **Enforced after every course-mode validation run. Controls access to publishing commands.**
 
-| Result | Agent behavior |
-|---|---|
-| 🔴 FAIL | Block publishing. State: "⛔ Publishing Gate: FAIL. Bitte behebe zuerst alle Issues in `validation-report.md` und führe `/validate-course` erneut aus. `/create-project` und `/update-project` sind gesperrt bis PASS." |
-| 🟡 PASS with concerns | Ask: "Es gibt offene Punkte, aber keine harten Blocker. Möchtest du trotzdem zu Publishing weitergehen? (Ja / Nein / Issues zuerst beheben)" |
-| 🟢 PASS | Suggest handoff: "✅ Publishing Gate: PASS. Bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`" |
+| Result                 | Agent behavior                                                                                                                                                                                                          |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `validation-report.md` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
+| 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
+| 🟢 PASS               | Suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
 
 **Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `validation-report.md` contains FAIL — regardless of how the instructor asks.

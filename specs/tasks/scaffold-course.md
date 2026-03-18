@@ -41,7 +41,7 @@ Generated in sequence without interruption:
 ### Phase 1: Intake Interview
 
 1. Announce scaffold mode:
-   > "Scaffold-Modus gestartet. Ich stelle dir jetzt alle Fragen auf einmal — danach generiere ich die komplette Kursstruktur automatisch. Du kannst danach alles noch anpassen."
+   > "Scaffold mode started. I will now ask you all the questions at once — afterwards, I will automatically generate the complete course structure. You can adjust everything afterwards."
 
 2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
 
@@ -69,7 +69,7 @@ Generated in sequence without interruption:
    - Session count: 💬 free text (number + optional titles, or leave for auto-generation)
 
 3. Present a **summary of all inputs** and ask for confirmation:
-   > "Zusammenfassung: [display all inputs]. Soll ich jetzt die Struktur generieren? (Ja / Anpassen)"
+   > "Summary: [display all inputs]. Should I generate the structure now? (Yes / Adjust)"
 
 4. If adjustments needed: ask which block to revise, update, confirm again.
 
@@ -82,7 +82,7 @@ Run each step silently (no approval prompts between steps):
 3. Generate and save `didactics.md` — including the **Persona Voice Sample** section.
 4. Generate and save `agenda.md` (skip if agenda = no).
 5. For each session: generate and save `skeletons/{n}-{type}.md`.
-6. Create `sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Fertig ❌.
+6. Create `sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Complete ❌.
 
 After each file is saved, print a brief progress line:
 ```
@@ -99,21 +99,21 @@ After each file is saved, print a brief progress line:
 ### Phase 3: Handoff
 
 7. Print completion summary:
-   > "Scaffold abgeschlossen. [N] Dateien erstellt."
+   > "Scaffold completed. [N] files created."
    >
-   > | Datei | Status |
-   > |---|---|
-   > | context.md | ✅ |
-   > | outline.md | ✅ |
-   > | didactics.md | ✅ |
-   > | agenda.md | ✅ / übersprungen |
-   > | skeletons/ | ✅ [N] Dateien |
-   > | sessions.md | ✅ |
+   > | File         | Status            |
+   > |--------------|-------------------|
+   > | context.md   | ✅                |
+   > | outline.md   | ✅                |
+   > | didactics.md | ✅                |
+   > | agenda.md    | ✅ / skipped      |
+   > | skeletons/   | ✅ [N] files      |
+   > | sessions.md  | ✅                |
    >
-   > "Nächster Schritt: `/coauthor-materials` um mit Session 1 zu starten."
+   > "Next step: `/coauthor-materials` to start with Session 1."
 
 8. Offer a note save:
-   > "Soll ich die Kursstruktur-Entscheidungen als Decision-Note festhalten? (`/save-decision kursstruktur`)"
+   > "Should I save the course structure decisions as a Decision Note? (`/save-decision course-structure`)"
 
 ## Escalation Rules
 

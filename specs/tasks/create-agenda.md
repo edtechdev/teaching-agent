@@ -27,9 +27,9 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
    - Check `agenda` field in the profile:
      - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
-       - **Ja** — Agenda erstellen, um die Struktur zu planen
-       - **Nein** — direkt zu `/create-session`
-       - **Später** — Agenda überspringen, später nachholen
+       - **Yes** — Create agenda to plan the structure
+       - **No** — Proceed directly to `/create-session`
+       - **Later** — Skip agenda, create it later
        If no: redirect to `/create-session`. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.

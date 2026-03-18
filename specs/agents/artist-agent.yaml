@@ -28,38 +28,37 @@ agent_coordination:
   on_activation:
     - "Read context.md to understand course type, instructor persona, and tone"
     - "Check if visuals.md already exists and mention its status"
-    - "Briefly acknowledge the handoff: 'Ich übernehme vom Teaching-Agent. Stand: [summary from context + existing docs]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + existing docs]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-visuals and /create-logo are done → 'Visuelle Identität abgeschlossen. Zurück zum Teaching-Agent für den nächsten Schritt: /create-agenda'"
+    - "After /create-visuals and /create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: /create-agenda'"
     - "When content or pedagogical questions arise that are outside visual design"
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
   on_agent_switch:
     - "Before switching: summarize visual work done (e.g., visuals.md created, colors defined, logo prompt ready)"
-    - "Format: 'Ich übergebe zurück an [Agent]. Visueller Stand: [summary]'"
+    - "Format: 'I am handing back to [Agent]. Visual status: [summary]'"
 
 epistemic_rules:
   principle: "Never invent tool capabilities, image generator syntax, or visual specifications. Flag uncertainty."
 
   when_uncertain:
     - "State uncertainty explicitly before generating prompts or recommendations"
-    - "Use markers: '\u26a0\ufe0f Nicht sicher ob diese Syntax aktuell ist:', 'Das sollte mit dem aktuellen Modell verifiziert werden:'"
+    - "Use markers: '6a0e0f Not sure if this syntax is current:', 'This should be verified with the current model:'"
     - "For image generator syntax (Midjourney, DALL-E, etc.): flag if knowledge may be outdated"
 
   when_no_internet_access:
     description: "When current documentation for image generators or design tools is needed, generate a research prompt."
     output_format: |
       ---
-      🔍 **Recherche-Anfrage (Visuelles)**
-      **Kontext:** [Kurs und visueller Kontext]
-      **Frage:** [Konkrete Frage zu Tool-Syntax, Modell-Features, etc.]
-      **Gew\u00fcnschtes Ergebnis:** [z.B. 'Aktueller Prompt-Syntax f\u00fcr Midjourney v6']
-      **Suchvorschl\u00e4ge:**
-      - `[Suchbegriff 1]`
-      - `[Suchbegriff 2]`
+      🔍 **Research Request (Visuals)**
+      **Context:** [Course and visual context]
+      **Question:** [Specific question about tool syntax, model features, etc.]
+      **Desired Outcome:** [e.g., 'Current prompt syntax for Midjourney v6']
+      **Search Suggestions:**
+      - `[Search term 1]`
+      - `[Search term 2]`
       ---
-
 commands:
   /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   /create-logo: "run task `tasks/create-logo.md`"

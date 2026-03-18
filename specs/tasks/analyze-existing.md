@@ -26,14 +26,14 @@ Offers two paths for each missing core document:
 
 2. Scan the project root and relevant folders:
 
-   | Document | Required |
-   |---|---|
-   | `outline.md` | always |
-   | `didactics.md` | always |
-   | `agenda.md` | if `context.md` agenda = yes |
-   | `visuals.md` | optional |
-   | `skeletons/` | if sessions expected |
-   | `materials/` | if sessions expected |
+   | Document       | Required                     |
+   | -------------- | ---------------------------- |
+   | `outline.md`   | always                       |
+   | `didactics.md` | always                       |
+   | `agenda.md`    | if `context.md` agenda = yes |
+   | `visuals.md`   | optional                     |
+   | `skeletons/`   | if sessions expected         |
+   | `materials/`   | if sessions expected         |
 
 3. Display a **Course Doc Status** table:
    - ✅ exists
@@ -41,9 +41,9 @@ Offers two paths for each missing core document:
    - ❌ missing
 
 4. For each **missing** core document (`outline.md`, `didactics.md`), 🎛️ ask with structured question (single choice):
-   - **Auto-generieren** — ich lese deine bestehenden Materialien und erstelle einen Entwurf
-   - **Interaktiv erstellen** — ich führe dich durch das passende Erstellungs-Kommando
-   - **Überspringen** — weiter ohne dieses Dokument
+   - **Auto-generate** — I will read your existing materials and create a draft
+   - **Interactive creation** — I will guide you through the appropriate creation command
+   - **Skip** — proceed without this document
 
 5. If **auto-generate** is chosen:
    - Read all available files in `skeletons/` and `materials/`
@@ -58,7 +58,7 @@ Offers two paths for each missing core document:
 
 6b. Reconstruct or create `sessions.md` from the existing file system:
    - Scan `skeletons/` and `materials/` for files matching `{number}-{type}.md`
-   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save as `sessions.md` in the project root
 
 7. After all missing docs are handled, list **improvement opportunities** in the existing content:

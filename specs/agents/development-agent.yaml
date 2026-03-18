@@ -27,23 +27,23 @@ agent_coordination:
   on_activation:
     - "Read context.md to understand course type and project conventions"
     - "Check if project.yaml exists and which materials are in materials/"
-    - "Briefly acknowledge the handoff: 'Ich übernehme vom Teaching-Agent. Stand: [summary from context + project files]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + project files]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-project is complete and GitHub Pages is set up → 'Projekt veröffentlicht. Zurück zum Teaching-Agent für weitere Materialien'"
-    - "After /update-project is done → 'Update abgeschlossen. Zurück zum Teaching-Agent'"
+    - "After /create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
+    - "After /update-project is done → 'Update complete. Back to the Teaching-Agent'"
     - "When content, didactic, or session questions arise"
 
   on_agent_switch:
     - "Before switching: summarize what was published or configured (project.yaml status, GitHub Pages URL if available)"
-    - "Format: 'Ich übergebe zurück an [Agent]. Publishing-Stand: [summary]'"
+    - "Format: 'I am handing back to [Agent]. Publishing status: [summary]'"
 
 epistemic_rules:
   principle: "Never invent GitHub Actions syntax, LiaScript features, or git commands. Verify against docs."
 
   when_uncertain:
     - "State uncertainty explicitly, especially for GitHub Actions YAML syntax and LiaScript exporter options"
-    - "Use markers: '\u26a0\ufe0f Diese Syntax sollte gegen die aktuelle Dokumentation gepr\u00fcft werden:'"
+    - "Use markers: '6a0e0f This syntax should be checked against the current documentation:'"
     - "For workflow files: always recommend the instructor verify against official GitHub Actions docs before pushing"
 
   when_no_internet_access:
@@ -54,16 +54,16 @@ epistemic_rules:
       - GitHub Pages configuration or deployment options
     output_format: |
       ---
-      🔍 **Recherche-Anfrage (Publishing/Dev)**
-      **Kontext:** [Kurs-Projekt und Publishing-Ziel]
-      **Frage:** [Konkrete technische Frage]
-      **Gew\u00fcnschtes Ergebnis:** [z.B. 'Aktuelles GitHub Actions Workflow-Template f\u00fcr LiaScript-Export']
-      **Offizielle Quellen zuerst pr\u00fcfen:**
+      🔍 **Research Request (Publishing/Dev)**
+      **Context:** [Course project and publishing goal]
+      **Question:** [Specific technical question]
+      **Desired Outcome:** [e.g., 'Current GitHub Actions workflow template for LiaScript export']
+      **Check official sources first:**
       - https://liascript.github.io/blog/
       - https://docs.github.com/en/actions
-      **Suchvorschl\u00e4ge:**
-      - `[Suchbegriff 1]`
-      - `[Suchbegriff 2]`
+      **Search Suggestions:**
+      - `[Search term 1]`
+      - `[Search term 2]`
       ---
 
 commands:

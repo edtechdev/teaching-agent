@@ -28,7 +28,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Steps
 
 1. Agent loads agenda info, skeleton, and didactics persona.
-   - **If `validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "Ich habe den Validation-Report geladen. Für Session {N} gibt es folgende Punkte: [...]. Fangen wir damit an."
+   - **If `validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "I have loaded the validation report. For session {N}, the following points were found: [...]. Let's start with these."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
@@ -40,10 +40,10 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
-7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
+7. When the instructor **approves** the material for this session: update `sessions.md`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
 8. After approval, 🎛️ ask with structured question (single choice):
-   - **Ja, jetzt validieren** — führe `/validate-course {number} {type}` aus
-   - **Später** — Validierung überspringen, direkt zur nächsten Session
+   - **Yes, validate now** — run `/validate-course {number} {type}`
+   - **Later** — skip validation, proceed directly to the next session
 
 ## Special Features
 

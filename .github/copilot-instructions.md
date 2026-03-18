@@ -99,7 +99,7 @@ agent_coordination:
 
   on_agent_switch:
     - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
-    - "Format: 'Ich übergebe an [Agent-Name]. Stand: [summary]. Nächster empfohlener Schritt: [step]'"
+    - "Format: 'I am handing over to [Agent-Name]. Status: [summary]. Next recommended step: [step]'"
     - "After switching: new agent reads context.md and available docs to orient itself"
 
   on_activation:
@@ -120,7 +120,7 @@ interaction_mode:
       - "Selecting from a fixed list: course type, language, tone, person (Sie/Du), difficulty, persona style"
       - "Binary or trinary gates: yes/no/later, PASS/proceed/fix-first"
       - "Mode selection: iterative vs. batch, scaffold vs. step-by-step"
-      - "Confirmation steps: 'Soll ich jetzt generieren?', 'Soll ich das festhalten?'"
+      - "Confirmation steps: 'Should I generate now?', 'Should I save this?'"
       - "Approval checkpoints at the end of a task step"
     not_when:
       - "Collecting free-form content: title, abstract, learning objectives, examples"
@@ -137,7 +137,7 @@ epistemic_rules:
 
   when_uncertain:
     - "State the uncertainty explicitly before giving an answer"
-    - "Use clear markers: '\u26a0\ufe0f Ich bin hier nicht sicher:', 'Das m\u00fcsste ich verifizieren:', 'Mein Wissensstand dazu ist begrenzt:'"
+    - "Use clear markers: '⚠️ I am not sure here:', 'This needs to be verified:', 'My knowledge on this is limited:'"
     - "Distinguish between: (a) completely unknown, (b) partially known, (c) known but possibly outdated"
     - "Never silently guess — if there is a >20% chance the information is wrong or outdated, flag it"
 
@@ -152,15 +152,15 @@ epistemic_rules:
       Generate a research prompt block in this format:
 
       ---
-      🔍 **Recherche-Anfrage**
-      **Kontext:** [Kurze Beschreibung des Kurses/der Session und warum diese Information ben\u00f6tigt wird]
-      **Frage:** [Pr\u00e4zise Frage, die beantwortet werden muss]
-      **Gew\u00fcnschtes Ergebnis:** [Format und Umfang der erwarteten Antwort, z.B. 'Eine kurze Zusammenfassung mit 2-3 Quellen' oder 'Konkretes Codebeispiel f\u00fcr X']
-      **Suchvorschl\u00e4ge:**
-      - `[Suchbegriff 1]`
-      - `[Suchbegriff 2]`
-      - `[Suchbegriff 3]`
-      **Hinweis f\u00fcr Web-Agent:** Bitte verifiziere die Information und liefere aktuelle Quellen (Stand 2024/2025).
+      🔍 **Research Request**
+      **Context:** [Short description of the course/session and why this information is needed]
+      **Question:** [Precise question that needs to be answered]
+      **Desired Outcome:** [Format and scope of the expected answer, e.g., 'A short summary with 2-3 sources' or 'A concrete code example for X']
+      **Search Suggestions:**
+      - `[Search term 1]`
+      - `[Search term 2]`
+      - `[Search term 3]`
+      **Note for Web Agent:** Please verify the information and provide up-to-date sources (as of 2024/2025).
       ---
 
 note_saving:
@@ -169,7 +169,7 @@ note_saving:
     summary: "notes/summary-{slug}-{YYYY-MM-DD}.md"
     research: "notes/research-{slug}-{YYYY-MM-DD}.md"
     decision: "notes/decision-{slug}-{YYYY-MM-DD}.md"
-  note: "slug = 2-4 word kebab-case description of the topic, e.g. 'agenda-struktur', 'kurstyp-entscheidung'"
+  note: "slug = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
 
   proactive_triggers:
     description: "Agent proactively offers to save notes when these situations occur — does NOT save automatically."
@@ -181,10 +181,10 @@ note_saving:
       - "A /coauthor-materials session ends with instructor approval"
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
-      "Das war eine wichtige Entscheidung/Erkenntnis. Soll ich das festhalten?
-      Ich würde speichern als: `notes/{type}-{slug}-{date}.md`
-      Inhalt: [1-3 sentence preview of what would be saved]
-      Ja / Nein / Anpassen"
+      This was an important decision/insight. Should I save this?
+      I would save it as: `notes/{type}-{slug}-{date}.md`
+      Content: [1-3 sentence preview of what would be saved]
+      Yes / No / Adjust"
 
   save_format: |
     Each notes file starts with:
@@ -308,38 +308,37 @@ agent_coordination:
   on_activation:
     - "Read context.md to understand course type, instructor persona, and tone"
     - "Check if visuals.md already exists and mention its status"
-    - "Briefly acknowledge the handoff: 'Ich übernehme vom Teaching-Agent. Stand: [summary from context + existing docs]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + existing docs]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-visuals and /create-logo are done → 'Visuelle Identität abgeschlossen. Zurück zum Teaching-Agent für den nächsten Schritt: /create-agenda'"
+    - "After /create-visuals and /create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: /create-agenda'"
     - "When content or pedagogical questions arise that are outside visual design"
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
   on_agent_switch:
     - "Before switching: summarize visual work done (e.g., visuals.md created, colors defined, logo prompt ready)"
-    - "Format: 'Ich übergebe zurück an [Agent]. Visueller Stand: [summary]'"
+    - "Format: 'I am handing back to [Agent]. Visual status: [summary]'"
 
 epistemic_rules:
   principle: "Never invent tool capabilities, image generator syntax, or visual specifications. Flag uncertainty."
 
   when_uncertain:
     - "State uncertainty explicitly before generating prompts or recommendations"
-    - "Use markers: '\u26a0\ufe0f Nicht sicher ob diese Syntax aktuell ist:', 'Das sollte mit dem aktuellen Modell verifiziert werden:'"
+    - "Use markers: '6a0e0f Not sure if this syntax is current:', 'This should be verified with the current model:'"
     - "For image generator syntax (Midjourney, DALL-E, etc.): flag if knowledge may be outdated"
 
   when_no_internet_access:
     description: "When current documentation for image generators or design tools is needed, generate a research prompt."
     output_format: |
       ---
-      🔍 **Recherche-Anfrage (Visuelles)**
-      **Kontext:** [Kurs und visueller Kontext]
-      **Frage:** [Konkrete Frage zu Tool-Syntax, Modell-Features, etc.]
-      **Gew\u00fcnschtes Ergebnis:** [z.B. 'Aktueller Prompt-Syntax f\u00fcr Midjourney v6']
-      **Suchvorschl\u00e4ge:**
-      - `[Suchbegriff 1]`
-      - `[Suchbegriff 2]`
+      🔍 **Research Request (Visuals)**
+      **Context:** [Course and visual context]
+      **Question:** [Specific question about tool syntax, model features, etc.]
+      **Desired Outcome:** [e.g., 'Current prompt syntax for Midjourney v6']
+      **Search Suggestions:**
+      - `[Search term 1]`
+      - `[Search term 2]`
       ---
-
 commands:
   /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   /create-logo: "run task `tasks/create-logo.md`"
@@ -415,23 +414,23 @@ agent_coordination:
   on_activation:
     - "Read context.md to understand course type and project conventions"
     - "Check if project.yaml exists and which materials are in materials/"
-    - "Briefly acknowledge the handoff: 'Ich übernehme vom Teaching-Agent. Stand: [summary from context + project files]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + project files]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-project is complete and GitHub Pages is set up → 'Projekt veröffentlicht. Zurück zum Teaching-Agent für weitere Materialien'"
-    - "After /update-project is done → 'Update abgeschlossen. Zurück zum Teaching-Agent'"
+    - "After /create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
+    - "After /update-project is done → 'Update complete. Back to the Teaching-Agent'"
     - "When content, didactic, or session questions arise"
 
   on_agent_switch:
     - "Before switching: summarize what was published or configured (project.yaml status, GitHub Pages URL if available)"
-    - "Format: 'Ich übergebe zurück an [Agent]. Publishing-Stand: [summary]'"
+    - "Format: 'I am handing back to [Agent]. Publishing status: [summary]'"
 
 epistemic_rules:
   principle: "Never invent GitHub Actions syntax, LiaScript features, or git commands. Verify against docs."
 
   when_uncertain:
     - "State uncertainty explicitly, especially for GitHub Actions YAML syntax and LiaScript exporter options"
-    - "Use markers: '\u26a0\ufe0f Diese Syntax sollte gegen die aktuelle Dokumentation gepr\u00fcft werden:'"
+    - "Use markers: '6a0e0f This syntax should be checked against the current documentation:'"
     - "For workflow files: always recommend the instructor verify against official GitHub Actions docs before pushing"
 
   when_no_internet_access:
@@ -442,16 +441,16 @@ epistemic_rules:
       - GitHub Pages configuration or deployment options
     output_format: |
       ---
-      🔍 **Recherche-Anfrage (Publishing/Dev)**
-      **Kontext:** [Kurs-Projekt und Publishing-Ziel]
-      **Frage:** [Konkrete technische Frage]
-      **Gew\u00fcnschtes Ergebnis:** [z.B. 'Aktuelles GitHub Actions Workflow-Template f\u00fcr LiaScript-Export']
-      **Offizielle Quellen zuerst pr\u00fcfen:**
+      🔍 **Research Request (Publishing/Dev)**
+      **Context:** [Course project and publishing goal]
+      **Question:** [Specific technical question]
+      **Desired Outcome:** [e.g., 'Current GitHub Actions workflow template for LiaScript export']
+      **Check official sources first:**
       - https://liascript.github.io/blog/
       - https://docs.github.com/en/actions
-      **Suchvorschl\u00e4ge:**
-      - `[Suchbegriff 1]`
-      - `[Suchbegriff 2]`
+      **Search Suggestions:**
+      - `[Search term 1]`
+      - `[Search term 2]`
       ---
 
 commands:
@@ -515,14 +514,14 @@ Offers two paths for each missing core document:
 
 2. Scan the project root and relevant folders:
 
-   | Document | Required |
-   |---|---|
-   | `outline.md` | always |
-   | `didactics.md` | always |
-   | `agenda.md` | if `context.md` agenda = yes |
-   | `visuals.md` | optional |
-   | `skeletons/` | if sessions expected |
-   | `materials/` | if sessions expected |
+   | Document       | Required                     |
+   | -------------- | ---------------------------- |
+   | `outline.md`   | always                       |
+   | `didactics.md` | always                       |
+   | `agenda.md`    | if `context.md` agenda = yes |
+   | `visuals.md`   | optional                     |
+   | `skeletons/`   | if sessions expected         |
+   | `materials/`   | if sessions expected         |
 
 3. Display a **Course Doc Status** table:
    - ✅ exists
@@ -530,9 +529,9 @@ Offers two paths for each missing core document:
    - ❌ missing
 
 4. For each **missing** core document (`outline.md`, `didactics.md`), 🎛️ ask with structured question (single choice):
-   - **Auto-generieren** — ich lese deine bestehenden Materialien und erstelle einen Entwurf
-   - **Interaktiv erstellen** — ich führe dich durch das passende Erstellungs-Kommando
-   - **Überspringen** — weiter ohne dieses Dokument
+   - **Auto-generate** — I will read your existing materials and create a draft
+   - **Interactive creation** — I will guide you through the appropriate creation command
+   - **Skip** — proceed without this document
 
 5. If **auto-generate** is chosen:
    - Read all available files in `skeletons/` and `materials/`
@@ -547,7 +546,7 @@ Offers two paths for each missing core document:
 
 6b. Reconstruct or create `sessions.md` from the existing file system:
    - Scan `skeletons/` and `materials/` for files matching `{number}-{type}.md`
-   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save as `sessions.md` in the project root
 
 7. After all missing docs are handled, list **improvement opportunities** in the existing content:
@@ -571,7 +570,7 @@ Offers two paths for each missing core document:
 ## Purpose
 
 Combines all course documents into a complete, distributable package for handoff, archiving, or offline use.
-Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artefacts.
+Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artifacts.
 
 ## Inputs
 
@@ -608,7 +607,7 @@ course-bundle/
 ## Steps
 
 1. **Pre-flight check:** Confirm `validation-report.md` exists and shows PASS.
-   - If missing or FAIL: block bundling. State: "⛔ Bitte führe zuerst `/validate-course` aus und behebe alle Issues, bevor das Bundle erstellt wird."
+   - If missing or FAIL: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
 
 2. Read course title and abstract from `outline.md`.
 
@@ -627,15 +626,15 @@ course-bundle/
 
    ## Contents
 
-   | File | Description |
-   |------|-------------|
-   | context.md | Course governance and conventions |
-   | outline.md | Title, audience, learning objectives |
-   | didactics.md | Teaching approach and instructor persona |
-   | agenda.md | Session schedule and structure |
-   | sessions.md | Production status per session |
-   | validation-report.md | Quality validation results |
-   | materials/{n}-{type}.md | Session N: [title from agenda.md] |
+   | File                    | Description                              |
+   |-------------------------|------------------------------------------|
+   | context.md              | Course governance and conventions        |
+   | outline.md              | Title, audience, learning objectives     |
+   | didactics.md            | Teaching approach and instructor persona |
+   | agenda.md               | Session schedule and structure           |
+   | sessions.md             | Production status per session            |
+   | validation-report.md    | Quality validation results               |
+   | materials/{n}-{type}.md | Session N: [title from agenda.md]        |
 
    ## Quick Start
 
@@ -647,8 +646,8 @@ course-bundle/
 5. Copy all collected files into `course-bundle/` preserving subfolder structure.
 
 6. Confirm completion:
-   > "Bundle erstellt in `course-bundle/`. Enthält [N] Materialdateien, [agenda.md ✅ / kein Agenda], [assets/ ✅ / keine Assets]."
-   > "Nächster Schritt: `/agent development` → `/create-project` um den Kurs zu veröffentlichen."
+   > "Bundle created in `course-bundle/`. Contains [N] material files, [agenda.md ✅ / no agenda], [assets/ ✅ / no assets]."
+   > "Next step: `/agent development` → `/create-project` to publish the course."
 
 ==================== END: .bmad-core/tasks/assemble-bundle.md ====================
 
@@ -685,7 +684,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Steps
 
 1. Agent loads agenda info, skeleton, and didactics persona.
-   - **If `validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "Ich habe den Validation-Report geladen. Für Session {N} gibt es folgende Punkte: [...]. Fangen wir damit an."
+   - **If `validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "I have loaded the validation report. For session {N}, the following points were found: [...]. Let's start with these."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
@@ -697,10 +696,10 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
-7. When the instructor **approves** the material for this session: update `sessions.md`, set Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
+7. When the instructor **approves** the material for this session: update `sessions.md`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
 8. After approval, 🎛️ ask with structured question (single choice):
-   - **Ja, jetzt validieren** — führe `/validate-course {number} {type}` aus
-   - **Später** — Validierung überspringen, direkt zur nächsten Session
+   - **Yes, validate now** — run `/validate-course {number} {type}`
+   - **Later** — skip validation, proceed directly to the next session
 
 ## Special Features
 
@@ -748,9 +747,9 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
    - Check `agenda` field in the profile:
      - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
-       - **Ja** — Agenda erstellen, um die Struktur zu planen
-       - **Nein** — direkt zu `/create-session`
-       - **Später** — Agenda überspringen, später nachholen
+       - **Yes** — Create agenda to plan the structure
+       - **No** — Proceed directly to `/create-session`
+       - **Later** — Skip agenda, create it later
        If no: redirect to `/create-session`. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.
@@ -1204,17 +1203,17 @@ The course context acts as the governance layer: it defines the course type, ter
 4. 🎛️ Ask about the target platform (structured question — single choice: LiaScript / Other).
 5. Based on the course type, set the profile defaults:
 
-   | Type | Terminology | Persona | Agenda default | Pacing | Assessment |
-   |---|---|---|---|---|---|
-   | lecture-series | session / lecture | professor | required | scheduled | quizzes + assignments |
-   | self-paced | unit / module | coach | optional | learner-driven | self-check quizzes |
-   | workshop | block / activity | facilitator | required | event-based | reflection + group work |
-   | single-lesson | lesson | tutor | optional | n/a | optional quiz |
-   | improve-existing | (from existing) | (from existing) | optional | (from existing) | (from existing) |
+   | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
+   | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
+   | lecture-series   | session / lecture | professor       | required       | scheduled       | quizzes + assignments   |
+   | self-paced       | unit / module     | coach           | optional       | learner-driven  | self-check quizzes      |
+   | workshop         | block / activity  | facilitator     | required       | event-based     | reflection + group work |
+   | single-lesson    | lesson            | tutor           | optional       | n/a             | optional quiz           |
+   | improve-existing | (from existing)   | (from existing) | optional       | (from existing) | (from existing)         |
 
    For **self-paced** and **single-lesson**, 🎛️ ask agenda preference (structured question — single choice):
-   - **Ja** — hilft bei der Strukturplanung, besonders bei längeren Inhalten
-   - **Nein** — direkt weiter zu Skeleton und Materialien
+   - **Yes** — helps with structure planning, especially for longer content
+   - **No** — proceed directly to skeleton and materials
 
    Set `agenda` in the profile to `yes` or `no` based on the answer.
    For **lecture-series** and **workshop**, agenda is always `yes` (required, no question needed).
@@ -1349,7 +1348,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 - `number`: session number
 - `type`: session type (`lecture` or `exercise`)
-- `description`: what to fix (brief, e.g. "Tippfehler in Abschnitt 3", "Quiz-Syntax in Folie 5 korrigieren", "Beispiel für Lernziel 2 ersetzen")
+- `description`: what to fix (brief, e.g., "Typo in section 3", "Fix quiz syntax in slide 5", "Replace example for learning objective 2")
 - `materials/{number}-{type}.md` — the file to change
 - `context.md` — for conventions and terminology
 - `data/liascript-cheat-sheet.md` — for syntax reference if the fix involves LiaScript
@@ -1362,7 +1361,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 ## Steps
 
 1. **Scope confirmation:** State what will be changed and the acceptance criterion:
-   - "Ich werde [beschreibe Änderung] in `materials/{number}-{type}.md`. Die Änderung ist abgeschlossen wenn [condition]. Korrekt? (Ja / Scope anpassen)"
+   - "I will [describe the change] in `materials/{number}-{type}.md`. The change is complete when [condition]. Correct? (Yes / Adjust scope)"
 
 2. **Make the targeted change only** — no refactoring, no adjacent edits, no style improvements beyond the stated fix.
 
@@ -1372,8 +1371,8 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
    - No unintended regression in surrounding content?
 
 4. **Report result:**
-   - ✅ "Fix angewendet und validiert — fertig."
-   - ⚠️ "Das Problem ist größer als erwartet: [describe]. Soll ich `/coauthor-materials {number} {type}` öffnen?"
+   - ✅ "Fix applied and validated — done."
+   - ⚠️ "The problem is larger than expected: [describe]. Should I open `/coauthor-materials {number} {type}`?"
 
 5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `/coauthor-materials` — do NOT proceed silently.
 
@@ -1381,15 +1380,15 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 ## When to use vs. /coauthor-materials
 
-| Situation | Use |
-|---|---|
-| Single typo or broken syntax | `/quick-fix` |
-| Wrong link or missing alt text | `/quick-fix` |
-| Swap one example or code snippet | `/quick-fix` |
-| Fix one quiz answer | `/quick-fix` |
-| Multiple sections need rework | `/coauthor-materials` |
-| Learning objective not covered | `/coauthor-materials` |
-| Structural or content change | `/coauthor-materials` |
+| Situation                            | Use                   |
+| ------------------------------------ | --------------------- |
+| Single typo or broken syntax         | `/quick-fix`          |
+| Wrong link or missing alt text       | `/quick-fix`          |
+| Swap one example or code snippet     | `/quick-fix`          |
+| Fix one quiz answer                  | `/quick-fix`          |
+| Multiple sections need rework        | `/coauthor-materials` |
+| Learning objective not covered       | `/coauthor-materials` |
+| Structural or content change         | `/coauthor-materials` |
 | Persona tone inconsistent throughout | `/coauthor-materials` |
 
 ==================== END: .bmad-core/tasks/quick-fix.md ====================
@@ -1440,7 +1439,7 @@ Generated in sequence without interruption:
 ### Phase 1: Intake Interview
 
 1. Announce scaffold mode:
-   > "Scaffold-Modus gestartet. Ich stelle dir jetzt alle Fragen auf einmal — danach generiere ich die komplette Kursstruktur automatisch. Du kannst danach alles noch anpassen."
+   > "Scaffold mode started. I will now ask you all the questions at once — afterwards, I will automatically generate the complete course structure. You can adjust everything afterwards."
 
 2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
 
@@ -1468,7 +1467,7 @@ Generated in sequence without interruption:
    - Session count: 💬 free text (number + optional titles, or leave for auto-generation)
 
 3. Present a **summary of all inputs** and ask for confirmation:
-   > "Zusammenfassung: [display all inputs]. Soll ich jetzt die Struktur generieren? (Ja / Anpassen)"
+   > "Summary: [display all inputs]. Should I generate the structure now? (Yes / Adjust)"
 
 4. If adjustments needed: ask which block to revise, update, confirm again.
 
@@ -1481,7 +1480,7 @@ Run each step silently (no approval prompts between steps):
 3. Generate and save `didactics.md` — including the **Persona Voice Sample** section.
 4. Generate and save `agenda.md` (skip if agenda = no).
 5. For each session: generate and save `skeletons/{n}-{type}.md`.
-6. Create `sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Fertig ❌.
+6. Create `sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Complete ❌.
 
 After each file is saved, print a brief progress line:
 ```
@@ -1498,21 +1497,21 @@ After each file is saved, print a brief progress line:
 ### Phase 3: Handoff
 
 7. Print completion summary:
-   > "Scaffold abgeschlossen. [N] Dateien erstellt."
+   > "Scaffold completed. [N] files created."
    >
-   > | Datei | Status |
-   > |---|---|
-   > | context.md | ✅ |
-   > | outline.md | ✅ |
-   > | didactics.md | ✅ |
-   > | agenda.md | ✅ / übersprungen |
-   > | skeletons/ | ✅ [N] Dateien |
-   > | sessions.md | ✅ |
+   > | File         | Status            |
+   > |--------------|-------------------|
+   > | context.md   | ✅                |
+   > | outline.md   | ✅                |
+   > | didactics.md | ✅                |
+   > | agenda.md    | ✅ / skipped      |
+   > | skeletons/   | ✅ [N] files      |
+   > | sessions.md  | ✅                |
    >
-   > "Nächster Schritt: `/coauthor-materials` um mit Session 1 zu starten."
+   > "Next step: `/coauthor-materials` to start with Session 1."
 
 8. Offer a note save:
-   > "Soll ich die Kursstruktur-Entscheidungen als Decision-Note festhalten? (`/save-decision kursstruktur`)"
+   > "Should I save the course structure decisions as a Decision Note? (`/save-decision course-structure`)"
 
 ## Escalation Rules
 
@@ -1621,7 +1620,7 @@ Can be run in two modes:
    - [ ] No unclosed `<div>` blocks
 
 5. Report issues clearly with line references where possible.
-6. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax und Inhalt geprüft."
+6. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified."
 7. If issues found: list them and ask the instructor whether to open `/coauthor-materials` to fix them.
 
 ---
@@ -1646,7 +1645,7 @@ Can be run in two modes:
    - All expected sessions have a row
    - Cross-check: every ✅ Skeleton row has a file in `skeletons/`
    - Cross-check: every ✅ Material row has a file in `materials/`
-   - All sessions marked ✅ Fertig `[required before publishing]`
+   - All sessions marked ✅ Ready `[required before publishing]`
 
 7. **Check each material file** in `materials/` (same LiaScript + content checks as Session Mode Step 4).
 
@@ -1688,8 +1687,8 @@ Can be run in two modes:
    ```
 
 10. After report is created: suggest next step.
-    - If issues exist: "Öffne `/coauthor-materials {number} {type}` um die Issues in Session X zu beheben, dann erneut `/validate-course` ausführen."
-    - If no issues: "Kurs ist bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`"
+    - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
+    - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
 
 ---
 
@@ -1697,11 +1696,11 @@ Can be run in two modes:
 
 **Enforced after every course-mode validation run. Controls access to publishing commands.**
 
-| Result | Agent behavior |
-|---|---|
-| 🔴 FAIL | Block publishing. State: "⛔ Publishing Gate: FAIL. Bitte behebe zuerst alle Issues in `validation-report.md` und führe `/validate-course` erneut aus. `/create-project` und `/update-project` sind gesperrt bis PASS." |
-| 🟡 PASS with concerns | Ask: "Es gibt offene Punkte, aber keine harten Blocker. Möchtest du trotzdem zu Publishing weitergehen? (Ja / Nein / Issues zuerst beheben)" |
-| 🟢 PASS | Suggest handoff: "✅ Publishing Gate: PASS. Bereit für Publishing. Nächster Schritt: `/agent development` → `/create-project`" |
+| Result                 | Agent behavior                                                                                                                                                                                                          |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `validation-report.md` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
+| 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
+| 🟢 PASS               | Suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
 
 **Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `validation-report.md` contains FAIL — regardless of how the instructor asks.
 
