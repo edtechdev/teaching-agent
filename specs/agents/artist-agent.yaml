@@ -26,7 +26,7 @@ agent_coordination:
   role: "Visual specialist — hands back to Teaching-Agent when visual work is complete"
 
   on_activation:
-    - "Read context.md to understand course type, instructor persona, and tone"
+    - "Read docs/context.md to understand course type, instructor persona, and tone"
     - "Check if visuals.md already exists and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + existing docs]'"
 

@@ -46,11 +46,11 @@ agent_coordination:
   on_agent_switch:
     - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
     - "Format: 'I am handing over to [Agent-Name]. Status: [summary]. Next recommended step: [step]'"
-    - "After switching: new agent reads context.md and available docs to orient itself"
+    - "After switching: new agent reads docs/context.md and available docs to orient itself"
 
   on_activation:
-    - "Read context.md if it exists to understand course type, terminology, and conventions"
-    - "Check which core docs exist (outline.md, didactics.md, agenda.md) and mention status if relevant"
+    - "Read docs/context.md if it exists to understand course type, terminology, and conventions"
+    - "Check which core docs exist (docs/outline.md, docs/didactics.md, docs/agenda.md) and mention status if relevant"
 
   suggest_escalation_when:
     - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
@@ -138,7 +138,7 @@ note_saving:
     type: summary | research | decision
     topic: [short topic description]
     date: YYYY-MM-DD
-    related: [optional: outline.md / session 3 / etc.]
+    related: [optional: docs/outline.md / session 3 / etc.]
     ---
     [content]
 
@@ -154,7 +154,7 @@ note_saving:
 commands:
   /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate context.md, outline.md, didactics.md, agenda.md, and all session skeletons in one pass"
+  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"

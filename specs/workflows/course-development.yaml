@@ -27,7 +27,7 @@ workflow:
     - step: init
       agent: teaching
       command: /init-course
-      output: context.md
+      output: docs/context.md
       notes: |
         First mandatory step for every new course:
         - Choose course type (lecture-series / self-paced / workshop / single-lesson / improve-existing)
@@ -39,7 +39,7 @@ workflow:
     - step: scaffold
       agent: teaching
       command: /scaffold {course-type?}
-      output: context.md, outline.md, didactics.md, agenda.md, skeletons/, sessions.md
+      output: docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, skeletons/, docs/sessions.md
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
         Fast-track for instructors who know what they want:
@@ -58,7 +58,7 @@ workflow:
       condition: course_type == improve-existing
       notes: |
         Scan project for existing docs and fill gaps:
-        - Check outline.md, didactics.md, agenda.md, skeletons/, materials/
+        - Check docs/outline.md, docs/didactics.md, docs/agenda.md, skeletons/, materials/
         - For missing core docs: offer auto-generate or interactive creation
         - List improvement opportunities and suggest next steps
         - Skip all of Phase 1–3 if docs already exist
@@ -67,7 +67,7 @@ workflow:
     - step: create_outline
       agent: teaching
       command: /create-outline
-      output: outline.md
+      output: docs/outline.md
       dependencies: [init]
       notes: |
         Define the course foundation:
@@ -78,7 +78,7 @@ workflow:
     - step: create_didactics
       agent: teaching
       command: /create-didactics
-      output: didactics.md
+      output: docs/didactics.md
       dependencies: [create_outline]
       notes: |
         Define teaching approach:
@@ -112,7 +112,7 @@ workflow:
     - step: create_agenda
       agent: teaching
       command: /create-agenda
-      output: agenda.md
+      output: docs/agenda.md
       dependencies: [create_didactics, create_visuals]
       notes: |
         Build session structure (skipped for single-lesson):
@@ -182,18 +182,18 @@ workflow:
     - step: validate_course
       agent: teaching
       command: /validate-course
-      output: validation-report.md
+      output: docs/validation-report.md
       dependencies: [session_development]
       notes: |
         Full course check before publishing:
         - Cross-document consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
-        - All sessions Fertig ✅ in sessions.md
+        - All sessions Fertig ✅ in docs/sessions.md
         - LiaScript syntax check on all material files
-        - Produces validation-report.md with PASS/FAIL + issues list
+        - Produces docs/validation-report.md with PASS/FAIL + issues list
 
         Feedback loop if issues found:
         - Open /coauthor-materials {number} {type} for affected sessions
-        - Agent loads validation-report.md and works through issues
+        - Agent loads docs/validation-report.md and works through issues
         - Re-run /validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
 
@@ -222,7 +222,7 @@ workflow:
       optional: true
       condition: user_requests_publishing AND first_time_setup AND validation_report == PASS
       notes: |
-        Only when the instructor explicitly wants to publish AND validation-report.md shows PASS.
+        Only when the instructor explicitly wants to publish AND docs/validation-report.md shows PASS.
         Recommended when multiple materials exist and the course is ready to share.
         - Generate project.yaml with all materials from materials/
         - Apply visuals colors to project.yaml
@@ -249,10 +249,10 @@ workflow:
       optional: true
       condition: validation_report == PASS
       notes: |
-        Create complete distributable package (requires PASS in validation-report.md):
-        - Pre-flight check: blocks if validation-report.md is missing or FAIL
-        - Collects context.md, outline.md, didactics.md, sessions.md, all materials/
-        - Conditionally includes agenda.md, skeletons/, assets/, notes/
+        Create complete distributable package (requires PASS in docs/validation-report.md):
+        - Pre-flight check: blocks if docs/validation-report.md is missing or FAIL
+        - Collects docs/context.md, docs/outline.md, docs/didactics.md, docs/sessions.md, all materials/
+        - Conditionally includes docs/agenda.md, skeletons/, assets/, notes/
         - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
@@ -263,7 +263,7 @@ workflow:
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
-    - sessions.md tracks skeleton/material/done status per session automatically
+    - docs/sessions.md tracks skeleton/material/done status per session automatically
 
   flow_diagram: |
     ```mermaid

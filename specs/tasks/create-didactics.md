@@ -4,24 +4,24 @@
 
 Creates the document **Course Didactics & Style**.  
 Defines the didactic concept, instructor persona, style, and course type.  
-Builds on the outline to ensure a consistent teaching strategy aligned with the course type from `context.md`.
+Builds on the outline to ensure a consistent teaching strategy aligned with the course type from `docs/context.md`.
 
 ## Inputs
 
-- Abstract from `outline.md`
-- Target audience from `outline.md`
-- Learning objectives from `outline.md`
-- Course type & conventions from `context.md`
+- Abstract from `docs/outline.md`
+- Target audience from `docs/outline.md`
+- Learning objectives from `docs/outline.md`
+- Course type & conventions from `docs/context.md`
 
 ## Output
 
-- `didactics.md` (Markdown file)
+- `docs/didactics.md` (Markdown file)
 - Structure based on `templates/course-didactics.yaml`
 
 ## Steps
 
-1. Read `context.md` for course type, persona type, and conventions.
-2. Read abstract, target audience, and learning objectives from `outline.md`.
+1. Read `docs/context.md` for course type, persona type, and conventions.
+2. Read abstract, target audience, and learning objectives from `docs/outline.md`.
 3. 💬 Design a suitable didactic concept (teaching methods, learning phases) adapted to the course type — discuss with instructor if unclear:
    - **lecture-series**: structured phases, presenter-driven, attendance-based
    - **self-paced**: modular, learner-driven, self-check oriented
@@ -34,4 +34,4 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - beginner / intermediate / advanced
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
-9. Save the file as `didactics.md`.
+9. Save the file as `docs/didactics.md`.
