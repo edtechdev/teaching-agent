@@ -1,4 +1,6 @@
-[View Sample College Success Course in LiaScript](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccess.md#1)
+[View Sample College Success Course in LiaScript](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccess.md)
+
+
 [View Older, More Complete Version of College Success Course in LiaScript](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccessold.md)
 
 # Teaching-Agent 🎓
