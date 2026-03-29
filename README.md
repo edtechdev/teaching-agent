@@ -1,3 +1,5 @@
+[View Sample College Success Course in LiaScript](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccess.md#1)
+
 # Teaching-Agent 🎓
 
 > A BMad-Method-powered AI agent for structured lecture development with LiaScript
