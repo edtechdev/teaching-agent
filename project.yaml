@@ -1,0 +1,60 @@
+title: >
+  <span style="background-color: rgba(11, 110, 117, 0.82); padding: 10px; color: white; border-radius: 6px;">
+    College Success
+  </span>
+
+comment: >
+  <br>
+  <span style="background-color: rgba(255, 140, 66, 0.82); padding: 8px; color: white; border-radius: 6px;">
+    Self-paced interactive modules for first-year college student success
+  </span>
+
+footer: >
+  <hr>
+  <p>
+    <strong>College Success</strong> - self-paced student success course.<br>
+    Built with <a href="https://liascript.github.io" target="_blank">LiaScript</a>.
+  </p>
+
+meta:
+  title: College Success - Interactive Course Hub
+  description: Evidence-based college success modules on study skills, time management, resilience, planning, and financial literacy.
+
+collection:
+  - html: >
+      <div style="padding: 18px; background-color: rgba(11, 110, 117, 0.10); border-radius: 8px; margin: 18px 0;">
+        <h2>Start Here</h2>
+        <p>This hub contains all 8 modules in recommended order. Complete one module at a time.</p>
+      </div>
+
+  - url: materials/1-lecture.md
+    title: "Module 1: How Learning Works and Why Mindset Matters"
+    tags: [Learning Science, Mindset, Study Skills, Beginner]
+
+  - url: materials/2-exercise.md
+    title: "Module 2: Time Management and Focus Systems"
+    tags: [Time Management, Focus, Productivity, Beginner]
+
+  - url: materials/3-exercise.md
+    title: "Module 3: Note-Taking and Study Strategies That Actually Work"
+    tags: [Note-Taking, Retrieval Practice, Study Strategies, Beginner]
+
+  - url: materials/4-lecture.md
+    title: "Module 4: Stress, Resilience, and Healthy Performance"
+    tags: [Resilience, Stress Management, Wellbeing, Beginner]
+
+  - url: materials/5-exercise.md
+    title: "Module 5: Help-Seeking and Building Your Support Network"
+    tags: [Help-Seeking, Support Systems, Communication, Beginner]
+
+  - url: materials/6-lecture.md
+    title: "Module 6: Values, Purpose, and Goal Setting"
+    tags: [Values, Goal Setting, Motivation, Beginner]
+
+  - url: materials/7-exercise.md
+    title: "Module 7: Career Exploration, Major Choice, and Academic Planning"
+    tags: [Career Planning, Major Choice, Academic Planning, Beginner]
+
+  - url: materials/8-lecture.md
+    title: "Module 8: Financial Literacy for College Success"
+    tags: [Financial Literacy, Budgeting, Aid, Beginner]

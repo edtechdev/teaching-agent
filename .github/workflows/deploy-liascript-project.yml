@@ -1,0 +1,46 @@
+name: Generate and Deploy LiaScript Project Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run_exporter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install LiaScript Exporter
+        run: npm install -g @liascript/exporter
+
+      - name: Generate project website
+        run: liaex -i project.yaml --format project --output index
+
+      - name: Prepare deployment directory
+        run: |
+          set -e
+          rm -rf gh-pages-deploy
+          mkdir -p gh-pages-deploy
+          cp index.html gh-pages-deploy/
+          cp -r materials gh-pages-deploy/materials
+          cp README.md gh-pages-deploy/README.md
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: gh-pages-deploy
+          force_orphan: true
