@@ -1,5 +1,5 @@
 [View Sample College Success Course in LiaScript](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccess.md#1)
-[View Older, More Complete Version of College Success Course](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccessold.md)
+[View Older, More Complete Version of College Success Course in LiaScript](https://liascript.github.io/course/?https://raw.githubusercontent.com/edtechdev/teaching-agent/refs/heads/main/collegesuccessold.md)
 
 # Teaching-Agent 🎓
 
@@ -21,10 +21,6 @@
 - [License](#license)
 
 ---
-
-
-
-
 
 ## Philosophy: Spec-Driven Development
 
@@ -69,9 +65,6 @@ Teaching-Agent implements BMad principles by:
 ---
 
 ## Teaching-Agent Workflow
-
-
-
 
 Teaching-Agent guides you through **6 phases** — starting with project initialization, then building iteratively toward published materials.
 
