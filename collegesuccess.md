@@ -3,7 +3,7 @@ author:   Course Team
 version:  1.0.0
 language: en
 narrator: English Female
-comment:  College Success course homepage with introduction and module table of contents
+comment:  College Success combined full course
 tags: College Success, Orientation, Beginner
 -->
 
@@ -33,25 +33,10 @@ By the end of this course, you should be able to:
 - Create academic and career-aligned plans
 - Make informed financial choices for college
 
-## Table of Contents
-
-1. [Module 1: How Learning Works and Why Mindset Matters](#college-success---module-1-how-learning-works-and-why-mindset-matters)
-2. [Module 2: Time Management and Focus Systems](#college-success---module-2-time-management-and-focus-systems)
-3. [Module 3: Note-Taking and Study Strategies That Actually Work](#college-success---module-3-note-taking-and-study-strategies-that-actually-work)
-4. [Module 4: Stress, Resilience, and Healthy Performance](#college-success---module-4-stress-resilience-and-healthy-performance)
-5. [Module 5: Help-Seeking and Building Your Support Network](#college-success---module-5-help-seeking-and-building-your-support-network)
-6. [Module 6: Values, Purpose, and Goal Setting](#college-success---module-6-values-purpose-and-goal-setting)
-7. [Module 7: Career Exploration, Major Choice, and Academic Planning](#college-success---module-7-career-exploration-major-choice-and-academic-planning)
-8. [Module 8: Financial Literacy for College Success](#college-success---module-8-financial-literacy-for-college-success)
-
 ## Suggested Pace
 
 - Complete one module per week for an 8-week plan, or
 - Complete two modules per week for an accelerated 4-week plan
-
-## Start Here
-
-Go to [Module 1](#college-success---module-1-how-learning-works-and-why-mindset-matters) to begin.
 
 
 ---
