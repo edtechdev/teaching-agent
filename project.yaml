@@ -21,6 +21,10 @@ meta:
   description: Evidence-based college success modules on study skills, time management, resilience, planning, and financial literacy.
 
 collection:
+  - url: materials/0-homepage.md
+    title: "Course Homepage: Start Here"
+    tags: [Homepage, Orientation, Beginner]
+
   - html: >
       <div style="padding: 18px; background-color: rgba(11, 110, 117, 0.10); border-radius: 8px; margin: 18px 0;">
         <h2>Start Here</h2>
