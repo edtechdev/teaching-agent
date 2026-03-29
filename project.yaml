@@ -21,6 +21,10 @@ meta:
   description: Evidence-based college success modules on study skills, time management, resilience, planning, and financial literacy.
 
 collection:
+  - url: materials/collegesuccess.md
+    title: "College Success (Combined Full Course)"
+    tags: [Combined, Full Course, Beginner]
+
   - url: materials/0-homepage.md
     title: "Course Homepage: Start Here"
     tags: [Homepage, Orientation, Beginner]
