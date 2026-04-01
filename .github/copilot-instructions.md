@@ -1287,16 +1287,22 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
    async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-   async function waitForImage(knownUrls, timeout = 30000) {
+   async function waitForGenerationComplete(timeout = 120000) {
      const start = Date.now();
      while (Date.now() - start < timeout) {
-       const imgs = [...document.querySelectorAll('img')]
-         .map(i => i.src)
-         .filter(s => s.includes('estuary') && s.includes('file_') && !knownUrls.has(s));
-       if (imgs.length > 0) return imgs[imgs.length - 1];
+       const stopBtn = document.querySelector('[data-testid="stop-button"]');
+       const sendBtn = document.querySelector('[data-testid="send-button"]');
+       if (!stopBtn && sendBtn) return true; // generation finished
        await sleep(2000);
      }
-     return null;
+     return false; // timeout
+   }
+
+   function getGeneratedImageUrl() {
+     const imgs = [...document.querySelectorAll('img')]
+       .map(i => i.src)
+       .filter(s => s.includes('estuary') && s.includes('file_'));
+     return imgs.length > 0 ? imgs[imgs.length - 1] : null;
    }
 
    async function downloadBlob(url, filename) {
@@ -1309,22 +1315,24 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
    }
 
    async function runBatch() {
+     // Navigate once before the first image
+     window.location.href = 'https://chatgpt.com/';
+     await sleep(3000);
+
      for (const { slug, prompt } of queue) {
        console.log(`[batch] Starting: ${slug}`);
-       window.location.href = 'https://chatgpt.com/';
-       await sleep(3000);
        const tb = document.getElementById('prompt-textarea');
        tb.focus();
        tb.textContent = prompt;
        tb.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: prompt }));
-       const knownUrls = new Set([...document.querySelectorAll('img')].map(i => i.src));
        document.querySelector('[data-testid="send-button"]').click();
-       await sleep(5000);
-       const imgUrl = await waitForImage(knownUrls);
-       if (!imgUrl) { console.warn(`[batch] ❌ Failed: ${slug}`); continue; }
+       const done = await waitForGenerationComplete();
+       if (!done) { console.warn(`[batch] ❌ Timeout: ${slug}`); continue; }
+       const imgUrl = getGeneratedImageUrl();
+       if (!imgUrl) { console.warn(`[batch] ❌ No image found: ${slug}`); continue; }
        const size = await downloadBlob(imgUrl, `${slug}.png`);
        console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
-       await sleep(2000);
+       await sleep(1000);
      }
      console.log('[batch] All done.');
    }
@@ -1339,7 +1347,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ## Phase 3: Submit to ChatGPT *(single + sequential batch)*
 
-- Navigate to `https://chatgpt.com/` (new chat per image).
+- **First image only:** Navigate to `https://chatgpt.com/`. For subsequent images in sequential batch, stay on the same page — just insert the next prompt.
 - Insert prompt:
   ```js
   const tb = document.getElementById('prompt-textarea');
@@ -1354,14 +1362,22 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ## Phase 4: Wait for Image *(single + sequential batch)*
 
-- Wait ~20 seconds, then poll:
+- Poll until generation is complete — the stop-button disappears **and** the send-button reappears:
   ```js
-  [...document.querySelectorAll('img')]
-    .map(i => i.src)
-    .filter(s => s.includes('estuary') && s.includes('file_'));
+  async function waitForGenerationComplete(timeout = 120000) {
+    const start = Date.now();
+    while (Date.now() - start < timeout) {
+      const stopBtn = document.querySelector('[data-testid="stop-button"]');
+      const sendBtn = document.querySelector('[data-testid="send-button"]');
+      if (!stopBtn && sendBtn) return true;
+      await sleep(2000);
+    }
+    return false;
+  }
   ```
-  - Use the **last** URL in the list.
-  - No image after 30 seconds → report `❌ failed`, stop (single) or continue (batch).
+  - Do **not** use the presence of an `estuary` URL as the ready signal — those appear early as low-res previews.
+  - After `waitForGenerationComplete()` returns `true`, fetch the last `estuary` URL from the DOM — that is the full-resolution image.
+  - Timeout (120s) → report `❌ failed`, stop (single) or continue (batch).
 
 ## Phase 5: Download and Save *(single + sequential batch)*
 
