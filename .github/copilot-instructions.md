@@ -855,6 +855,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 - Image style guidelines from `visuals.md#image-prompt-style`
 - Website color palette from `visuals.md#website-colors`
 - Course context from `docs/outline.md#abstract` (for thematic alignment)
+- Course language from `docs/context.md` (Language field — for in-image text language)
 
 ## Output
 
@@ -867,20 +868,22 @@ Creates professional, actionable prompts for AI image generators that maintain v
 2. Read image style guidelines from `visuals.md#image-prompt-style`.
 3. Read color palette from `visuals.md#website-colors`.
 4. Read course theme from `docs/outline.md#abstract` for context.
-5. Analyze user description and extract:
+5. Read course language from `docs/context.md` (Language field, e.g., `de`, `en`). If `docs/context.md` is unavailable, infer the language from the user's description as fallback.
+6. Analyze user description and extract:
    - Main subject/concept
    - Required elements or details
    - Intended use (diagram, illustration, header, etc.)
-6. Combine user description with style guide parameters:
+7. Combine user description with style guide parameters:
    - Visual style (photorealistic, illustrated, flat, etc.)
    - Color scheme (using palette from style guide)
    - Composition approach
    - Lighting and mood
    - Educational context
-7. Generate a detailed, actionable prompt.
-8. Include accessibility considerations (alt text suggestion).
-9. Present the prompt in a clear format.
-10. Save to `assets/prompts/image-{slug}.md` — always, without asking.
+   - **In-image text language:** if the image may contain any visible text (labels, headings, titles, UI elements, captions), explicitly specify in the prompt that all such text must be in the course language (e.g., `"All text visible in the image must be written in German."`)
+8. Generate a detailed, actionable prompt.
+9. Include accessibility considerations (alt text suggestion).
+10. Present the prompt in a clear format.
+11. Save to `assets/prompts/image-{slug}.md` — always, without asking.
     Create the folder if it does not exist.
     Confirm: "Prompt saved: `assets/prompts/image-{slug}.md`"
 
@@ -902,9 +905,10 @@ Visual Parameters:
 - Composition: [layout approach]
 - Lighting: [lighting style]
 - Mood: [atmosphere]
+- In-image text language: [language from docs/context.md, e.g., "German" / "English"]
 
 Complete Prompt:
-"[Full detailed prompt ready for image generator]"
+"[Full detailed prompt ready for image generator. If the image contains visible text, end with: 'All text visible in the image (labels, headings, UI elements) must be written in [language].']" 
 
 Accessibility:
 Alt text suggestion: "[Descriptive alt text for the image]"
@@ -1215,6 +1219,7 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 - **Single mode:** `assets/prompts/image-{slug}.md`
 - **Batch mode:** all `assets/prompts/image-*.md` files (skips slugs that already have a matching image)
 - Chrome DevTools MCP availability (checked at task start)
+- Course language from `docs/context.md` (safety-net: appended to prompt if no language instruction is already present)
 
 ## Output
 
@@ -1275,7 +1280,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ### Automated Batch
 
-8. Read all pending prompt files, extract `Complete Prompt:` strings.
+8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `docs/context.md`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 9. Inject the following self-contained JS loop into the browser:
 
    ```js
@@ -1348,6 +1353,8 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 ## Phase 3: Submit to ChatGPT *(single + sequential batch)*
 
 - **First image only:** Navigate to `https://chatgpt.com/`. For subsequent images in sequential batch, stay on the same page — just insert the next prompt.
+- **Language safety-net:** Read course language from `docs/context.md`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:  
+  `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 - Insert prompt:
   ```js
   const tb = document.getElementById('prompt-textarea');

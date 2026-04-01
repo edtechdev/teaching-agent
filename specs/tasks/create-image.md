@@ -11,6 +11,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 - Image style guidelines from `visuals.md#image-prompt-style`
 - Website color palette from `visuals.md#website-colors`
 - Course context from `docs/outline.md#abstract` (for thematic alignment)
+- Course language from `docs/context.md` (Language field — for in-image text language)
 
 ## Output
 
@@ -23,20 +24,22 @@ Creates professional, actionable prompts for AI image generators that maintain v
 2. Read image style guidelines from `visuals.md#image-prompt-style`.
 3. Read color palette from `visuals.md#website-colors`.
 4. Read course theme from `docs/outline.md#abstract` for context.
-5. Analyze user description and extract:
+5. Read course language from `docs/context.md` (Language field, e.g., `de`, `en`). If `docs/context.md` is unavailable, infer the language from the user's description as fallback.
+6. Analyze user description and extract:
    - Main subject/concept
    - Required elements or details
    - Intended use (diagram, illustration, header, etc.)
-6. Combine user description with style guide parameters:
+7. Combine user description with style guide parameters:
    - Visual style (photorealistic, illustrated, flat, etc.)
    - Color scheme (using palette from style guide)
    - Composition approach
    - Lighting and mood
    - Educational context
-7. Generate a detailed, actionable prompt.
-8. Include accessibility considerations (alt text suggestion).
-9. Present the prompt in a clear format.
-10. Save to `assets/prompts/image-{slug}.md` — always, without asking.
+   - **In-image text language:** if the image may contain any visible text (labels, headings, titles, UI elements, captions), explicitly specify in the prompt that all such text must be in the course language (e.g., `"All text visible in the image must be written in German."`)
+8. Generate a detailed, actionable prompt.
+9. Include accessibility considerations (alt text suggestion).
+10. Present the prompt in a clear format.
+11. Save to `assets/prompts/image-{slug}.md` — always, without asking.
     Create the folder if it does not exist.
     Confirm: "Prompt saved: `assets/prompts/image-{slug}.md`"
 
@@ -58,9 +61,10 @@ Visual Parameters:
 - Composition: [layout approach]
 - Lighting: [lighting style]
 - Mood: [atmosphere]
+- In-image text language: [language from docs/context.md, e.g., "German" / "English"]
 
 Complete Prompt:
-"[Full detailed prompt ready for image generator]"
+"[Full detailed prompt ready for image generator. If the image contains visible text, end with: 'All text visible in the image (labels, headings, UI elements) must be written in [language].']" 
 
 Accessibility:
 Alt text suggestion: "[Descriptive alt text for the image]"
