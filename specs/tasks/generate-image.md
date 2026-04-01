@@ -101,9 +101,17 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
    }
 
    function getGeneratedImageUrl() {
+     const seen = new Set();
      const imgs = [...document.querySelectorAll('img')]
        .map(i => i.src)
-       .filter(s => s.includes('estuary') && s.includes('file_'));
+       .filter(s => s.includes('chatgpt.com') && s.includes('file_'))
+       .filter(s => {
+         const match = s.match(/file_[^&?]+/);
+         const id = match ? match[0] : s;
+         if (seen.has(id)) return false;
+         seen.add(id);
+         return true;
+       });
      return imgs.length > 0 ? imgs[imgs.length - 1] : null;
    }
 
@@ -117,10 +125,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
    }
 
    async function runBatch() {
-     // Navigate once before the first image
-     window.location.href = 'https://chatgpt.com/';
-     await sleep(3000);
-
+     // ChatGPT must already be open — no navigation here (window.location.href kills the script context)
      for (const { slug, prompt } of queue) {
        console.log(`[batch] Starting: ${slug}`);
        const tb = document.getElementById('prompt-textarea');
@@ -180,7 +185,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
   }
   ```
   - Do **not** use the presence of an `estuary` URL as the ready signal — those appear early as low-res previews.
-  - After `waitForGenerationComplete()` returns `true`, fetch the last `estuary` URL from the DOM — that is the full-resolution image.
+  - After `waitForGenerationComplete()` returns `true`, fetch the last matching image URL from the DOM. Filter: `s.includes('chatgpt.com') && s.includes('file_')`. Note: the `file_` ID is in the query parameter, not the path. Deduplicate by `file_` ID to avoid counting the same image multiple times.
   - Timeout (120s) → report `❌ failed`, stop (single) or continue (batch).
 
 ## Phase 5: Download and Save *(single + sequential batch)*
