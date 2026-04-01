@@ -38,7 +38,10 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 1. Check if `mcp_chrome-devtoo_*` tools are available.
    - **Not available** → explain setup, stop. Suggest `/create-image` for prompt-only mode.
 
-2. Determine mode:
+2. Resize the browser viewport: use `mcp_chrome-devtoo_resize_page` → width: 1280, height: 900.
+   This ensures stop-button and send-button are rendered (they may be hidden on narrow viewports).
+
+3. Determine mode:
    - **Slug provided** → skip to [Single Mode (Phase 2a)](#phase-2a-single-mode).
    - **No argument** → 🎛️ ask with structured question (single choice):
      - **Single** — enter a slug to execute one prompt
@@ -89,13 +92,33 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
    async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-   async function waitForGenerationComplete(timeout = 120000) {
+   async function waitForGenerationDone(timeout = 150000) {
      const start = Date.now();
+
+     const urlsBefore = new Set(
+       [...document.querySelectorAll('img')]
+         .map(i => i.src)
+         .filter(s => s.includes('file_'))
+     );
+
+     // Phase 1: wait for stop-button to appear
+     while (Date.now() - start < 20000) {
+       if (document.querySelector('[data-testid="stop-button"]')) break;
+       await sleep(500);
+     }
+
+     // Phase 2: wait for stop-button gone AND new image URL in DOM
      while (Date.now() - start < timeout) {
-       const stopBtn = document.querySelector('[data-testid="stop-button"]');
-       const sendBtn = document.querySelector('[data-testid="send-button"]');
-       if (!stopBtn && sendBtn) return true; // generation finished
-       await sleep(2000);
+       const stopGone = !document.querySelector('[data-testid="stop-button"]');
+       const newImg = [...document.querySelectorAll('img')]
+         .map(i => i.src)
+         .filter(s => s.includes('file_'))
+         .some(s => !urlsBefore.has(s));
+       if (stopGone && newImg) {
+         await sleep(2000); // grace period for full-resolution render
+         return true;
+       }
+       await sleep(1500);
      }
      return false; // timeout
    }
@@ -132,8 +155,17 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
        tb.focus();
        tb.textContent = prompt;
        tb.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: prompt }));
-       document.querySelector('[data-testid="send-button"]').click();
-       const done = await waitForGenerationComplete();
+       // poll for send-button (only rendered when textarea has content)
+       let sendBtn;
+       const deadline = Date.now() + 10000;
+       while (Date.now() < deadline) {
+         sendBtn = document.querySelector('[data-testid="send-button"]');
+         if (sendBtn) break;
+         await sleep(200);
+       }
+       if (!sendBtn) { console.warn(`[batch] ❌ Send button not found: ${slug}`); continue; }
+       sendBtn.click();
+       const done = await waitForGenerationDone();
        if (!done) { console.warn(`[batch] ❌ Timeout: ${slug}`); continue; }
        const imgUrl = getGeneratedImageUrl();
        if (!imgUrl) { console.warn(`[batch] ❌ No image found: ${slug}`); continue; }
@@ -157,36 +189,65 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 - **First image only:** Navigate to `https://chatgpt.com/`. For subsequent images in sequential batch, stay on the same page — just insert the next prompt.
 - **Language safety-net:** Read course language from `docs/context.md`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:  
   `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
-- Insert prompt:
+- Insert prompt and submit — poll for send-button at 200ms intervals (it only renders when textarea has content):
   ```js
   const tb = document.getElementById('prompt-textarea');
   tb.focus();
   tb.textContent = prompt;
   tb.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: prompt }));
-  ```
-- Submit:
-  ```js
-  document.querySelector('[data-testid="send-button"]').click();
+  // poll for send-button (only rendered when textarea has content)
+  let sendBtn;
+  const deadline = Date.now() + 10000;
+  while (Date.now() < deadline) {
+    sendBtn = document.querySelector('[data-testid="send-button"]');
+    if (sendBtn) break;
+    await sleep(200);
+  }
+  if (!sendBtn) throw new Error('Send button not found after 10s');
+  sendBtn.click();
   ```
 
 ## Phase 4: Wait for Image *(single + sequential batch)*
 
-- Poll until generation is complete — the stop-button disappears **and** the send-button reappears:
+- Use a dual-check: snapshot URLs before click, wait for stop-button gone **and** a new `file_` URL in the DOM:
   ```js
-  async function waitForGenerationComplete(timeout = 120000) {
+  async function waitForGenerationDone(timeout = 150000) {
     const start = Date.now();
+
+    // Snapshot of image URLs present BEFORE this prompt was submitted
+    const urlsBefore = new Set(
+      [...document.querySelectorAll('img')]
+        .map(i => i.src)
+        .filter(s => s.includes('file_'))
+    );
+
+    // Phase 1: wait for stop-button to appear (confirms generation started)
+    while (Date.now() - start < 20000) {
+      if (document.querySelector('[data-testid="stop-button"]')) break;
+      await sleep(500);
+    }
+
+    // Phase 2: wait for stop-button gone AND new image URL in DOM
     while (Date.now() - start < timeout) {
-      const stopBtn = document.querySelector('[data-testid="stop-button"]');
-      const sendBtn = document.querySelector('[data-testid="send-button"]');
-      if (!stopBtn && sendBtn) return true;
-      await sleep(2000);
+      const stopGone = !document.querySelector('[data-testid="stop-button"]');
+      const newImg = [...document.querySelectorAll('img')]
+        .map(i => i.src)
+        .filter(s => s.includes('file_'))
+        .some(s => !urlsBefore.has(s));
+
+      if (stopGone && newImg) {
+        await sleep(2000); // grace period for full-resolution render
+        return true;
+      }
+      await sleep(1500);
     }
     return false;
   }
   ```
-  - Do **not** use the presence of an `estuary` URL as the ready signal — those appear early as low-res previews.
-  - After `waitForGenerationComplete()` returns `true`, fetch the last matching image URL from the DOM. Filter: `s.includes('chatgpt.com') && s.includes('file_')`. Note: the `file_` ID is in the query parameter, not the path. Deduplicate by `file_` ID to avoid counting the same image multiple times.
-  - Timeout (120s) → report `❌ failed`, stop (single) or continue (batch).
+  - Do **not** rely solely on button state — `[data-testid="send-button"]` is only rendered when the textarea has content; after generation the textarea is empty → button absent → the old approach always timed out.
+  - The `urlsBefore` snapshot is taken at function entry, immediately after the click. Image generation takes several seconds, so the race condition risk is negligible.
+  - After `waitForGenerationDone()` returns `true`, fetch the last matching image URL from the DOM. Filter: `s.includes('chatgpt.com') && s.includes('file_')`. Note: the `file_` ID is in the query parameter, not the path. Deduplicate by `file_` ID to avoid counting the same image multiple times.
+  - Timeout (150s) → report `❌ failed`, stop (single) or continue (batch).
 
 ## Phase 5: Download and Save *(single + sequential batch)*
 
