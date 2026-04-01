@@ -15,7 +15,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Output
 
 - A detailed image prompt (displayed as formatted text)
-- Optionally saved to `assets/prompts/image-[description-slug].md`
+- Always saved to `assets/prompts/image-{slug}.md` (created automatically if folder does not exist)
 
 ## Steps
 
@@ -36,7 +36,9 @@ Creates professional, actionable prompts for AI image generators that maintain v
 7. Generate a detailed, actionable prompt.
 8. Include accessibility considerations (alt text suggestion).
 9. Present the prompt in a clear format.
-10. Optionally save to `assets/prompts/image-[slug].md`.
+10. Save to `assets/prompts/image-{slug}.md` — always, without asking.
+    Create the folder if it does not exist.
+    Confirm: "Prompt saved: `assets/prompts/image-{slug}.md`"
 
 ## Output Format
 
