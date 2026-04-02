@@ -4,7 +4,7 @@
 
 Runs all structural setup steps in one automated pass — without stopping for approval after each step.
 
-The instructor answers all questions **upfront in a single intake interview**. The agent then generates `context.md`, `outline.md`, `didactics.md`, `agenda.md`, and all session skeletons automatically. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
+The instructor answers all questions **upfront in a single intake interview**. The agent then generates `docs/context.md`, `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, and all session skeletons automatically. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
 
 This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
 
@@ -29,12 +29,12 @@ All collected in a single intake interview at the start:
 ## Output
 
 Generated in sequence without interruption:
-- `context.md`
-- `outline.md`
-- `didactics.md`
-- `agenda.md` (if applicable)
+- `docs/context.md`
+- `docs/outline.md`
+- `docs/didactics.md`
+- `docs/agenda.md` (if applicable)
 - `skeletons/{n}-{type}.md` for each session
-- `sessions.md` (tracking table)
+- `docs/sessions.md` (tracking table)
 
 ## Steps
 
@@ -77,23 +77,23 @@ Generated in sequence without interruption:
 
 Run each step silently (no approval prompts between steps):
 
-1. Generate and save `context.md` from collected inputs.
-2. Generate and save `outline.md`.
-3. Generate and save `didactics.md` — including the **Persona Voice Sample** section.
-4. Generate and save `agenda.md` (skip if agenda = no).
+1. Generate and save `docs/context.md` from collected inputs.
+2. Generate and save `docs/outline.md`.
+3. Generate and save `docs/didactics.md` — including the **Persona Voice Sample** section.
+4. Generate and save `docs/agenda.md` (skip if agenda = no).
 5. For each session: generate and save `skeletons/{n}-{type}.md`.
-6. Create `sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Complete ❌.
+6. Create `docs/sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Complete ❌.
 
 After each file is saved, print a brief progress line:
 ```
-✅ context.md
-✅ outline.md
-✅ didactics.md
-✅ agenda.md
+✅ docs/context.md
+✅ docs/outline.md
+✅ docs/didactics.md
+✅ docs/agenda.md
 ✅ skeletons/1-lecture.md
 ✅ skeletons/2-lecture.md
 ...
-✅ sessions.md
+✅ docs/sessions.md
 ```
 
 ### Phase 3: Handoff
@@ -103,12 +103,12 @@ After each file is saved, print a brief progress line:
    >
    > | File         | Status            |
    > |--------------|-------------------|
-   > | context.md   | ✅                |
-   > | outline.md   | ✅                |
-   > | didactics.md | ✅                |
-   > | agenda.md    | ✅ / skipped      |
+   > | docs/context.md   | ✅                |
+   > | docs/outline.md   | ✅                |
+   > | docs/didactics.md | ✅                |
+   > | docs/agenda.md    | ✅ / skipped      |
    > | skeletons/   | ✅ [N] files      |
-   > | sessions.md  | ✅                |
+   > | docs/sessions.md  | ✅                |
    >
    > "Next step: `/coauthor-materials` to start with Session 1."
 
@@ -125,4 +125,4 @@ After each file is saved, print a brief progress line:
 
 - Scaffold mode does NOT run `/promote-session` or `/coauthor-materials` — those remain interactive.
 - All generated files are drafts. The instructor reviews and refines them during co-authoring.
-- The Persona Voice Sample in `didactics.md` is especially important — it anchors tone for all future co-authoring sessions.
+- The Persona Voice Sample in `docs/didactics.md` is especially important — it anchors tone for all future co-authoring sessions.

@@ -1,10 +1,10 @@
 # Checklist: Course Quality
 
-> **Usage note:** Read `context.md` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
+> **Usage note:** Read `docs/context.md` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
 
 ## Context
 
-- [ ] `context.md` exists
+- [ ] `docs/context.md` exists
 - [ ] Course type defined
 - [ ] Terminology set (sessions-called, lectures-called)
 - [ ] Language & tone conventions set
@@ -27,17 +27,17 @@
 - [ ] Didactic concept clear
 - [ ] Instructor persona defined (background, role, style)
 - [ ] Style & difficulty level specified
-- [ ] Course type consistent with `context.md`
+- [ ] Course type consistent with `docs/context.md`
 
-## Agenda `[if agenda flag = yes in context.md]`
+## Agenda `[if agenda flag = yes in docs/context.md]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary
-- [ ] Session learning objectives align with `outline.md` learning objectives
+- [ ] Session learning objectives align with `docs/outline.md` learning objectives
 - [ ] Materials file reference present per session
 
-## Session Progress (sessions.md)
+## Session Progress (docs/sessions.md)
 
-- [ ] `sessions.md` exists `[not single-lesson]`
+- [ ] `docs/sessions.md` exists `[not single-lesson]`
 - [ ] All expected sessions have a row
 - [ ] No session marked ✅ Skeleton without a file in `skeletons/`
 - [ ] No session marked ✅ Material without a file in `materials/`
@@ -53,8 +53,8 @@
 - [ ] All skeletons promoted to materials
 - [ ] Outline with subchapters present
 - [ ] References included per section where claims are made
-- [ ] Didactic inputs from `didactics.md` reflected (methods, learning phases)
-- [ ] Learning objectives from `agenda.md` addressed in content
+- [ ] Didactic inputs from `docs/didactics.md` reflected (methods, learning phases)
+- [ ] Learning objectives from `docs/agenda.md` addressed in content
 
 ## LiaScript Syntax (per material file)
 
@@ -69,9 +69,9 @@
 
 ## Overall Consistency
 
-- [ ] Terminology from `context.md` used consistently throughout all docs
+- [ ] Terminology from `docs/context.md` used consistently throughout all docs
 - [ ] Instructor persona tone consistent across all materials
-- [ ] Learning objectives from `outline.md` traceable into `agenda.md` and materials
+- [ ] Learning objectives from `docs/outline.md` traceable into `docs/agenda.md` and materials
 - [ ] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] Numbering correct, no gaps
 - [ ] No sessions without materials

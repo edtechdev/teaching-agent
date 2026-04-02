@@ -25,7 +25,7 @@ agent_coordination:
   role: "Publishing & git specialist — hands back to Teaching-Agent when publishing is set up"
 
   on_activation:
-    - "Read context.md to understand course type and project conventions"
+    - "Read docs/context.md to understand course type and project conventions"
     - "Check if project.yaml exists and which materials are in materials/"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + project files]'"
 

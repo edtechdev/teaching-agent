@@ -10,34 +10,34 @@ Can be run in two modes:
 
 ## Inputs
 
-- `context.md` — course type and conventions
+- `docs/context.md` — course type and conventions
 - `checklists/course-quality-checklist.md` — structured checklist
 - `data/liascript-cheat-sheet.md` — syntax reference for LiaScript checks
-- For session mode: `materials/{number}-{type}.md` and matching row in `sessions.md`
-- For course mode: all docs (`outline.md`, `didactics.md`, `agenda.md`, `sessions.md`, `skeletons/`, `materials/`)
+- For session mode: `materials/{number}-{type}.md` and matching row in `docs/sessions.md`
+- For course mode: all docs (`docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `docs/sessions.md`, `skeletons/`, `materials/`)
 
 ## Output
 
 - **Session mode**: short inline report (printed, not saved) with issues for this session
-- **Course mode**: `validation-report.md` — structured report with pass/fail per section and a list of issues
+- **Course mode**: `docs/validation-report.md` — structured report with pass/fail per section and a list of issues
 
 ---
 
 ## Session Mode Steps (`/validate-course {number} {type}`)
 
-1. Load `context.md` for course type and conventions.
-2. Load `agenda.md` to get the learning objectives for this session.
+1. Load `docs/context.md` for course type and conventions.
+2. Load `docs/agenda.md` to get the learning objectives for this session.
 3. Load `data/liascript-cheat-sheet.md` as syntax reference.
 4. Open `materials/{number}-{type}.md` and check:
 
    **Content checks:**
-   - [ ] All learning objectives from `agenda.md` for this session are addressed
+   - [ ] All learning objectives from `docs/agenda.md` for this session are addressed
    - [ ] No section is vague, content-free, or placeholder-only
    - [ ] References present where content claims are made
 
    **Persona & style checks:**
-   - [ ] Tone matches the instructor persona from `didactics.md`
-   - [ ] Terminology matches `context.md` (sessions-called, etc.)
+   - [ ] Tone matches the instructor persona from `docs/didactics.md`
+   - [ ] Terminology matches `docs/context.md` (sessions-called, etc.)
 
    **LiaScript syntax checks** (against `data/liascript-cheat-sheet.md`):
    - [ ] Exactly one `#` heading in the file (course title)
@@ -56,21 +56,21 @@ Can be run in two modes:
 
 ## Course Mode Steps (`/validate-course`)
 
-1. Load `context.md` to understand course type and applicable conventions.
+1. Load `docs/context.md` to understand course type and applicable conventions.
 2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
 3. Load `data/liascript-cheat-sheet.md` as syntax reference.
 
 4. **Check Context & Foundation:**
-   - `context.md` complete (course type, terminology, agenda flag, conventions)
-   - `outline.md`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
-   - `didactics.md`: instructor persona, didactic concept, style, difficulty level
+   - `docs/context.md` complete (course type, terminology, agenda flag, conventions)
+   - `docs/outline.md`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
+   - `docs/didactics.md`: instructor persona, didactic concept, style, difficulty level
 
-5. **Check Agenda** `[if agenda flag = yes in context.md]`:
+5. **Check Agenda** `[if agenda flag = yes in docs/context.md]`:
    - All sessions have title, duration, type, learning objective, summary
-   - Learning objectives align with `outline.md`
+   - Learning objectives align with `docs/outline.md`
 
 6. **Check Session Progress:**
-   - Load `sessions.md` as primary source
+   - Load `docs/sessions.md` as primary source
    - All expected sessions have a row
    - Cross-check: every ✅ Skeleton row has a file in `skeletons/`
    - Cross-check: every ✅ Material row has a file in `materials/`
@@ -79,12 +79,12 @@ Can be run in two modes:
 7. **Check each material file** in `materials/` (same LiaScript + content checks as Session Mode Step 4).
 
 8. **Consistency check across all documents:**
-   - Terminology consistent (sessions-called from `context.md` used throughout)
+   - Terminology consistent (sessions-called from `docs/context.md` used throughout)
    - Persona tone consistent across all materials
-   - Learning objectives from `outline.md` traceable through `agenda.md` into materials
+   - Learning objectives from `docs/outline.md` traceable through `docs/agenda.md` into materials
    - Numbering correct and no gaps
 
-9. **Create `validation-report.md`:**
+9. **Create `docs/validation-report.md`:**
 
    ```
    # Validation Report — [Course Title]
@@ -127,8 +127,8 @@ Can be run in two modes:
 
 | Result                 | Agent behavior                                                                                                                                                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `validation-report.md` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
+| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `docs/validation-report.md` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
 | 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
 | 🟢 PASS               | Suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
 
-**Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `validation-report.md` contains FAIL — regardless of how the instructor asks.
+**Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `docs/validation-report.md` contains FAIL — regardless of how the instructor asks.

@@ -7,15 +7,15 @@ Produces a structured `course-bundle/` folder with an auto-generated index and a
 
 ## Inputs
 
-- `context.md` — course metadata and conventions
-- `outline.md` — course title and abstract (used in bundle index)
-- `didactics.md` — teaching approach and persona documentation
-- `agenda.md` — session schedule (if exists)
-- `sessions.md` — production status tracking
+- `docs/context.md` — course metadata and conventions
+- `docs/outline.md` — course title and abstract (used in bundle index)
+- `docs/didactics.md` — teaching approach and persona documentation
+- `docs/agenda.md` — session schedule (if exists)
+- `docs/sessions.md` — production status tracking
 - `skeletons/` — session skeletons (optional, for documentation trail)
 - `materials/` — full session materials (primary content)
 - `visuals.md` + `assets/` — visual style guide and assets (if exists)
-- `validation-report.md` — latest QA report (**required, must show PASS**)
+- `docs/validation-report.md` — latest QA report (**required, must show PASS**)
 - `notes/` — decision records and summaries (optional)
 
 ## Output
@@ -23,12 +23,12 @@ Produces a structured `course-bundle/` folder with an auto-generated index and a
 ```
 course-bundle/
 ├── bundle-index.md          ← auto-generated index
-├── context.md
-├── outline.md
-├── didactics.md
-├── agenda.md                ← if exists
-├── sessions.md
-├── validation-report.md
+├── docs/context.md
+├── docs/outline.md
+├── docs/didactics.md
+├── docs/agenda.md                ← if exists
+├── docs/sessions.md
+├── docs/validation-report.md
 ├── materials/
 │   └── {n}-{type}.md
 ├── skeletons/               ← optional
@@ -39,14 +39,14 @@ course-bundle/
 
 ## Steps
 
-1. **Pre-flight check:** Confirm `validation-report.md` exists and shows PASS.
+1. **Pre-flight check:** Confirm `docs/validation-report.md` exists and shows PASS.
    - If missing or FAIL: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
 
-2. Read course title and abstract from `outline.md`.
+2. Read course title and abstract from `docs/outline.md`.
 
 3. Scan all source folders and collect files:
-   - **Required:** `context.md`, `outline.md`, `didactics.md`, `sessions.md`, all files in `materials/`, `validation-report.md`
-   - **Conditional:** `agenda.md` (if exists), `skeletons/` (if exists), `assets/` (if exists), `notes/` (if exists)
+   - **Required:** `docs/context.md`, `docs/outline.md`, `docs/didactics.md`, `docs/sessions.md`, all files in `materials/`, `docs/validation-report.md`
+   - **Conditional:** `docs/agenda.md` (if exists), `skeletons/` (if exists), `assets/` (if exists), `notes/` (if exists)
 
 4. Generate `bundle-index.md`:
 
@@ -54,30 +54,30 @@ course-bundle/
    # Course Bundle: [Course Title]
 
    Generated: YYYY-MM-DD
-   Course type: [type from context.md]
-   Validation: PASS (see validation-report.md)
+   Course type: [type from docs/context.md]
+   Validation: PASS (see docs/validation-report.md)
 
    ## Contents
 
    | File                    | Description                              |
    |-------------------------|------------------------------------------|
-   | context.md              | Course governance and conventions        |
-   | outline.md              | Title, audience, learning objectives     |
-   | didactics.md            | Teaching approach and instructor persona |
-   | agenda.md               | Session schedule and structure           |
-   | sessions.md             | Production status per session            |
-   | validation-report.md    | Quality validation results               |
-   | materials/{n}-{type}.md | Session N: [title from agenda.md]        |
+   | docs/context.md              | Course governance and conventions        |
+   | docs/outline.md              | Title, audience, learning objectives     |
+   | docs/didactics.md            | Teaching approach and instructor persona |
+   | docs/agenda.md               | Session schedule and structure           |
+   | docs/sessions.md             | Production status per session            |
+   | docs/validation-report.md    | Quality validation results               |
+   | materials/{n}-{type}.md | Session N: [title from docs/agenda.md]        |
 
    ## Quick Start
 
-   - **Instructor handoff:** Start with `outline.md` and `didactics.md`
+   - **Instructor handoff:** Start with `docs/outline.md` and `docs/didactics.md`
    - **LiaScript publish:** Use files in `materials/` directly
-   - **Quality audit:** See `validation-report.md`
+   - **Quality audit:** See `docs/validation-report.md`
    ```
 
 5. Copy all collected files into `course-bundle/` preserving subfolder structure.
 
 6. Confirm completion:
-   > "Bundle created in `course-bundle/`. Contains [N] material files, [agenda.md ✅ / no agenda], [assets/ ✅ / no assets]."
+   > "Bundle created in `course-bundle/`. Contains [N] material files, [docs/agenda.md ✅ / no agenda], [assets/ ✅ / no assets]."
    > "Next step: `/agent development` → `/create-project` to publish the course."

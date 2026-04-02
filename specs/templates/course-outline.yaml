@@ -4,7 +4,7 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: outline.md
+    filename: docs/outline.md
   title: 'Course Outline'
   sections:
     - id: title

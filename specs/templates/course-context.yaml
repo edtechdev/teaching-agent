@@ -4,7 +4,7 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: context.md
+    filename: docs/context.md
   title: 'Course Context'
   sections:
     - id: course-type
