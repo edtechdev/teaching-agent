@@ -38,10 +38,19 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 1. Check if `mcp_chrome-devtoo_*` tools are available.
    - **Not available** → explain setup, stop. Suggest `/create-image` for prompt-only mode.
 
-2. Resize the browser viewport: use `mcp_chrome-devtoo_resize_page` → width: 1280, height: 900.
+2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtoo_list_pages`.
+   - **Fails or returns empty** → start Chrome in the background:
+     ```bash
+     google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug &
+     ```
+     Wait ~3 seconds, then retry `mcp_chrome-devtoo_list_pages` to confirm connection.
+     If it still fails: inform the instructor and stop.
+   - **Succeeds** → continue.
+
+3. Resize the browser viewport: use `mcp_chrome-devtoo_resize_page` → width: 1280, height: 900.
    This ensures stop-button and send-button are rendered (they may be hidden on narrow viewports).
 
-3. Determine mode:
+4. Determine mode:
    - **Slug provided** → skip to [Single Mode (Phase 2a)](#phase-2a-single-mode).
    - **No argument** → 🎛️ ask with structured question (single choice):
      - **Single** — enter a slug to execute one prompt
@@ -92,50 +101,40 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
    async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-   async function waitForGenerationDone(timeout = 150000) {
+   function countReadyContainers() {
+     return [...document.querySelectorAll('[class*="group/imagegen-image"]')]
+       .filter(d => [...d.children].some(c =>
+         c.className.includes('pointer-events-none') && c.className.includes('bottom-0')
+       )).length;
+   }
+
+   async function waitForGenerationDone(readyBefore, timeout = 150000) {
      const start = Date.now();
-
-     const urlsBefore = new Set(
-       [...document.querySelectorAll('img')]
-         .map(i => i.src)
-         .filter(s => s.includes('file_'))
-     );
-
      // Phase 1: wait for stop-button to appear
      while (Date.now() - start < 20000) {
        if (document.querySelector('[data-testid="stop-button"]')) break;
        await sleep(500);
      }
-
-     // Phase 2: wait for stop-button gone AND new image URL in DOM
+     // Phase 2: wait for new ready container (action-bar = image complete)
      while (Date.now() - start < timeout) {
-       const stopGone = !document.querySelector('[data-testid="stop-button"]');
-       const newImg = [...document.querySelectorAll('img')]
-         .map(i => i.src)
-         .filter(s => s.includes('file_'))
-         .some(s => !urlsBefore.has(s));
-       if (stopGone && newImg) {
-         await sleep(2000); // grace period for full-resolution render
+       if (countReadyContainers() > readyBefore) {
+         await sleep(1000); // grace period for full-res render
          return true;
        }
-       await sleep(1500);
+       await sleep(1000);
      }
      return false; // timeout
    }
 
-   function getGeneratedImageUrl() {
+   function getNewImageUrls(urlsBefore) {
      const seen = new Set();
-     const imgs = [...document.querySelectorAll('img')]
+     return [...document.querySelectorAll('img')]
        .map(i => i.src)
-       .filter(s => s.includes('chatgpt.com') && s.includes('file_'))
+       .filter(s => s.includes('chatgpt.com') && s.includes('file_') && !urlsBefore.has(s))
        .filter(s => {
-         const match = s.match(/file_[^&?]+/);
-         const id = match ? match[0] : s;
-         if (seen.has(id)) return false;
-         seen.add(id);
-         return true;
+         const id = (s.match(/file_[^&?]+/) || [s])[0];
+         return seen.has(id) ? false : (seen.add(id), true);
        });
-     return imgs.length > 0 ? imgs[imgs.length - 1] : null;
    }
 
    async function downloadBlob(url, filename) {
@@ -164,12 +163,15 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
          await sleep(200);
        }
        if (!sendBtn) { console.warn(`[batch] ❌ Send button not found: ${slug}`); continue; }
+       const readyBefore = countReadyContainers();
+       const urlsBefore = new Set([...document.querySelectorAll('img')].map(i => i.src).filter(s => s.includes('file_')));
        sendBtn.click();
-       const done = await waitForGenerationDone();
+       const done = await waitForGenerationDone(readyBefore);
        if (!done) { console.warn(`[batch] ❌ Timeout: ${slug}`); continue; }
-       const imgUrl = getGeneratedImageUrl();
-       if (!imgUrl) { console.warn(`[batch] ❌ No image found: ${slug}`); continue; }
-       const size = await downloadBlob(imgUrl, `${slug}.png`);
+       const newUrls = getNewImageUrls(urlsBefore);
+       if (!newUrls.length) { console.warn(`[batch] ❌ No image found: ${slug}`); continue; }
+       const size = await downloadBlob(newUrls[0], `${slug}.png`); // newUrls[0] = finished image; others are still-loading previews
+       console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
        console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
        await sleep(1000);
      }
@@ -204,49 +206,45 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
     await sleep(200);
   }
   if (!sendBtn) throw new Error('Send button not found after 10s');
+  // Capture state BEFORE submitting (used by Phase 4 + 5)
+  const readyBefore = countReadyContainers();
+  const urlsBefore = new Set([...document.querySelectorAll('img')].map(i => i.src).filter(s => s.includes('file_')));
   sendBtn.click();
   ```
 
 ## Phase 4: Wait for Image *(single + sequential batch)*
 
-- Use a dual-check: snapshot URLs before click, wait for stop-button gone **and** a new `file_` URL in the DOM:
+- ChatGPT marks a finished image by adding an action-bar (`div.pointer-events-none.bottom-0`) inside the `div.group/imagegen-image` container. Count these ready containers before submitting; wait until the count increases.
   ```js
-  async function waitForGenerationDone(timeout = 150000) {
+  function countReadyContainers() {
+    return [...document.querySelectorAll('[class*="group/imagegen-image"]')]
+      .filter(d => [...d.children].some(c =>
+        c.className.includes('pointer-events-none') && c.className.includes('bottom-0')
+      )).length;
+  }
+
+  async function waitForGenerationDone(readyBefore, timeout = 150000) {
     const start = Date.now();
-
-    // Snapshot of image URLs present BEFORE this prompt was submitted
-    const urlsBefore = new Set(
-      [...document.querySelectorAll('img')]
-        .map(i => i.src)
-        .filter(s => s.includes('file_'))
-    );
-
     // Phase 1: wait for stop-button to appear (confirms generation started)
     while (Date.now() - start < 20000) {
       if (document.querySelector('[data-testid="stop-button"]')) break;
       await sleep(500);
     }
-
-    // Phase 2: wait for stop-button gone AND new image URL in DOM
+    // Phase 2: wait for a new ready container (action-bar appeared = image complete)
     while (Date.now() - start < timeout) {
-      const stopGone = !document.querySelector('[data-testid="stop-button"]');
-      const newImg = [...document.querySelectorAll('img')]
-        .map(i => i.src)
-        .filter(s => s.includes('file_'))
-        .some(s => !urlsBefore.has(s));
-
-      if (stopGone && newImg) {
-        await sleep(2000); // grace period for full-resolution render
+      if (countReadyContainers() > readyBefore) {
+        await sleep(1000); // grace period for full-res render
         return true;
       }
-      await sleep(1500);
+      await sleep(1000);
     }
     return false;
   }
   ```
-  - Do **not** rely solely on button state — `[data-testid="send-button"]` is only rendered when the textarea has content; after generation the textarea is empty → button absent → the old approach always timed out.
-  - The `urlsBefore` snapshot is taken at function entry, immediately after the click. Image generation takes several seconds, so the race condition risk is negligible.
-  - After `waitForGenerationDone()` returns `true`, fetch the last matching image URL from the DOM. Filter: `s.includes('chatgpt.com') && s.includes('file_')`. Note: the `file_` ID is in the query parameter, not the path. Deduplicate by `file_` ID to avoid counting the same image multiple times.
+  - This is layout-independent: works regardless of viewport size or button visibility.
+  - `readyBefore` and `urlsBefore` are captured in Phase 3 immediately before `sendBtn.click()`.
+  - After `waitForGenerationDone()` returns `true`, collect new `file_` URLs via `urlsBefore` diff (Phase 5). Filter: `s.includes('chatgpt.com') && s.includes('file_')`. Deduplicate by `file_` ID.
+  - **Always use `newUrls[0]`** — the first new URL is the finished full-resolution image. Subsequent new URLs are still-loading preview artefacts.
   - Timeout (150s) → report `❌ failed`, stop (single) or continue (batch).
 
 ## Phase 5: Download and Save *(single + sequential batch)*
@@ -255,12 +253,14 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
   - `assets/images/` exists → `assets/images/{slug}.png`
   - `assets/` exists → `assets/{slug}.png`
   - Neither → `~/Downloads/{slug}.png` (inform instructor)
+- Collect new `file_` URLs via `urlsBefore` diff, deduplicated by `file_` ID. Take only **`newUrls[0]`** — the first new URL is the finished image; subsequent URLs are still-loading previews.
+- Download as `{slug}.png`.
 - Download via Blob URL:
   ```js
-  fetch(url).then(r => r.blob()).then(blob => {
+  fetch(newUrls[0]).then(r => r.blob()).then(blob => {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = '{slug}.png';
+    a.download = `${slug}.png`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   });
   ```
